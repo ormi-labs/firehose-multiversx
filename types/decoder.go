@@ -18,7 +18,7 @@ import (
 	"fmt"
 
 	"github.com/streamingfast/bstream"
-	pbacme "github.com/streamingfast/firehose-acme/types/pb/sf/acme/type/v1"
+	pbmultiversx "github.com/streamingfast/firehose-multiversx/types/pb/sf/multiversx/type/v1"
 	pbbstream "github.com/streamingfast/pbgo/sf/bstream/v1"
 	"google.golang.org/protobuf/proto"
 )
@@ -32,7 +32,7 @@ func BlockDecoder(blk *bstream.Block) (interface{}, error) {
 		return nil, fmt.Errorf("this decoder only knows about version 1, got %d", blk.Version())
 	}
 
-	block := new(pbacme.Block)
+	block := new(pbmultiversx.Block)
 	payload, err := blk.Payload.Get()
 	if err != nil {
 		return nil, fmt.Errorf("getting payload: %w", err)
