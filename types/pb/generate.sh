@@ -16,7 +16,7 @@
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd ../.. && pwd )"
 
 # Protobuf definitions
-PROTO=${1:-"$ROOT/../proto"}
+PROTO=${1:-"$ROOT/proto"}
 PROTO_MULTIVERSX=${2:-"$ROOT/proto"}
 
 function main() {
@@ -25,11 +25,9 @@ function main() {
   set -e
   cd "$ROOT/types/pb" &> /dev/null
 
-  generate "sf/multiversx/type/v1/type.proto"
+  generate "$PROTO/sf/multiversx/type/v1/type.proto"
 
   echo "generate.sh - `date` - `whoami`" > ./last_generate.txt
-  echo "streamingfast/proto revision: `GIT_DIR=$PROTO/.git git rev-parse HEAD`" >> ./last_generate.txt
-  echo "streamingfast/firehose-multiversx/proto revision: `GIT_DIR=$ROOT/.git git log -n 1 --pretty=format:%h -- proto`" >> ./last_generate.txt
 }
 
 # usage:
