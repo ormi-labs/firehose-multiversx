@@ -23,11 +23,11 @@ import (
 	"google.golang.org/grpc"
 )
 
-var nodeLogger, nodeTracer = logging.PackageLogger("node", "github.com/streamingfast/firehose-firemultiversx/node")
-var nodeMultiversxChainLogger, _ = logging.PackageLogger("node.firemultiversx", "github.com/streamingfast/firehose-firemultiversx/node/firemultiversx", DefaultLevelInfo)
+var nodeLogger, nodeTracer = logging.PackageLogger("node", "github.com/streamingfast/firehose-multiversx/node")
+var nodeMultiversxChainLogger, _ = logging.PackageLogger("node.firemultiversx", "github.com/streamingfast/firehose-multiversx/node/firemultiversx", DefaultLevelInfo)
 
-var readerLogger, readerTracer = logging.PackageLogger("reader", "github.com/streamingfast/firehose-firemultiversx/reader")
-var readerMultiversxChainLogger, _ = logging.PackageLogger("reader.firemultiversx", "github.com/streamingfast/firehose-firemultiversx/reader/firemultiversx", DefaultLevelInfo)
+var readerLogger, readerTracer = logging.PackageLogger("reader", "github.com/streamingfast/firehose-multiversx/reader")
+var readerMultiversxChainLogger, _ = logging.PackageLogger("reader.firemultiversx", "github.com/streamingfast/firehose-multiversx/reader/firemultiversx", DefaultLevelInfo)
 
 func registerCommonNodeFlags(cmd *cobra.Command, flagPrefix string, managerAPIAddr string) {
 	cmd.Flags().String(flagPrefix+"path", ChainExecutableName, FlagDescription(`

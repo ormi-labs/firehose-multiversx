@@ -1,9 +1,9 @@
-project_name: firehose-firemultiversx
+project_name: firehose-multiversx
 
 release:
   github:
     owner: streamingfast
-    name: firehose-firemultiversx
+    name: firehose-multiversx
   name_template: '{{.Tag}}'
 builds:
 - goos:
@@ -57,7 +57,7 @@ signs:
 env_files:
   github_token: ~/.config/goreleaser/github_token
 brews:
-  - name: firehose-firemultiversx
+  - name: firehose-multiversx
     tap:
       owner: streamingfast
       name: homebrew-tap

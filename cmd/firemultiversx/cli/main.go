@@ -19,7 +19,7 @@ import (
 	"go.uber.org/zap"
 )
 
-var rootLog, _ = logging.RootLogger("firemultiversx", "github.com/streamingfast/firehose-firemultiversx/cmd/firemultiversx/cli")
+var rootLog, _ = logging.RootLogger("firemultiversx", "github.com/streamingfast/firehose-multiversx/cmd/firemultiversx/cli")
 
 var RootCmd = &cobra.Command{Use: "firemultiversx", Short: "Multiversx on StreamingFast"}
 var allFlags = make(map[string]bool) // used as global because of async access to cobra init functions
@@ -78,7 +78,7 @@ func Main() {
 		return nil
 	}
 
-	derr.Check("firemultiversx-blockchain", RootCmd.Execute())
+	derr.Check("multiversx-blockchain", RootCmd.Execute())
 }
 
 var startCmdExample = `firemultiversx start reader-node`

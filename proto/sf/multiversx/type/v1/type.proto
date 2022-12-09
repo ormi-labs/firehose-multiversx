@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package sf.multiversx.type.v1;
 
-option go_package = "github.com/streamingfast/firehose-firemultiversx/types/pb/sf/firemultiversx/type/v1;pbmultiversx";
+option go_package = "github.com/streamingfast/firehose-multiversx/types/pb/sf/firemultiversx/type/v1;pbmultiversx";
 
 message Block {
   uint64 height = 1;
