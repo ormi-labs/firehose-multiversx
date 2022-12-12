@@ -9,9 +9,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/ElrondNetwork/firehose-multiversx/types"
+	pbmultiversx "github.com/ElrondNetwork/firehose-multiversx/types/pb/sf/multiversx/type/v1"
 	"github.com/streamingfast/bstream"
-	"github.com/streamingfast/firehose-multiversx/types"
-	pbmultiversx "github.com/streamingfast/firehose-multiversx/types/pb/sf/multiversx/type/v1"
 	"go.uber.org/zap"
 )
 

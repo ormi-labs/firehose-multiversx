@@ -3,8 +3,9 @@ package types
 import (
 	"fmt"
 
+	pbmultiversx "github.com/ElrondNetwork/firehose-multiversx/types/pb/sf/multiversx/type/v1"
 	"github.com/streamingfast/bstream"
-	pbmultiversx "github.com/streamingfast/firehose-multiversx/types/pb/sf/multiversx/type/v1"
+
 	pbbstream "github.com/streamingfast/pbgo/sf/bstream/v1"
 	"google.golang.org/protobuf/proto"
 )

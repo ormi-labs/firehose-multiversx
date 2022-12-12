@@ -21,11 +21,11 @@ import (
 	"io"
 	"strconv"
 
+	pbmultiversx "github.com/ElrondNetwork/firehose-multiversx/types/pb/sf/multiversx/type/v1"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/streamingfast/bstream"
 	"github.com/streamingfast/dstore"
-	pbmultiversx "github.com/streamingfast/firehose-multiversx/types/pb/sf/multiversx/type/v1"
 	"go.uber.org/zap"
 )
 

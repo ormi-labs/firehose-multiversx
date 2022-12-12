@@ -17,10 +17,10 @@ package tools
 import (
 	"fmt"
 
+	pbmultiversx "github.com/ElrondNetwork/firehose-multiversx/types/pb/sf/multiversx/type/v1"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/streamingfast/bstream"
-	pbmultiversx "github.com/streamingfast/firehose-multiversx/types/pb/sf/multiversx/type/v1"
 	sftools "github.com/streamingfast/sf-tools"
 )
 
