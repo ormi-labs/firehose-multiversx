@@ -1,4 +1,4 @@
-module github.com/streamingfast/firehose-multiversx
+module github.com/ElrondNetwork/firehose-multiversx
 
 go 1.18
 
