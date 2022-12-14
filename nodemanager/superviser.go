@@ -92,7 +92,6 @@ func (s *Superviser) lastBlockSeenLogPlugin(line string) {
 	}
 
 	splits := strings.Split(line, " ")
-	//blockNumStr := line[18:]
 	blockNumStr := splits[2]
 
 	blockNum, err := strconv.ParseUint(blockNumStr, 10, 64)

@@ -3,6 +3,7 @@ syntax = "proto3";
 package sf.multiversx.type.v1;
 
 option go_package = "github.com/ElrondNetwork/firehose-multiversx/types/pb/sf/firemultiversx/type/v1;pbmultiversx";
+
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "github.com/ElrondNetwork/elrond-go-core/data/firehose/firehoseBlock.proto";
 

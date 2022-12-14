@@ -27,7 +27,7 @@ function main() {
 
   generate "$PROTO/sf/multiversx/type/v1/type.proto"
 
-  echo "generate.sh - `LANG=de_DE date --utc` - `whoami`" > ./last_generate.txt
+  echo "generate.sh - `LANG=en_US date --utc` - `whoami`" > ./last_generate.txt
 }
 
 # usage:

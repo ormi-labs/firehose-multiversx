@@ -24,10 +24,10 @@ import (
 )
 
 var nodeLogger, nodeTracer = logging.PackageLogger("node", "github.com/streamingfast/firehose-multiversx/node")
-var nodeMultiversxChainLogger, _ = logging.PackageLogger("node.firemultiversx", "github.com/streamingfast/firehose-multiversx/node/firemultiversx", DefaultLevelInfo)
+var nodeMultiversxChainLogger, _ = logging.PackageLogger("node.multiversx", "github.com/streamingfast/firehose-multiversx/node/multiversx", DefaultLevelInfo)
 
 var readerLogger, readerTracer = logging.PackageLogger("reader", "github.com/streamingfast/firehose-multiversx/reader")
-var readerMultiversxChainLogger, _ = logging.PackageLogger("reader.firemultiversx", "github.com/streamingfast/firehose-multiversx/reader/firemultiversx", DefaultLevelInfo)
+var readerMultiversxChainLogger, _ = logging.PackageLogger("reader.multiversx", "github.com/streamingfast/firehose-multiversx/reader/multiversx", DefaultLevelInfo)
 
 func registerCommonNodeFlags(cmd *cobra.Command, flagPrefix string, managerAPIAddr string) {
 	cmd.Flags().String(flagPrefix+"path", ChainExecutableName, FlagDescription(`
