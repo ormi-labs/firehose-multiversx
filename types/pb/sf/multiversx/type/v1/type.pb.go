@@ -27,6 +27,7 @@ const (
 // of the legacy proto package is being used.
 const _ = proto.ProtoPackageIsVersion4
 
+// TODO: Remove this struct and only use FirehoseBlock from elrond-go-core
 type Block struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

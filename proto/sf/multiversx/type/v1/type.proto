@@ -8,6 +8,8 @@ import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "github.com/ElrondNetwork/elrond-go-core/data/firehose/firehoseBlock.proto";
 
 option (gogoproto.stable_marshaler_all) = true;
+
+// TODO: Remove this struct and only use FirehoseBlock from elrond-go-core
 message Block {
   uint64 height = 1;
   string hash = 2;

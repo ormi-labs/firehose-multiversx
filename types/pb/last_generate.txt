@@ -1,1 +1,3 @@
-generate.sh - Thu Dec 15 14:34:19 UTC 2022 - elrond
+generate.sh - Thu Dec 15 14:50:03 UTC 2022 - elrond
+streamingfast/proto revision: 086dc4643579c0102b2a198bc40b89854dc50111
+streamingfast/firehose-acme/proto revision: 6b8f621
