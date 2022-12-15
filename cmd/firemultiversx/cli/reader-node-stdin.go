@@ -29,7 +29,7 @@ import (
 )
 
 func init() {
-	appLogger, appTracer := logging.PackageLogger("reader-node-stdin", "github.com/streamingfast/firehose-firemultiversx/firemultiversx/cli/reader-node-stdin")
+	appLogger, appTracer := logging.PackageLogger("reader-node-stdin", "github.com/ElrondNetwork/firehose-multiversx/firemultiversx/cli/reader-node-stdin")
 
 	launcher.RegisterApp(rootLog, &launcher.AppDef{
 		ID:            "reader-node-stdin",
