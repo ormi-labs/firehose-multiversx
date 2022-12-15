@@ -3,7 +3,7 @@ module github.com/ElrondNetwork/firehose-multiversx
 go 1.17
 
 require (
-	github.com/ElrondNetwork/firehose-multiversx/types v0.0.0-20221215121343-3d2932404f62
+	github.com/ElrondNetwork/firehose-multiversx/types v0.0.0-20221215141258-6b8f6216b602
 	github.com/ShinyTrinkets/overseer v0.3.0
 	github.com/spf13/cobra v1.4.0
 	github.com/spf13/viper v1.8.1
@@ -39,7 +39,7 @@ require (
 	contrib.go.opencensus.io/exporter/zipkin v0.1.1 // indirect
 	github.com/Azure/azure-pipeline-go v0.2.3 // indirect
 	github.com/Azure/azure-storage-blob-go v0.14.0 // indirect
-	github.com/ElrondNetwork/elrond-go-core v1.1.27-0.20221215085416-032e64232bd5 // indirect
+	github.com/ElrondNetwork/elrond-go-core v1.1.27-0.20221215140953-889ae4c74255 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp v0.32.3 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.8.6 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.32.6 // indirect
