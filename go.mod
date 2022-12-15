@@ -3,7 +3,7 @@ module github.com/ElrondNetwork/firehose-multiversx
 go 1.17
 
 require (
-	github.com/ElrondNetwork/firehose-multiversx/types v0.0.0-20221215141258-6b8f6216b602
+	github.com/ElrondNetwork/firehose-multiversx/types v0.0.0-20221215145030-3a56e29c89e3
 	github.com/ShinyTrinkets/overseer v0.3.0
 	github.com/spf13/cobra v1.4.0
 	github.com/spf13/viper v1.8.1
