@@ -25,7 +25,7 @@ function main() {
   set -e
   cd "$ROOT/types/pb" &> /dev/null
 
-  generate "$PROTO/sf/multiversx/type/v1/type.proto"
+  generate "sf/multiversx/type/v1/type.proto"
 
   echo "generate.sh - `LANG=en_US date --utc` - `whoami`" > ./last_generate.txt
 }
@@ -40,7 +40,7 @@ function generate() {
     fi
 
     for file in "$@"; do
-      protoc -I$PROTO -I$PROTO_MULTIVERSX \
+      protoc -I$GOPATH/src -I$PROTO -I$PROTO_MULTIVERSX \
         --go_out=. --go_opt=paths=source_relative \
         --go-grpc_out=. --go-grpc_opt=paths=source_relative,require_unimplemented_servers=false \
          $base$file
