@@ -27,7 +27,7 @@ type Superviser struct {
 }
 
 func (s *Superviser) GetName() string {
-	return "acme"
+	return "multiversx"
 }
 
 func NewSuperviser(
@@ -60,7 +60,7 @@ func NewSuperviser(
 		supervisor.RegisterLogPlugin(logplugin.NewToConsoleLogPlugin(debugFirehose))
 	}
 
-	appLogger.Info("created acme superviser", zap.Object("superviser", supervisor))
+	appLogger.Info("created multiversx superviser", zap.Object("superviser", supervisor))
 	return supervisor
 }
 
@@ -91,7 +91,8 @@ func (s *Superviser) lastBlockSeenLogPlugin(line string) {
 		return
 	}
 
-	blockNumStr := line[18:]
+	splits := strings.Split(line, " ")
+	blockNumStr := splits[2]
 
 	blockNum, err := strconv.ParseUint(blockNumStr, 10, 64)
 	if err != nil {

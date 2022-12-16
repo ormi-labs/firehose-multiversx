@@ -1,9 +1,15 @@
 syntax = "proto3";
 
-package sf.acme.type.v1;
+package sf.multiversx.type.v1;
 
-option go_package = "github.com/streamingfast/firehose-acme/types/pb/sf/acme/type/v1;pbacme";
+option go_package = "github.com/ElrondNetwork/firehose-multiversx/types/pb/sf/firemultiversx/type/v1;pbmultiversx";
 
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/ElrondNetwork/elrond-go-core/data/firehose/firehoseBlock.proto";
+
+option (gogoproto.stable_marshaler_all) = true;
+
+// TODO: Remove this struct and only use FirehoseBlock from elrond-go-core
 message Block {
   uint64 height = 1;
   string hash = 2;
@@ -35,4 +41,8 @@ message Attribute {
 
 message BigInt {
   bytes bytes = 1;
+}
+
+message WrappedMultiversxBlock{
+  proto.FirehoseBlock Block = 1;
 }

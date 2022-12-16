@@ -3,13 +3,14 @@ package types
 import (
 	"fmt"
 
+	pbmultiversx "github.com/ElrondNetwork/firehose-multiversx/types/pb/sf/multiversx/type/v1"
 	"github.com/streamingfast/bstream"
-	pbacme "github.com/streamingfast/firehose-acme/types/pb/sf/acme/type/v1"
+
 	pbbstream "github.com/streamingfast/pbgo/sf/bstream/v1"
 	"google.golang.org/protobuf/proto"
 )
 
-func BlockFromProto(b *pbacme.Block) (*bstream.Block, error) {
+func BlockFromProto(b *pbmultiversx.Block) (*bstream.Block, error) {
 	content, err := proto.Marshal(b)
 	if err != nil {
 		return nil, fmt.Errorf("unable to marshal to binary form: %s", err)
