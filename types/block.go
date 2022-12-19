@@ -10,7 +10,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-func BlockFromProto(b *pbmultiversx.Block) (*bstream.Block, error) {
+func BlockFromProto(b *pbmultiversx.WrappedMultiversxBlock) (*bstream.Block, error) {
 	content, err := proto.Marshal(b)
 	if err != nil {
 		return nil, fmt.Errorf("unable to marshal to binary form: %s", err)
