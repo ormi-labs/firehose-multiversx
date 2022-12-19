@@ -9,11 +9,9 @@ import "github.com/ElrondNetwork/elrond-go-core/data/firehose/firehoseBlock.prot
 
 option (gogoproto.stable_marshaler_all) = true;
 
-// TODO: Remove this struct and only use FirehoseBlock from elrond-go-core
-message WrappedMultiversxBlock {
-  uint64 height = 1;
-  string hash = 2;
-  string prevHash = 3;
-  uint64 timestamp = 4;
-  proto.FirehoseBlock MultiversxBlock = 5;
+message Block {
+  uint64              height = 1;
+  string              prevHash = 2;
+  uint64              timestamp = 3;
+  proto.FirehoseBlock MultiversxBlock = 4;
 }
