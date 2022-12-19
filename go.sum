@@ -99,8 +99,8 @@ github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
 github.com/ElrondNetwork/elrond-go-core v1.1.27-0.20221215140953-889ae4c74255 h1:p/jhYM8rrA9mwiXPqlBDO9CDWpAvCjOuzk4Hvts1Qu0=
 github.com/ElrondNetwork/elrond-go-core v1.1.27-0.20221215140953-889ae4c74255/go.mod h1:N/RI++YU2M6OlnD1GSZepc1wPhI84ykRDQ1IyD3B0wk=
-github.com/ElrondNetwork/firehose-multiversx/types v0.0.0-20221215145030-3a56e29c89e3 h1:Of2HnmneRZv5L4pWYV9qtC0MbBhZ+VJ1zqHd84TtY2M=
-github.com/ElrondNetwork/firehose-multiversx/types v0.0.0-20221215145030-3a56e29c89e3/go.mod h1:siYOKPgwrspJIheTjohJSMEAQXTI5gyPqw2sySZx9Qs=
+github.com/ElrondNetwork/firehose-multiversx/types v0.0.0-20221219140155-6c8ce7703dfa h1:JlnWuSCvZczAGfJo4+8r4w4Vfgn4jP/0o0/sTVrcyHE=
+github.com/ElrondNetwork/firehose-multiversx/types v0.0.0-20221219140155-6c8ce7703dfa/go.mod h1:siYOKPgwrspJIheTjohJSMEAQXTI5gyPqw2sySZx9Qs=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp v0.32.3 h1:fiyErF/p5fz79DvMCca9ayvYiWYsFP1oJbskt9fjo8I=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp v0.32.3/go.mod h1:s7Gpwj0tk7XnVCm4BQEmx/mbS36SuTCY/vMB2SNxe8o=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.8.6 h1:TOxk7n3PE2OkdNMgrXDtDr3ju4pIvwhY515tCoH0CpE=
