@@ -115,6 +115,17 @@ const (
 	LogEndBlock   = "BLOCK_END"
 )
 
+const (
+	blockBeginChunks   = 1
+	blockBeginNonceIdx = 0
+
+	blockEndChunks       = 4
+	blockEndNonceIdx     = 0
+	blockEndPrevHashIdx  = 1
+	blockEndTimestampIdx = 2
+	blockEndProtoBytes   = 3
+)
+
 func (r *ConsoleReader) next() (out *pbmultiversx.Block, err error) {
 	for line := range r.lines {
 		if !strings.HasPrefix(line, LogPrefix) {
@@ -181,24 +192,24 @@ func (r *ConsoleReader) buildScanner(reader io.Reader) *bufio.Scanner {
 // Format:
 // FIRE BLOCK_BEGIN <NUM>
 func (r *ConsoleReader) blockBegin(params []string) error {
-	if err := validateChunk(params, 1); err != nil {
+	if err := validateChunk(params, blockBeginChunks); err != nil {
 		return fmt.Errorf("invalid log line length: %w", err)
 	}
 
-	blockHeight, err := strconv.ParseUint(params[0], 10, 64)
+	blockHeight, err := strconv.ParseUint(params[blockBeginNonceIdx], 10, 64)
 	if err != nil {
 		return fmt.Errorf("invalid block num: %w", err)
 	}
 
-	//Push new block meta
+	//Push new block
 	r.ctx = newContext(r.logger, blockHeight)
 	return nil
 }
 
 // Format:
-// FIRE BLOCK_END <HEIGHT> <HASH> <PREV_HASH> <TIMESTAMP> <TRX-COUNT>
+// FIRE BLOCK_END <HEIGHT> <PREV_HASH> <TIMESTAMP> <PROTO-BYTES-FIREHOSE-BLOCK>
 func (ctx *parseCtx) readBlockEnd(params []string) (*pbmultiversx.Block, error) {
-	if err := validateChunk(params, 4); err != nil {
+	if err := validateChunk(params, blockEndChunks); err != nil {
 		return nil, fmt.Errorf("invalid log line length: %w", err)
 	}
 
@@ -206,7 +217,7 @@ func (ctx *parseCtx) readBlockEnd(params []string) (*pbmultiversx.Block, error) 
 		return nil, fmt.Errorf("current block not set")
 	}
 
-	blockHeight, err := strconv.ParseUint(params[0], 10, 64)
+	blockHeight, err := strconv.ParseUint(params[blockEndNonceIdx], 10, 64)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse blockNum: %w", err)
 	}
@@ -214,25 +225,25 @@ func (ctx *parseCtx) readBlockEnd(params []string) (*pbmultiversx.Block, error) 
 		return nil, fmt.Errorf("end block height does not match active block height, got block height %d but current is block height %d", blockHeight, ctx.currentBlock.Height)
 	}
 
-	timestamp, err := strconv.ParseUint(params[2], 10, 64)
+	timestamp, err := strconv.ParseUint(params[blockEndTimestampIdx], 10, 64)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse block timestamp: %w", err)
 	}
 
-	multiversxBlockBytes, err := hex.DecodeString(params[3])
+	multiversxBlockBytes, err := hex.DecodeString(params[blockEndProtoBytes])
 	if err != nil {
 		return nil, err
 	}
 
-	multiversXBlock := &firehose.FirehoseBlock{}
-	err = proto.Unmarshal(multiversxBlockBytes, multiversXBlock)
+	multiversxBlock := &firehose.FirehoseBlock{}
+	err = proto.Unmarshal(multiversxBlockBytes, multiversxBlock)
 	if err != nil {
 		return nil, err
 	}
 
-	ctx.currentBlock.PrevHash = params[1]
+	ctx.currentBlock.PrevHash = params[blockEndPrevHashIdx]
 	ctx.currentBlock.Timestamp = timestamp
-	ctx.currentBlock.MultiversxBlock = multiversXBlock
+	ctx.currentBlock.MultiversxBlock = multiversxBlock
 
 	ctx.logger.Debug("console reader read block",
 		zap.Uint64("height", ctx.currentBlock.Height),
