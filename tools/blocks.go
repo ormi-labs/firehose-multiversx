@@ -121,12 +121,12 @@ func printBlocksE(cmd *cobra.Command, args []string) error {
 			block.Num(),
 			block.ID()[0:7],
 			block.PreviousID()[0:7],
-			len(multiversxBlock.Transactions),
+			len(multiversxBlock.MultiversxBlock.Transactions),
 		)
 		if printTransactions {
 			fmt.Println("- Transactions: ")
-			for _, t := range multiversxBlock.Transactions {
-				fmt.Println("  * ", t.Hash)
+			for hash := range multiversxBlock.MultiversxBlock.Transactions {
+				fmt.Println("  * ", hash)
 			}
 			fmt.Println()
 		}
@@ -196,12 +196,12 @@ func printBlockE(cmd *cobra.Command, args []string) error {
 			block.Num(),
 			block.ID()[0:7],
 			block.PreviousID()[0:7],
-			len(multiversxBlock.Transactions),
+			len(multiversxBlock.MultiversxBlock.Transactions),
 		)
 		if printTransactions {
 			fmt.Println("- Transactions: ")
-			for _, t := range multiversxBlock.Transactions {
-				fmt.Printf("  * %s\n", t.Hash)
+			for hash := range multiversxBlock.MultiversxBlock.Transactions {
+				fmt.Printf("  * %s\n", hash)
 			}
 		}
 		continue

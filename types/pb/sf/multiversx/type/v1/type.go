@@ -1,11 +1,12 @@
 package pbmultiversx
 
 import (
+	"encoding/hex"
 	"time"
 )
 
 func (b *Block) ID() string {
-	return b.Hash
+	return hex.EncodeToString(b.MultiversxBlock.HeaderHash)
 }
 
 func (b *Block) Number() uint64 {
