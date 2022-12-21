@@ -3,7 +3,7 @@ module github.com/ElrondNetwork/firehose-multiversx/types
 go 1.16
 
 require (
-	github.com/ElrondNetwork/elrond-go-core v1.1.27-0.20221215140953-889ae4c74255
+	github.com/ElrondNetwork/elrond-go-core v1.1.27-0.20221221125809-662924974348
 	github.com/gogo/protobuf v1.3.2
 	github.com/golang/protobuf v1.5.2
 	github.com/streamingfast/bstream v0.0.2-0.20220831142019-0a0b0caa04c3
