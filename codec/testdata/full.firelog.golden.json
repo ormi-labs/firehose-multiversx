@@ -8,7 +8,8 @@
     "AlteredAccounts": [
       {
         "Address": "erd1qq",
-        "Nonce": 4
+        "Nonce": 4,
+        "Balance": "100"
       }
     ]
   }
