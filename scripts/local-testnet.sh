@@ -1,10 +1,11 @@
-
 CURRENT_DIR=$(pwd)
 WORKING_DIR="$CURRENT_DIR"
 TESTNET_DIR=$WORKING_DIR/testnet
 TESTNET_OUTPUT_DIR=$TESTNET_DIR/testnet-local
 SCRIPTS_DIR=elrond-go/scripts/testnet
 VARIABLES_PATH=$SCRIPTS_DIR/variables.sh
+OBSERVERS_PATH=$SCRIPTS_DIR/include/observers.sh
+VALIDATORS_PATH=$SCRIPTS_DIR/include/validators.sh
 ENABLE_EPOCH_DIR=$TESTNET_DIR/elrond-go/cmd/node/config/enableEpochs.toml
 SYSTEM_SC_CONFIG_DIR=$TESTNET_DIR/elrond-go/cmd/node/config/systemSmartContractsConfig.toml
 SANDBOX_NAME=sandbox
@@ -17,8 +18,13 @@ cloneDependencies(){
   mkdir "$TESTNET_DIR"
 
   git clone https://github.com/ElrondNetwork/elrond-go "$TESTNET_DIR/elrond-go"
+  cd $TESTNET_DIR/elrond-go
+  git checkout 3fb9427ba444b5d5dc6072713c45756b4e45d79c
+  cd ../..
+
   git clone https://github.com/ElrondNetwork/elrond-deploy-go "$TESTNET_DIR/elrond-deploy-go"
   git clone https://github.com/ElrondNetwork/elrond-proxy-go "$TESTNET_DIR/elrond-proxy-go"
+  echo "Da"
 }
 
 testnetRemove(){
@@ -58,7 +64,10 @@ testnetUpdateVariables(){
   sed -i 's/META_VALIDATORCOUNT=.*/META_VALIDATORCOUNT=1/' $VARIABLES_PATH
   sed -i 's/META_OBSERVERCOUNT=.*/META_OBSERVERCOUNT=1/' $VARIABLES_PATH
   sed -i 's/META_CONSENSUS_SIZE=.*/META_CONSENSUS_SIZE=$META_VALIDATORCOUNT/' $VARIABLES_PATH
-  sed -i 's/NODE_DELAY=.*/NODE_DELAY=30/' $VARIABLES_PATH
+  sed -i 's/export NODE_DELAY=.*/export NODE_DELAY=30/' $VARIABLES_PATH
+
+  sed -i 's/EXTRA_OBSERVERS_FLAGS.*/EXTRA_OBSERVERS_FLAGS --firehose-enabled"/' $OBSERVERS_PATH
+  sed -i 's/config_validator.toml/config_validator.toml --firehose-enabled/' $VALIDATORS_PATH
 }
 
 testnetNew(){
@@ -67,11 +76,18 @@ testnetNew(){
   testnetSetup
   testnetUpdateVariables
   testnetPrereq
+  #cd ../../../devel/standard
+  #sudo ./start.sh
 }
 
 testnetStart(){
   cd "$TESTNET_DIR" && \
-    ./elrond-go/scripts/testnet/start.sh trace
+    ./elrond-go/scripts/testnet/start.sh
+}
+
+testnetReset(){
+  cd "$TESTNET_DIR" && \
+    ./elrond-go/scripts/testnet/reset.sh
 }
 
 testnetStop(){
@@ -93,6 +109,8 @@ main(){
         testnetNew ;;
       start)
         testnetStart ;;
+      reset)
+        testnetReset ;;
       stop)
         testnetStop ;;
       *)
