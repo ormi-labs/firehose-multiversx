@@ -66,8 +66,8 @@ testnetUpdateVariables(){
   sed -i 's/META_CONSENSUS_SIZE=.*/META_CONSENSUS_SIZE=$META_VALIDATORCOUNT/' $VARIABLES_PATH
   sed -i 's/export NODE_DELAY=.*/export NODE_DELAY=30/' $VARIABLES_PATH
 
-  sed -i 's/EXTRA_OBSERVERS_FLAGS.*/EXTRA_OBSERVERS_FLAGS --firehose-enabled"/' $OBSERVERS_PATH
-  sed -i 's/config_validator.toml/config_validator.toml --firehose-enabled/' $VALIDATORS_PATH
+  sed -i 's/EXTRA_OBSERVERS_FLAGS.*/EXTRA_OBSERVERS_FLAGS --firehose-enabled --operation-mode db-lookup-extension"/' $OBSERVERS_PATH
+  sed -i 's/config_validator.toml/config_validator.toml --firehose-enabled --operation-mode db-lookup-extension/' $VALIDATORS_PATH
 }
 
 testnetNew(){

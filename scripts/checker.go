@@ -2,12 +2,17 @@ package main
 
 import (
 	"context"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 	"time"
 
+	"github.com/ElrondNetwork/elrond-go-core/data/alteredAccount"
+	"github.com/ElrondNetwork/elrond-go-core/data/firehose"
+	"github.com/ElrondNetwork/elrond-go-core/data/transaction"
 	logger "github.com/ElrondNetwork/elrond-go-logger"
 	"github.com/ElrondNetwork/elrond-sdk-erdgo/blockchain"
 	"github.com/ElrondNetwork/elrond-sdk-erdgo/builders"
@@ -17,6 +22,7 @@ import (
 	"github.com/streamingfast/bstream"
 	"github.com/streamingfast/dstore"
 	pbbstream "github.com/streamingfast/pbgo/sf/bstream/v1"
+	"github.com/tidwall/gjson"
 	"github.com/urfave/cli"
 	"google.golang.org/protobuf/proto"
 )
@@ -48,6 +54,11 @@ func main() {
 }
 
 func startProcess(c *cli.Context) error {
+	multiversxBlock, err := printOneBlockE(9)
+	if err != nil {
+		return err
+	}
+	return nil
 	args := blockchain.ArgsElrondProxy{
 		ProxyURL:            "http://127.0.0.1:7950",
 		CacheExpirationTime: time.Minute,
@@ -78,9 +89,6 @@ func startProcess(c *cli.Context) error {
 	}
 	fmt.Println(address)
 
-	printOneBlockE(204)
-
-	return nil
 	txBuilder, err := builders.NewTxBuilder(blockchain.NewTxSigner())
 	if err != nil {
 		return err
@@ -130,9 +138,114 @@ func startProcess(c *cli.Context) error {
 		return err
 	}
 
-	fmt.Println(hash)
+	log.Info("sent transaction", "tx hash", hash)
+
+	resp, err := http.Get(fmt.Sprintf("http://127.0.0.1:7950/transaction/%s?withResults=true", hash))
+	if err != nil {
+		// handle error
+	}
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+
+	fmt.Println(string(body))
+	scrs := gjson.Get(string(body), "data.smartContractResults").Array()
+	logs := gjson.Get(string(body), "data.logs")
+
+	err = checkSCRs(scrs, multiversxBlock.MultiversxBlock.SmartContractResult)
+	if err != nil {
+		return err
+	}
+
+	err = checkLogs(logs, multiversxBlock.MultiversxBlock.Logs, gjson.Get(string(body), "data.transaction.hash").String())
+	if err != nil {
+		return err
+	}
+
+	err = checkAlteredAccounts(multiversxBlock.MultiversxBlock.AlteredAccounts)
+	if err != nil {
+		return err
+	}
+	//printOneBlockE(3)
+
+	return nil
+
 	_ = proxy
 	return nil
+}
+
+func checkAlteredAccounts(alteredAccount []*alteredAccount.AlteredAccount) error {
+	if len(alteredAccount) != 1 &&
+		alteredAccount[0].Nonce != 1 &&
+		alteredAccount[0].Address != "erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u" &&
+		alteredAccount[0].Balance != "50000000000000000" {
+		return fmt.Errorf("invalid altered account")
+	}
+
+	return nil
+}
+
+func checkSCRs(responses []gjson.Result, scrs map[string]*firehose.SCRWithFee) error {
+	if len(responses) != len(scrs) {
+		return fmt.Errorf("got %d scrs from api, but indexed %d scrs", len(responses), len(scrs))
+	}
+
+	for _, response := range responses {
+		hash := response.Get("hash").String()
+		hashBytes, err := hex.DecodeString(hash)
+		if err != nil {
+			return err
+		}
+
+		_, found := scrs[string(hashBytes)]
+		if !found {
+			return fmt.Errorf("api hash %s not found in indexed block", hash)
+		}
+	}
+
+	return nil
+}
+
+// TODO: CHECK HASH(HEADER)  =HASH
+
+func checkLogs(responses gjson.Result, logs map[string]*transaction.Log, hash string) error {
+	if len(logs) != 1 {
+		return fmt.Errorf("expected only one generated log")
+	}
+	hashBytes, err := hex.DecodeString(hash)
+	if err != nil {
+		return err
+	}
+
+	indexedLog, found := logs[string(hashBytes)]
+	if !found {
+		return fmt.Errorf("hash %s not found in indexed logs", hash)
+	}
+
+	// TODO: BECH32 converter, check here address
+
+	events := responses.Get("events").Array()
+	if len(events) != len(indexedLog.Events) {
+		return fmt.Errorf("got %d events from api, but indexed %d events", len(events), len(indexedLog.Events))
+	}
+
+	for _, event := range events {
+		identifier := event.Get("identifier").String()
+		if !contains(indexedLog.Events, identifier) {
+			return fmt.Errorf("indexed event %s not found", identifier)
+		}
+	}
+
+	return nil
+}
+
+func contains(events []*transaction.Event, identifier string) bool {
+	for _, event := range events {
+		if string(event.Identifier) == identifier {
+			return true
+		}
+	}
+
+	return false
 }
 
 func blockReaderFactory(reader io.Reader) (bstream.BlockReader, error) {
@@ -169,17 +282,17 @@ func BlockDecoder(blk *bstream.Block) (interface{}, error) {
 	return block, nil
 }
 
-func printOneBlockE(blockNum uint64) error {
+func printOneBlockE(blockNum uint64) (*pbmultiversx.Block, error) {
 	bstream.GetBlockReaderFactory = bstream.BlockReaderFactoryFunc(blockReaderFactory)
 	bstream.GetBlockDecoder = bstream.BlockDecoderFunc(BlockDecoder)
 	bstream.GetBlockWriterHeaderLen = 10
 	bstream.GetBlockPayloadSetter = bstream.MemoryBlockPayloadSetter
 	bstream.GetMemoizeMaxAge = 20 * time.Second
-	str := "/home/elrond/go/src/github.com/ElrondNetwork/firehose-multiversx/devel/standard/firehose-data/storage/one-blocks" //"../devel/standard/firehose-data/storage/one-blocks" //viper.GetString("store")
+	str := "../devel/standard/firehose-data/storage/one-blocks"
 
 	store, err := dstore.NewDBinStore(str)
 	if err != nil {
-		return fmt.Errorf("unable to create store at path %q: %w", store, err)
+		return nil, fmt.Errorf("unable to create store at path %q: %w", store, err)
 	}
 
 	ctx := context.Background()
@@ -190,9 +303,10 @@ func printOneBlockE(blockNum uint64) error {
 		return nil
 	})
 	if err != nil {
-		return fmt.Errorf("unable to find on block files: %w", err)
+		return nil, fmt.Errorf("unable to find on block files: %w", err)
 	}
 
+	var nativeBlock *pbmultiversx.Block
 	for _, filepath := range files {
 		ppp := str + "/" + filepath + ".dbin.zst"
 
@@ -200,14 +314,14 @@ func printOneBlockE(blockNum uint64) error {
 		reader, err := store.OpenObject(ctx, filepath)
 		if err != nil {
 			fmt.Printf("❌ Unable to read block filename %s: %s\n", ppp, err)
-			return err
+			return nil, err
 		}
 		defer reader.Close()
 
 		readerFactory, err := bstream.GetBlockReaderFactory.New(reader)
 		if err != nil {
 			fmt.Printf("❌ Unable to read blocks filename %s: %s\n", filepath, err)
-			return err
+			return nil, err
 		}
 
 		//fmt.Printf("One Block File: %s\n", store.ObjectURL(filepath))
@@ -217,26 +331,27 @@ func printOneBlockE(blockNum uint64) error {
 			if err == io.EOF {
 				break
 			}
-			return fmt.Errorf("reading block: %w", err)
+			return nil, fmt.Errorf("reading block: %w", err)
 		}
 
-		if err = printBlock(block); err != nil {
-			return err
+		nativeBlock, err = printBlock(block)
+		if err != nil {
+			return nil, err
 		}
 
 	}
-	return nil
+	return nativeBlock, nil
 }
 
-func printBlock(block *bstream.Block) error {
+func printBlock(block *bstream.Block) (*pbmultiversx.Block, error) {
 	nativeBlock := block.ToProtocol().(*pbmultiversx.Block)
 
 	data, err := json.MarshalIndent(nativeBlock, "", "  ")
 	if err != nil {
-		return fmt.Errorf("json marshall: %w", err)
+		return nil, fmt.Errorf("json marshall: %w", err)
 	}
 
 	fmt.Println(string(data))
 
-	return nil
+	return nativeBlock, nil
 }

@@ -9,8 +9,9 @@ require (
 	github.com/streamingfast/bstream v0.0.2-0.20220909121429-4647fd1522c9
 	github.com/streamingfast/dstore v0.1.1-0.20220830184623-b0f0cc804743
 	github.com/streamingfast/pbgo v0.0.6-0.20220629184423-cfd0608e0cf4
+	github.com/tidwall/gjson v1.14.0
 	github.com/urfave/cli v1.22.10
-	google.golang.org/grpc v1.49.0
+	google.golang.org/protobuf v1.28.0
 )
 
 require (
@@ -67,6 +68,8 @@ require (
 	github.com/streamingfast/opaque v0.0.0-20210811180740-0c01d37ea308 // indirect
 	github.com/streamingfast/shutter v1.5.0 // indirect
 	github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7 // indirect
+	github.com/tidwall/match v1.1.1 // indirect
+	github.com/tidwall/pretty v1.2.0 // indirect
 	github.com/tyler-smith/go-bip39 v1.1.0 // indirect
 	go.opencensus.io v0.23.0 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
@@ -82,7 +85,7 @@ require (
 	google.golang.org/api v0.91.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20220808131553-a91ffa7f803e // indirect
-	google.golang.org/protobuf v1.28.0 // indirect
+	google.golang.org/grpc v1.49.0 // indirect
 )
 
 replace github.com/ElrondNetwork/arwen-wasm-vm/v1_2 v1.2.40 => github.com/ElrondNetwork/arwen-wasm-vm v1.2.40

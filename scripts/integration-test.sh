@@ -13,6 +13,24 @@ sed -i 's/DestinationShardAsObserver =.*/DestinationShardAsObserver = "metachain
 sed -i 's/FullArchive =.*/FullArchive = true/' $CURRENT_DIR/config/prefs.toml
 
 cd ../devel/standard/
+
+rm -rf compiledSCStorage/
+rm -rf config/
+rm -rf db/
+rm -rf stats/
+rm -rf firehose-data/*
+rm -rf logs/
+rm node
+
+echo $(pwd)
+
+mkdir "config/"
+
+DEVEL=$(pwd)
+cp $CURRENT_DIR/node $DEVEL
+cp -R $CURRENT_DIR/config $DEVEL
+cp $DEVEL/validatorKey.pem config/
+
 ls
 
 #sed -e "s/reader-node-path:.*/$CURRENT_DIR/" $CURRENT_DIR/../devel/standard/standard.yaml
