@@ -1,18 +1,23 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
+	"math/big"
 	"net/http"
 	"os"
 	"time"
 
+	core2 "github.com/ElrondNetwork/elrond-go-core/core"
 	"github.com/ElrondNetwork/elrond-go-core/data/alteredAccount"
 	"github.com/ElrondNetwork/elrond-go-core/data/firehose"
 	"github.com/ElrondNetwork/elrond-go-core/data/transaction"
+	"github.com/ElrondNetwork/elrond-go-core/hashing/blake2b"
+	"github.com/ElrondNetwork/elrond-go-core/marshal"
 	logger "github.com/ElrondNetwork/elrond-go-logger"
 	"github.com/ElrondNetwork/elrond-sdk-erdgo/blockchain"
 	"github.com/ElrondNetwork/elrond-sdk-erdgo/builders"
@@ -28,6 +33,8 @@ import (
 )
 
 var log = logger.GetOrCreate("checker")
+var marshaller = &marshal.GogoProtoMarshalizer{}
+var hasher = blake2b.NewBlake2b()
 
 func main() {
 	app := cli.NewApp()
@@ -54,11 +61,8 @@ func main() {
 }
 
 func startProcess(c *cli.Context) error {
-	multiversxBlock, err := printOneBlockE(9)
-	if err != nil {
-		return err
-	}
-	return nil
+
+	//return nil
 	args := blockchain.ArgsElrondProxy{
 		ProxyURL:            "http://127.0.0.1:7950",
 		CacheExpirationTime: time.Minute,
@@ -148,8 +152,21 @@ func startProcess(c *cli.Context) error {
 	body, err := io.ReadAll(resp.Body)
 
 	fmt.Println(string(body))
-	scrs := gjson.Get(string(body), "data.smartContractResults").Array()
-	logs := gjson.Get(string(body), "data.logs")
+	scrs := gjson.Get(string(body), "data.transaction.smartContractResults").Array()
+	logs := gjson.Get(string(body), "data.transaction.logs")
+
+	blockNum := gjson.Get(string(body), "data.transaction.blockNonce").Uint()
+	blockHash := gjson.Get(string(body), "data.transaction.blockHash").String()
+
+	multiversxBlock, err := printOneBlockE(blockNum)
+	if err != nil {
+		return err
+	}
+
+	err = checkHeader(multiversxBlock.MultiversxBlock, blockHash)
+	if err != nil {
+		return err
+	}
 
 	err = checkSCRs(scrs, multiversxBlock.MultiversxBlock.SmartContractResult)
 	if err != nil {
@@ -173,12 +190,29 @@ func startProcess(c *cli.Context) error {
 	return nil
 }
 
+func checkHeader(multiversxBlock *firehose.FirehoseBlock, expectedHash string) error {
+	hashBytes := hasher.Compute(string(multiversxBlock.HeaderBytes))
+	hashStr := hex.EncodeToString(hashBytes)
+
+	if hashStr != expectedHash {
+		return fmt.Errorf("invalid header hash, expected: %s, got: %s", expectedHash, hashStr)
+	}
+
+	return nil
+}
+
 func checkAlteredAccounts(alteredAccount []*alteredAccount.AlteredAccount) error {
-	if len(alteredAccount) != 1 &&
-		alteredAccount[0].Nonce != 1 &&
-		alteredAccount[0].Address != "erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u" &&
-		alteredAccount[0].Balance != "50000000000000000" {
-		return fmt.Errorf("invalid altered account")
+	if len(alteredAccount) != 1 && alteredAccount[0].Address != "erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u" {
+		return fmt.Errorf("expected only one altered account: erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u, got: %d", len(alteredAccount))
+	}
+
+	balance, castOk := big.NewInt(0).SetString(alteredAccount[0].Balance, 10)
+	if !castOk {
+		return fmt.Errorf("could not convert balance: %s to bigInt", balance)
+	}
+
+	if balance.Cmp(big.NewInt(50000000000000000)) < 0 {
+		return fmt.Errorf("expected balance increased after ESDT issue balance, but got %s", balance)
 	}
 
 	return nil
@@ -196,9 +230,18 @@ func checkSCRs(responses []gjson.Result, scrs map[string]*firehose.SCRWithFee) e
 			return err
 		}
 
-		_, found := scrs[string(hashBytes)]
+		scrFromProtocol, found := scrs[string(hashBytes)]
 		if !found {
 			return fmt.Errorf("api hash %s not found in indexed block", hash)
+		}
+
+		computedHash, err := core2.CalculateHash(marshaller, hasher, scrFromProtocol.SmartContractResult)
+		if err != nil {
+			return err
+		}
+
+		if !bytes.Equal(computedHash, hashBytes) {
+			return fmt.Errorf("computed scr hash != received scr hash")
 		}
 	}
 
