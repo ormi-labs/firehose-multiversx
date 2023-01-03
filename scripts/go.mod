@@ -3,6 +3,7 @@ module github.com/ElrondNetwork/firehose-multiversx/scripts
 go 1.17
 
 require (
+	github.com/ElrondNetwork/elrond-go-core v1.1.27-0.20221222105853-9fac9627c82b
 	github.com/ElrondNetwork/elrond-go-logger v1.0.9
 	github.com/ElrondNetwork/elrond-sdk-erdgo v1.1.2-0.20220817085202-41824b2249e5
 	github.com/ElrondNetwork/firehose-multiversx/types v0.0.0-20221222111352-c9399c804e87
@@ -11,7 +12,6 @@ require (
 	github.com/streamingfast/pbgo v0.0.6-0.20220629184423-cfd0608e0cf4
 	github.com/tidwall/gjson v1.14.0
 	github.com/urfave/cli v1.22.10
-	google.golang.org/protobuf v1.28.0
 )
 
 require (
@@ -23,7 +23,6 @@ require (
 	github.com/Azure/azure-storage-blob-go v0.14.0 // indirect
 	github.com/ElrondNetwork/concurrent-map v0.1.3 // indirect
 	github.com/ElrondNetwork/elrond-go v1.3.35 // indirect
-	github.com/ElrondNetwork/elrond-go-core v1.1.27-0.20221222105853-9fac9627c82b // indirect
 	github.com/ElrondNetwork/elrond-go-crypto v1.0.1 // indirect
 	github.com/ElrondNetwork/elrond-vm-common v1.3.12 // indirect
 	github.com/aws/aws-sdk-go v1.37.0 // indirect
@@ -86,6 +85,7 @@ require (
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20220808131553-a91ffa7f803e // indirect
 	google.golang.org/grpc v1.49.0 // indirect
+	google.golang.org/protobuf v1.28.0 // indirect
 )
 
 replace github.com/ElrondNetwork/arwen-wasm-vm/v1_2 v1.2.40 => github.com/ElrondNetwork/arwen-wasm-vm v1.2.40
