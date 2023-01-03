@@ -35,6 +35,7 @@ import (
 var log = logger.GetOrCreate("checker")
 var marshaller = &marshal.GogoProtoMarshalizer{}
 var hasher = blake2b.NewBlake2b()
+var checkMeta = false
 
 func main() {
 	app := cli.NewApp()
@@ -163,6 +164,11 @@ func startProcess(c *cli.Context) error {
 		return err
 	}
 
+	if !checkMeta {
+		hyperBlockNonce := gjson.Get(string(body), "data.transaction.hyperblockNonce").Uint()
+		return checkShardBlock(hyperBlockNonce, address)
+	}
+
 	err = checkHeader(multiversxBlock.MultiversxBlock, blockHash)
 	if err != nil {
 		return err
@@ -190,6 +196,76 @@ func startProcess(c *cli.Context) error {
 	return nil
 }
 
+func checkShardBlock(hyperBlockNonce uint64, address core.AddressHandler) error {
+	resp, err := http.Get(fmt.Sprintf("http://127.0.0.1:7950/hyperblock/by-nonce/%d", hyperBlockNonce))
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+
+	shardBlocks := gjson.Get(string(body), "data.hyperblock.shardBlocks").Array()
+
+	if len(shardBlocks) != 1 {
+		return fmt.Errorf("should only have one shard, but got %d", len(shardBlocks))
+	}
+
+	shardBlockHash := shardBlocks[0].Get("hash").String()
+	shardBlockNonce := shardBlocks[0].Get("nonce").Uint()
+
+	multiversxBlock, err := printOneBlockE(shardBlockNonce)
+	if err != nil {
+		return err
+	}
+
+	if hex.EncodeToString(multiversxBlock.MultiversxBlock.HeaderHash) != shardBlockHash {
+		return fmt.Errorf("received invalid shard hash: %s, expected: %s",
+			hex.EncodeToString(multiversxBlock.MultiversxBlock.HeaderHash),
+			shardBlockHash)
+	}
+
+	apiTxs := gjson.Get(string(body), "data.hyperblock.transactions").Array()
+
+	if len(apiTxs) != 1 || len(multiversxBlock.MultiversxBlock.Transactions) != 1 {
+		return fmt.Errorf("expected only one sent tx, got %d", len(multiversxBlock.MultiversxBlock.Transactions))
+	}
+	apiTxHash := apiTxs[0].Get("hash").String()
+
+	txHashBytes, err := hex.DecodeString(apiTxHash)
+	if err != nil {
+		return err
+	}
+
+	protocolTx, found := multiversxBlock.MultiversxBlock.Transactions[string(txHashBytes)]
+	if !found {
+		return fmt.Errorf("expected indexed tx hash: %s not found", apiTxs)
+	}
+
+	txProtocolHash, err := core2.CalculateHash(marshaller, hasher, protocolTx.Transaction)
+	if err != nil {
+		return err
+	}
+
+	if hex.EncodeToString(txProtocolHash) != apiTxHash {
+		return fmt.Errorf("invalid tx hash, expected: %s, got %s",
+			hex.EncodeToString(txProtocolHash), apiTxHash)
+	}
+
+	if len(multiversxBlock.MultiversxBlock.AlteredAccounts) != 1 {
+		return fmt.Errorf("got more altered accounts")
+	}
+
+	if !(multiversxBlock.MultiversxBlock.AlteredAccounts[0].Nonce > 0) {
+		return fmt.Errorf("invalid nonce")
+	}
+
+	if multiversxBlock.MultiversxBlock.AlteredAccounts[0].Address != address.AddressAsBech32String() {
+		return fmt.Errorf("invalid address")
+	}
+
+	return nil
+}
+
 func checkHeader(multiversxBlock *firehose.FirehoseBlock, expectedHash string) error {
 	hashBytes := hasher.Compute(string(multiversxBlock.HeaderBytes))
 	hashStr := hex.EncodeToString(hashBytes)
@@ -202,7 +278,7 @@ func checkHeader(multiversxBlock *firehose.FirehoseBlock, expectedHash string) e
 }
 
 func checkAlteredAccounts(alteredAccount []*alteredAccount.AlteredAccount) error {
-	if len(alteredAccount) != 1 && alteredAccount[0].Address != "erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u" {
+	if len(alteredAccount) != 1 || alteredAccount[0].Address != "erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u" {
 		return fmt.Errorf("expected only one altered account: erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u, got: %d", len(alteredAccount))
 	}
 
