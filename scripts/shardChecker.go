@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io"
+	"math/big"
 	"net/http"
 
 	mvxcore "github.com/ElrondNetwork/elrond-go-core/core"
@@ -100,6 +101,15 @@ func checkShardTxs(apiTxs []gjson.Result, transactions map[string]*firehose.TxWi
 	txProtocolHexHash := hex.EncodeToString(txProtocolHash)
 	if txProtocolHexHash != txHash {
 		return fmt.Errorf("checkShardTxs: invalid computed tx hash, expected: %s, got %s", txHash, txProtocolHexHash)
+	}
+
+	initialPaidFeed := protocolTx.FeeInfo.GetInitialPaidFee()
+	expectedInitialPaidFee := big.NewInt(txGasLimit * 1000000000)
+	if initialPaidFeed.Cmp(expectedInitialPaidFee) != 0 {
+		return fmt.Errorf("checkShardTxs: invalid initial tx paid fee, expected: %s, got %s",
+			expectedInitialPaidFee.String(),
+			initialPaidFeed.String(),
+		)
 	}
 
 	return nil

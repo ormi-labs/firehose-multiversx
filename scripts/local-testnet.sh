@@ -24,7 +24,6 @@ cloneDependencies(){
 
   git clone https://github.com/ElrondNetwork/elrond-deploy-go "$TESTNET_DIR/elrond-deploy-go"
   git clone https://github.com/ElrondNetwork/elrond-proxy-go "$TESTNET_DIR/elrond-proxy-go"
-  echo "Da"
 }
 
 testnetRemove(){
@@ -76,8 +75,6 @@ testnetNew(){
   testnetSetup
   testnetUpdateVariables
   testnetPrereq
-  #cd ../../../devel/standard
-  #sudo ./start.sh
 }
 
 testnetStart(){
@@ -99,6 +96,7 @@ echoOptions(){
   echo "ERROR!!! Please choose one of the following parameters:
   - new to create a new testnet
   - start to start the testnet
+  - reset to reset the testnet
   - stop to stop the testnet"
 }
 

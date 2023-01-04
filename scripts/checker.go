@@ -13,29 +13,31 @@ import (
 	"github.com/urfave/cli"
 )
 
-var log = logger.GetOrCreate("checker")
-var marshaller = &marshal.GogoProtoMarshalizer{}
-var hasher = blake2b.NewBlake2b()
-var checkMeta = false
+var (
+	log        = logger.GetOrCreate("checker")
+	marshaller = &marshal.GogoProtoMarshalizer{}
+	hasher     = blake2b.NewBlake2b()
+)
 
-const proxyPem = "testnet/testnet-local/sandbox/proxy/config/walletKey.pem"
-const esdtIssueAddress = "erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u"
-const proxyUrl = "http://127.0.0.1:7950"
+var checkMetaFlag = cli.BoolFlag{
+	Name:  "check-meta",
+	Usage: "Boolean flag to specify if checker should be used for meta blocks or shard blocks",
+}
+
+const (
+	proxyPem         = "testnet/testnet-local/sandbox/proxy/config/walletKey.pem"
+	esdtIssueAddress = "erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u"
+	proxyUrl         = "http://127.0.0.1:7950"
+	txGasLimit       = 55141500
+)
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "Transaction sender tool"
-	app.Usage = "This is the entry point for the tool that sends one tx/block from multiple shards"
-	//app.Flags = getFlags()
-	app.Authors = []cli.Author{
-		{
-			Name:  "The Elrond Team",
-			Email: "contact@elrond.com",
-		},
-	}
-
+	app.Name = "Tool to check data integration validity into firehose ingestion process"
+	app.Usage = "This tool only works if a local testnet and a firehose node are started. See integration-test.sh and local-testnet.sh scripts"
 	app.Action = func(c *cli.Context) error {
-		return startProcess(c)
+		checkMeta := c.GlobalBool(checkMetaFlag.Name)
+		return startProcess(checkMeta)
 	}
 
 	err := app.Run(os.Args)
@@ -46,7 +48,7 @@ func main() {
 	}
 }
 
-func startProcess(c *cli.Context) error {
+func startProcess(checkMeta bool) error {
 	address, privateKey, err := getAddressAndSK(proxyPem)
 	if err != nil {
 		return err
