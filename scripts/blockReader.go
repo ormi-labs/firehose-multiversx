@@ -36,6 +36,8 @@ func blockReaderFactory(reader io.Reader) (bstream.BlockReader, error) {
 }
 
 func getBlockFromStorage(blockNum uint64) (*pbmultiversx.Block, error) {
+	log.Info("getBlockFromStorage", "blockNum", blockNum)
+
 	store, err := dstore.NewDBinStore(storagePath)
 	if err != nil {
 		return nil, fmt.Errorf("unable to create store at path %q: %w", store, err)
