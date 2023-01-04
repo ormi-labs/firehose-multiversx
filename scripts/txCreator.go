@@ -12,7 +12,7 @@ import (
 
 func sendIssueESDTTx(address core.AddressHandler, privateKey []byte) (string, error) {
 	args := blockchain.ArgsElrondProxy{
-		ProxyURL:            "http://127.0.0.1:7950",
+		ProxyURL:            proxyUrl,
 		CacheExpirationTime: time.Minute,
 		EntityType:          core.Proxy,
 	}
@@ -45,7 +45,7 @@ func sendIssueESDTTx(address core.AddressHandler, privateKey []byte) (string, er
 	transactionArguments.Value = "50000000000000000"
 	transactionArguments.GasLimit = 55141500
 	transactionArguments.Data = []byte("issue@4141414141@41414141@6f@01@63616e55706772616465@74727565@63616e57697065@74727565@63616e467265657a65@74727565")
-	transactionArguments.RcvAddr = "erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u"
+	transactionArguments.RcvAddr = esdtIssueAddress
 
 	signedTx, err := ti.ApplySignatureAndGenerateTx(privateKey, transactionArguments)
 	if err != nil {
