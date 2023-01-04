@@ -16,6 +16,14 @@ import (
 
 const storagePath = "../devel/standard/firehose-data/storage/one-blocks"
 
+func init() {
+	bstream.GetBlockReaderFactory = bstream.BlockReaderFactoryFunc(blockReaderFactory)
+	bstream.GetBlockDecoder = bstream.BlockDecoderFunc(types.BlockDecoder)
+	bstream.GetBlockWriterHeaderLen = 10
+	bstream.GetBlockPayloadSetter = bstream.MemoryBlockPayloadSetter
+	bstream.GetMemoizeMaxAge = 20 * time.Second
+}
+
 func blockReaderFactory(reader io.Reader) (bstream.BlockReader, error) {
 	return bstream.NewDBinBlockReader(reader, func(contentType string, version int32) error {
 		protocol := pbbstream.Protocol(pbbstream.Protocol_value[contentType])
@@ -27,13 +35,7 @@ func blockReaderFactory(reader io.Reader) (bstream.BlockReader, error) {
 	})
 }
 
-func printOneBlockE(blockNum uint64) (*pbmultiversx.Block, error) {
-	bstream.GetBlockReaderFactory = bstream.BlockReaderFactoryFunc(blockReaderFactory)
-	bstream.GetBlockDecoder = bstream.BlockDecoderFunc(types.BlockDecoder)
-	bstream.GetBlockWriterHeaderLen = 10
-	bstream.GetBlockPayloadSetter = bstream.MemoryBlockPayloadSetter
-	bstream.GetMemoizeMaxAge = 20 * time.Second
-
+func getBlockFromStorage(blockNum uint64) (*pbmultiversx.Block, error) {
 	store, err := dstore.NewDBinStore(storagePath)
 	if err != nil {
 		return nil, fmt.Errorf("unable to create store at path %q: %w", store, err)
@@ -59,7 +61,9 @@ func printOneBlockE(blockNum uint64) (*pbmultiversx.Block, error) {
 		}
 		defer func() {
 			errCloseReader := reader.Close()
-			log.Warn("could not close reader", "error", errCloseReader)
+			if errCloseReader != nil {
+				log.Warn("could not close reader", "error", errCloseReader)
+			}
 		}()
 
 		readerFactory, err := bstream.GetBlockReaderFactory.New(reader)
@@ -76,7 +80,7 @@ func printOneBlockE(blockNum uint64) (*pbmultiversx.Block, error) {
 			return nil, fmt.Errorf("reading block: %w", err)
 		}
 
-		nativeBlock, err = printBlock(block)
+		nativeBlock, err = getNativeBlock(block)
 		if err != nil {
 			return nil, err
 		}
@@ -85,7 +89,7 @@ func printOneBlockE(blockNum uint64) (*pbmultiversx.Block, error) {
 	return nativeBlock, nil
 }
 
-func printBlock(block *bstream.Block) (*pbmultiversx.Block, error) {
+func getNativeBlock(block *bstream.Block) (*pbmultiversx.Block, error) {
 	nativeBlock := block.ToProtocol().(*pbmultiversx.Block)
 
 	data, err := json.MarshalIndent(nativeBlock, "", "  ")
@@ -93,7 +97,6 @@ func printBlock(block *bstream.Block) (*pbmultiversx.Block, error) {
 		return nil, fmt.Errorf("json marshall: %w", err)
 	}
 
-	fmt.Println(string(data))
-
+	log.Info("loaded block", "block", string(data))
 	return nativeBlock, nil
 }

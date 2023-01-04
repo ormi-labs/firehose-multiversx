@@ -1,18 +1,13 @@
 package main
 
 import (
-	"bytes"
 	"encoding/hex"
 	"fmt"
 	"io"
-	"math/big"
 	"net/http"
 	"os"
 
 	core2 "github.com/ElrondNetwork/elrond-go-core/core"
-	"github.com/ElrondNetwork/elrond-go-core/data/alteredAccount"
-	"github.com/ElrondNetwork/elrond-go-core/data/firehose"
-	"github.com/ElrondNetwork/elrond-go-core/data/transaction"
 	"github.com/ElrondNetwork/elrond-go-core/hashing/blake2b"
 	"github.com/ElrondNetwork/elrond-go-core/marshal"
 	logger "github.com/ElrondNetwork/elrond-go-logger"
@@ -27,6 +22,7 @@ var hasher = blake2b.NewBlake2b()
 var checkMeta = false
 
 const proxyPem = "testnet/testnet-local/sandbox/proxy/config/walletKey.pem"
+const esdtIssueAddress = "erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u"
 
 func main() {
 	app := cli.NewApp()
@@ -67,6 +63,7 @@ func startProcess(c *cli.Context) error {
 	if err != nil {
 		return err
 	}
+
 	defer func() {
 		err = resp.Body.Close()
 		if err != nil {
@@ -79,43 +76,12 @@ func startProcess(c *cli.Context) error {
 		return err
 	}
 
-	scrs := gjson.Get(string(body), "data.transaction.smartContractResults").Array()
-	logs := gjson.Get(string(body), "data.transaction.logs")
-
-	blockNum := gjson.Get(string(body), "data.transaction.blockNonce").Uint()
-	blockHash := gjson.Get(string(body), "data.transaction.blockHash").String()
-
-	multiversxBlock, err := printOneBlockE(blockNum)
-	if err != nil {
-		return err
-	}
-
 	if !checkMeta {
 		hyperBlockNonce := gjson.Get(string(body), "data.transaction.hyperblockNonce").Uint()
 		return checkShardBlock(hyperBlockNonce, address)
 	}
 
-	err = checkHeader(multiversxBlock.MultiversxBlock, blockHash)
-	if err != nil {
-		return err
-	}
-
-	err = checkSCRs(scrs, multiversxBlock.MultiversxBlock.SmartContractResult)
-	if err != nil {
-		return err
-	}
-
-	err = checkLogs(logs, multiversxBlock.MultiversxBlock.Logs, gjson.Get(string(body), "data.transaction.hash").String())
-	if err != nil {
-		return err
-	}
-
-	err = checkAlteredAccounts(multiversxBlock.MultiversxBlock.AlteredAccounts)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return checkMetaBlock(string(body))
 }
 
 func checkShardBlock(hyperBlockNonce uint64, address core.AddressHandler) error {
@@ -135,15 +101,20 @@ func checkShardBlock(hyperBlockNonce uint64, address core.AddressHandler) error 
 	shardBlockHash := shardBlocks[0].Get("hash").String()
 	shardBlockNonce := shardBlocks[0].Get("nonce").Uint()
 
-	multiversxBlock, err := printOneBlockE(shardBlockNonce)
+	multiversxBlock, err := getBlockFromStorage(shardBlockNonce)
 	if err != nil {
 		return err
 	}
 
-	if hex.EncodeToString(multiversxBlock.MultiversxBlock.HeaderHash) != shardBlockHash {
-		return fmt.Errorf("received invalid shard hash: %s, expected: %s",
-			hex.EncodeToString(multiversxBlock.MultiversxBlock.HeaderHash),
-			shardBlockHash)
+	err = checkHeader(
+		multiversxBlock.MultiversxBlock,
+		shardBlockHash,
+		map[core2.HeaderType]struct{}{
+			core2.ShardHeaderV1: {},
+			core2.ShardHeaderV2: {},
+		})
+	if err != nil {
+		return err
 	}
 
 	apiTxs := gjson.Get(string(body), "data.hyperblock.transactions").Array()
@@ -189,105 +160,4 @@ func checkShardBlock(hyperBlockNonce uint64, address core.AddressHandler) error 
 	}
 
 	return nil
-}
-
-func checkHeader(multiversxBlock *firehose.FirehoseBlock, expectedHash string) error {
-	hashBytes := hasher.Compute(string(multiversxBlock.HeaderBytes))
-	hashStr := hex.EncodeToString(hashBytes)
-
-	if hashStr != expectedHash {
-		return fmt.Errorf("invalid header hash, expected: %s, got: %s", expectedHash, hashStr)
-	}
-
-	return nil
-}
-
-func checkAlteredAccounts(alteredAccount []*alteredAccount.AlteredAccount) error {
-	if len(alteredAccount) != 1 || alteredAccount[0].Address != "erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u" {
-		return fmt.Errorf("expected only one altered account: erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u, got: %d", len(alteredAccount))
-	}
-
-	balance, castOk := big.NewInt(0).SetString(alteredAccount[0].Balance, 10)
-	if !castOk {
-		return fmt.Errorf("could not convert balance: %s to bigInt", balance)
-	}
-
-	if balance.Cmp(big.NewInt(50000000000000000)) < 0 {
-		return fmt.Errorf("expected balance increased after ESDT issue balance, but got %s", balance)
-	}
-
-	return nil
-}
-
-func checkSCRs(responses []gjson.Result, scrs map[string]*firehose.SCRWithFee) error {
-	if len(responses) != len(scrs) {
-		return fmt.Errorf("got %d scrs from api, but indexed %d scrs", len(responses), len(scrs))
-	}
-
-	for _, response := range responses {
-		hash := response.Get("hash").String()
-		hashBytes, err := hex.DecodeString(hash)
-		if err != nil {
-			return err
-		}
-
-		scrFromProtocol, found := scrs[string(hashBytes)]
-		if !found {
-			return fmt.Errorf("api hash %s not found in indexed block", hash)
-		}
-
-		computedHash, err := core2.CalculateHash(marshaller, hasher, scrFromProtocol.SmartContractResult)
-		if err != nil {
-			return err
-		}
-
-		if !bytes.Equal(computedHash, hashBytes) {
-			return fmt.Errorf("computed scr hash != received scr hash")
-		}
-	}
-
-	return nil
-}
-
-// TODO: CHECK HASH(HEADER)  =HASH
-
-func checkLogs(responses gjson.Result, logs map[string]*transaction.Log, hash string) error {
-	if len(logs) != 1 {
-		return fmt.Errorf("expected only one generated log")
-	}
-	hashBytes, err := hex.DecodeString(hash)
-	if err != nil {
-		return err
-	}
-
-	indexedLog, found := logs[string(hashBytes)]
-	if !found {
-		return fmt.Errorf("hash %s not found in indexed logs", hash)
-	}
-
-	// TODO: BECH32 converter, check here address
-
-	events := responses.Get("events").Array()
-	if len(events) != len(indexedLog.Events) {
-		return fmt.Errorf("got %d events from api, but indexed %d events", len(events), len(indexedLog.Events))
-	}
-
-	for _, event := range events {
-		identifier := event.Get("identifier").String()
-		if !contains(indexedLog.Events, identifier) {
-			return fmt.Errorf("indexed event %s not found", identifier)
-		}
-	}
-
-	return nil
-}
-
-func contains(events []*transaction.Event, identifier string) bool {
-	for _, event := range events {
-		if string(event.Identifier) == identifier {
-			return true
-		}
-	}
-
-	return false
 }
