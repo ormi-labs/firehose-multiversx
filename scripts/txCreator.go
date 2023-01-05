@@ -58,8 +58,8 @@ func sendIssueESDTTx(address core.AddressHandler, privateKey []byte) (string, er
 	}
 	log.Info("sent transaction", "tx hash", hash)
 
-	log.Info("waiting 4 rounds...")
-	time.Sleep(time.Millisecond * time.Duration(networkConfig.RoundDuration*4))
+	log.Info("waiting 5 rounds...")
+	time.Sleep(time.Millisecond * time.Duration(networkConfig.RoundDuration*5))
 
 	return hash, nil
 }

@@ -35,6 +35,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "Tool to check data integration validity into firehose ingestion process"
 	app.Usage = "This tool only works if a local testnet and a firehose node are started. See integration-test.sh and local-testnet.sh scripts"
+	app.Flags = []cli.Flag{checkMetaFlag}
 	app.Action = func(c *cli.Context) error {
 		checkMeta := c.GlobalBool(checkMetaFlag.Name)
 		return startProcess(checkMeta)
