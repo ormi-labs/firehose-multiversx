@@ -3,8 +3,8 @@ module github.com/ElrondNetwork/firehose-multiversx
 go 1.17
 
 require (
-	github.com/ElrondNetwork/elrond-go-core v1.1.27-0.20221222105853-9fac9627c82b
-	github.com/ElrondNetwork/firehose-multiversx/types v0.0.0-20221222111352-c9399c804e87
+	github.com/ElrondNetwork/elrond-go-core v1.1.27-0.20230105090400-71054be29f2f
+	github.com/ElrondNetwork/firehose-multiversx/types v0.0.0-20230105094233-40ee8c5c2bec
 	github.com/ShinyTrinkets/overseer v0.3.0
 	github.com/gogo/protobuf v1.3.2
 	github.com/golang/protobuf v1.5.2

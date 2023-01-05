@@ -97,10 +97,10 @@ github.com/Azure/go-autorest/tracing v0.6.0 h1:TYi4+3m5t6K48TGI9AUdb+IzbnSxvnvUM
 github.com/Azure/go-autorest/tracing v0.6.0/go.mod h1:+vhtPC754Xsa23ID7GlGsrdKBpUA79WCAKPPZVC2DeU=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
-github.com/ElrondNetwork/elrond-go-core v1.1.27-0.20221222105853-9fac9627c82b h1:FMc4DCkdOan30eX17CDrO/RMa9Jhb/ZzIe/tQYhJGl8=
-github.com/ElrondNetwork/elrond-go-core v1.1.27-0.20221222105853-9fac9627c82b/go.mod h1:N/RI++YU2M6OlnD1GSZepc1wPhI84ykRDQ1IyD3B0wk=
-github.com/ElrondNetwork/firehose-multiversx/types v0.0.0-20221222111352-c9399c804e87 h1:w+VRaPudQ26x9nbrpT0LzEPDQdKNnE/epM+k0DkyLzU=
-github.com/ElrondNetwork/firehose-multiversx/types v0.0.0-20221222111352-c9399c804e87/go.mod h1:AP3i9OYANMEwF+4MNrP7VG50YcU87d3WwoWVa3Odv/c=
+github.com/ElrondNetwork/elrond-go-core v1.1.27-0.20230105090400-71054be29f2f h1:PGNPnTKDqU9e8ptBMpF7MXLsPlFZ+3akhGEOVD/U7y4=
+github.com/ElrondNetwork/elrond-go-core v1.1.27-0.20230105090400-71054be29f2f/go.mod h1:N/RI++YU2M6OlnD1GSZepc1wPhI84ykRDQ1IyD3B0wk=
+github.com/ElrondNetwork/firehose-multiversx/types v0.0.0-20230105094233-40ee8c5c2bec h1:T7B8jdW3BVAEg7Klkv8fALiM6N72NnHnlU7ViTG/RS4=
+github.com/ElrondNetwork/firehose-multiversx/types v0.0.0-20230105094233-40ee8c5c2bec/go.mod h1:5wEaNrEpLwy+2H1oCbXJr1TaI7GkM8iM7jDNyw1HMn0=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp v0.32.3 h1:fiyErF/p5fz79DvMCca9ayvYiWYsFP1oJbskt9fjo8I=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp v0.32.3/go.mod h1:s7Gpwj0tk7XnVCm4BQEmx/mbS36SuTCY/vMB2SNxe8o=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.8.6 h1:TOxk7n3PE2OkdNMgrXDtDr3ju4pIvwhY515tCoH0CpE=
