@@ -76,10 +76,9 @@ func startProcess(checkMeta bool) error {
 		return err
 	}
 
-	if !checkMeta {
-		hyperBlockNonce := gjson.Get(string(body), "data.transaction.hyperblockNonce").Uint()
-		return checkShardBlock(hyperBlockNonce, address.AddressAsBech32String(), txHash)
+	if checkMeta {
+		return checkMetaBlock(string(body), txHash)
 	}
-
-	return checkMetaBlock(string(body), txHash)
+	hyperBlockNonce := gjson.Get(string(body), "data.transaction.hyperblockNonce").Uint()
+	return checkShardBlock(hyperBlockNonce, address.AddressAsBech32String(), txHash)
 }

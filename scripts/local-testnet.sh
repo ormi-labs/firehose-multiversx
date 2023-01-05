@@ -19,7 +19,7 @@ cloneDependencies(){
 
   git clone https://github.com/ElrondNetwork/elrond-go "$TESTNET_DIR/elrond-go"
   cd $TESTNET_DIR/elrond-go
-  git checkout 3fb9427ba444b5d5dc6072713c45756b4e45d79c
+  git checkout 4f82f49ede54e14b19f42028d910e41a728b3925
   cd ../..
 
   git clone https://github.com/ElrondNetwork/elrond-deploy-go "$TESTNET_DIR/elrond-deploy-go"
