@@ -48,31 +48,6 @@ func checkMetaBlock(apiTxResultBody string, txHash string) error {
 	return checkMetaAlteredAccounts(multiversxBlock.MultiversxBlock.AlteredAccounts)
 }
 
-func checkMetaAlteredAccounts(alteredAccounts []*alteredAccount.AlteredAccount) error {
-	log.Info("checking meta altered accounts...")
-
-	numAlteredAccounts := len(alteredAccounts)
-	if numAlteredAccounts != 1 {
-		return fmt.Errorf("checkMetaAlteredAccounts: expected only one altered account: %s, got: %d", esdtIssueAddress, numAlteredAccounts)
-	}
-
-	acc := alteredAccounts[0]
-	if acc.Address != esdtIssueAddress {
-		return fmt.Errorf("checkMetaAlteredAccounts: expected altered account: %s, got: %s", esdtIssueAddress, acc.Address)
-	}
-
-	balance, castOk := big.NewInt(0).SetString(acc.Balance, 10)
-	if !castOk {
-		return fmt.Errorf("checkMetaAlteredAccounts: could not convert balance: %s to bigInt, address: %s", balance, esdtIssueAddress)
-	}
-
-	if balance.Cmp(big.NewInt(50000000000000000)) < 0 {
-		return fmt.Errorf("checkMetaAlteredAccounts: expected %s address' balance increased after ESDT issue, but got %s", esdtIssueAddress, balance)
-	}
-
-	return nil
-}
-
 func checkMetaSCRs(apiSCRs []gjson.Result, scrs map[string]*firehose.SCRWithFee) error {
 	log.Info("checking meta scrs...")
 
@@ -157,4 +132,29 @@ func contains(events []*transaction.Event, identifier string) bool {
 	}
 
 	return false
+}
+
+func checkMetaAlteredAccounts(alteredAccounts []*alteredAccount.AlteredAccount) error {
+	log.Info("checking meta altered accounts...")
+
+	numAlteredAccounts := len(alteredAccounts)
+	if numAlteredAccounts != 1 {
+		return fmt.Errorf("checkMetaAlteredAccounts: expected only one altered account: %s, got: %d", esdtIssueAddress, numAlteredAccounts)
+	}
+
+	acc := alteredAccounts[0]
+	if acc.Address != esdtIssueAddress {
+		return fmt.Errorf("checkMetaAlteredAccounts: expected altered account: %s, got: %s", esdtIssueAddress, acc.Address)
+	}
+
+	balance, castOk := big.NewInt(0).SetString(acc.Balance, 10)
+	if !castOk {
+		return fmt.Errorf("checkMetaAlteredAccounts: could not convert balance: %s to bigInt, address: %s", balance, esdtIssueAddress)
+	}
+
+	if balance.Cmp(big.NewInt(50000000000000000)) < 0 {
+		return fmt.Errorf("checkMetaAlteredAccounts: expected %s address' balance increased after ESDT issue, but got %s", esdtIssueAddress, balance)
+	}
+
+	return nil
 }
