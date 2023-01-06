@@ -16,6 +16,12 @@ import (
 
 const storagePath = "../devel/standard/firehose-data/storage/one-blocks"
 
+type blockMessage string
+
+func (bm blockMessage) String() string {
+	return string(bm)
+}
+
 func init() {
 	bstream.GetBlockReaderFactory = bstream.BlockReaderFactoryFunc(blockReaderFactory)
 	bstream.GetBlockDecoder = bstream.BlockDecoderFunc(types.BlockDecoder)
@@ -99,6 +105,6 @@ func getNativeBlock(block *bstream.Block) (*pbmultiversx.Block, error) {
 		return nil, fmt.Errorf("json marshall: %w", err)
 	}
 
-	log.Info("loaded block", "block", string(data))
+	log.Info("loaded block", "block", blockMessage(data))
 	return nativeBlock, nil
 }
