@@ -9,7 +9,7 @@ func getAddressAndSK(pemPath string) (core.AddressHandler, []byte, error) {
 	w := interactors.NewWallet()
 	privateKey, err := w.LoadPrivateKeyFromPemFile(pemPath)
 	if err != nil {
-		log.Error("unable to load pem from proxy sandbox", "error", err)
+		log.Error("unable to load pem", "file", pemPath, "error", err)
 		return nil, nil, err
 	}
 

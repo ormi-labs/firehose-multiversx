@@ -35,6 +35,10 @@ func checkShardBlock(hyperBlockNonce uint64, address string, txHash string) erro
 	}
 
 	shardBlocks := gjson.Get(string(body), "data.hyperblock.shardBlocks").Array()
+	if len(shardBlocks) != 1 {
+		return fmt.Errorf("checkShardHeader: should only have one shard, but got %d", len(shardBlocks))
+	}
+
 	shardBlockNonce := shardBlocks[0].Get("nonce").Uint()
 	multiversxBlock, err := getBlockFromStorage(shardBlockNonce)
 	if err != nil {
@@ -56,10 +60,6 @@ func checkShardBlock(hyperBlockNonce uint64, address string, txHash string) erro
 }
 
 func checkShardHeader(multiversxBlock *firehose.FirehoseBlock, shardBlocks []gjson.Result) error {
-	if len(shardBlocks) != 1 {
-		return fmt.Errorf("checkShardHeader: should only have one shard, but got %d", len(shardBlocks))
-	}
-
 	shardBlockHash := shardBlocks[0].Get("hash").String()
 	return checkHeader(
 		multiversxBlock,
@@ -79,7 +79,7 @@ func checkShardTxs(apiTxs []gjson.Result, transactions map[string]*firehose.TxWi
 	}
 
 	numIndexedTxs := len(transactions)
-	if len(transactions) != 1 {
+	if numIndexedTxs != 1 {
 		return fmt.Errorf("checkShardTxs: expected only one sent tx, got %d", numIndexedTxs)
 	}
 

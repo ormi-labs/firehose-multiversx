@@ -67,7 +67,7 @@ func checkMetaAlteredAccounts(alteredAccounts []*alteredAccount.AlteredAccount) 
 	}
 
 	if balance.Cmp(big.NewInt(50000000000000000)) < 0 {
-		return fmt.Errorf("checkMetaAlteredAccounts: expected %s address' balance increased after ESDT issue balance, but got %s", esdtIssueAddress, balance)
+		return fmt.Errorf("checkMetaAlteredAccounts: expected %s address' balance increased after ESDT issue, but got %s", esdtIssueAddress, balance)
 	}
 
 	return nil
@@ -142,7 +142,7 @@ func checkMetaLogs(apiLog gjson.Result, logs map[string]*transaction.Log, txHash
 	for _, apiEvent := range apiEvents {
 		identifier := apiEvent.Get("identifier").String()
 		if !contains(indexedEvents, identifier) {
-			return fmt.Errorf("checkMetaLogs: indexed event identifier %s not found", identifier)
+			return fmt.Errorf("checkMetaLogs: api event identifier %s not found in indexed events", identifier)
 		}
 	}
 

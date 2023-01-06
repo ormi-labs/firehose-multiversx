@@ -5,7 +5,7 @@ startTest(){
 
   screen -L -A -m -d -S firehosenode ./integration-test.sh $1
 
-  sleep 140
+  sleep 80
 
   echo "finish starting firehosenode"
   echo "starting integration tests for $1"
@@ -21,6 +21,6 @@ startTest(){
   screen -S firehosenode -X quit
 }
 
-startTest shard
-startTest metachain
+startTest shard || exit 1
+startTest metachain || exit 1
 

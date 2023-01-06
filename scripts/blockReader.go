@@ -94,6 +94,10 @@ func getBlockFromStorage(blockNum uint64) (*pbmultiversx.Block, error) {
 		}
 
 	}
+	if nativeBlock == nil || nativeBlock.MultiversxBlock == nil {
+		return nil, fmt.Errorf("go nil block from storage")
+	}
+
 	return nativeBlock, nil
 }
 
