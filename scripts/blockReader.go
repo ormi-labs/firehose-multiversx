@@ -64,8 +64,7 @@ func getBlockFromStorage(blockNum uint64) (*pbmultiversx.Block, error) {
 	for _, filepath := range files {
 		reader, err := store.OpenObject(ctx, filepath)
 		if err != nil {
-			fmt.Printf("❌ Unable to read block filename %s: %s\n", filepath, err)
-			return nil, err
+			return nil, fmt.Errorf("unable to read block filename %s: ; error: %s\n", filepath, err)
 		}
 		defer func() {
 			errCloseReader := reader.Close()
@@ -76,8 +75,7 @@ func getBlockFromStorage(blockNum uint64) (*pbmultiversx.Block, error) {
 
 		readerFactory, err := bstream.GetBlockReaderFactory.New(reader)
 		if err != nil {
-			fmt.Printf("❌ Unable to read blocks filename %s: %s\n", filepath, err)
-			return nil, err
+			return nil, fmt.Errorf("unable to create a reader factory, blocks filename %s: %s\n", filepath, err)
 		}
 
 		block, err := readerFactory.Read()
