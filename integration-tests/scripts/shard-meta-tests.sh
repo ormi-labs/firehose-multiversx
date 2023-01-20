@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 cd ..
 go build
 cd scripts
@@ -5,7 +7,7 @@ cd scripts
 startTest(){
   echo "starting firehosenode with screen"
 
-  screen -L -A -m -d -S firehosenode ./integration-test.sh $1
+  screen -L -A -m -d -S firehosenode ./firehose-node.sh $1
 
   sleep 50
 

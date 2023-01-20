@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 CURRENT_DIR=$(pwd)
 SANDBOX_PATH=$CURRENT_DIR/testnet/testnet-local/sandbox
 KEY_GENERATOR_PATH=$CURRENT_DIR/testnet/elrond-go/cmd/keygenerator
@@ -5,10 +7,14 @@ KEY_GENERATOR_PATH=$CURRENT_DIR/testnet/elrond-go/cmd/keygenerator
 setup(){
   echo "starting integration tests for shard $1"
 
+  pushd $CURRENT_DIR
   cd testnet/elrond-go/cmd/keygenerator
   go build
   ./keygenerator
-  cd ../../../../../../devel/standard/
+
+  popd
+
+  cd ../../devel/standard/
 
   rm -rf compiledSCStorage/
   rm -rf config/

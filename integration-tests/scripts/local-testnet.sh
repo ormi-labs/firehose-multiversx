@@ -22,7 +22,6 @@ cloneDependencies(){
   git checkout 4f82f49ede54e14b19f42028d910e41a728b3925
   cd ../..
 
-  git clone https://github.com/ElrondNetwork/elrond-deploy-go "$TESTNET_DIR/elrond-deploy-go"
   git clone https://github.com/ElrondNetwork/elrond-proxy-go "$TESTNET_DIR/elrond-proxy-go"
 }
 
@@ -44,7 +43,6 @@ testnetSetup(){
   mkdir "$TESTNET_OUTPUT_DIR"
   cd "$TESTNET_OUTPUT_DIR" && \
     (ln -s "$TESTNET_DIR"/elrond-go elrond-go && \
-    ln -s "$TESTNET_DIR"/elrond-deploy-go elrond-deploy-go && \
     ln -s "$TESTNET_DIR"/elrond-proxy-go elrond-proxy-go)
 }
 

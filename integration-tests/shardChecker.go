@@ -45,7 +45,7 @@ func checkShardBlock(hyperBlockNonce uint64, address string, txHash string) erro
 		return err
 	}
 
-	err = checkShardHeader(multiversxBlock.MultiversxBlock, shardBlocks)
+	err = checkShardBlockHeader(multiversxBlock.MultiversxBlock, shardBlocks)
 	if err != nil {
 		return err
 	}
@@ -59,7 +59,7 @@ func checkShardBlock(hyperBlockNonce uint64, address string, txHash string) erro
 	return checkShardAlteredAccounts(multiversxBlock.MultiversxBlock.AlteredAccounts, address)
 }
 
-func checkShardHeader(multiversxBlock *firehose.FirehoseBlock, shardBlocks []gjson.Result) error {
+func checkShardBlockHeader(multiversxBlock *firehose.FirehoseBlock, shardBlocks []gjson.Result) error {
 	shardBlockHash := shardBlocks[0].Get("hash").String()
 	return checkHeader(
 		multiversxBlock,
@@ -103,12 +103,12 @@ func checkShardTxs(apiTxs []gjson.Result, transactions map[string]*firehose.TxWi
 		return fmt.Errorf("checkShardTxs: invalid computed tx hash, expected: %s, got %s", txHash, txProtocolHexHash)
 	}
 
-	initialPaidFeed := protocolTx.FeeInfo.GetInitialPaidFee()
+	initialPaidFee := protocolTx.FeeInfo.GetInitialPaidFee()
 	expectedInitialPaidFee := big.NewInt(txGasLimit * 1000000000)
-	if initialPaidFeed.Cmp(expectedInitialPaidFee) != 0 {
+	if initialPaidFee.Cmp(expectedInitialPaidFee) != 0 {
 		return fmt.Errorf("checkShardTxs: invalid initial tx paid fee, expected: %s, got %s",
 			expectedInitialPaidFee.String(),
-			initialPaidFeed.String(),
+			initialPaidFee.String(),
 		)
 	}
 
