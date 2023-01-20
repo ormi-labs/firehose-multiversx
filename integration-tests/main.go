@@ -25,7 +25,7 @@ var checkMetaFlag = cli.BoolFlag{
 }
 
 const (
-	proxyPem         = "testnet/testnet-local/sandbox/proxy/config/walletKey.pem"
+	proxyPem         = "scripts/testnet/testnet-local/sandbox/proxy/config/walletKey.pem"
 	esdtIssueAddress = "erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u"
 	proxyUrl         = "http://127.0.0.1:7950"
 	txGasLimit       = 55141500

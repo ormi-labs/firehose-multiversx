@@ -8,7 +8,7 @@ setup(){
   cd testnet/elrond-go/cmd/keygenerator
   go build
   ./keygenerator
-  cd ../../../../../devel/standard/
+  cd ../../../../../../devel/standard/
 
   rm -rf compiledSCStorage/
   rm -rf config/

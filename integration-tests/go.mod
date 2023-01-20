@@ -1,4 +1,4 @@
-module github.com/ElrondNetwork/firehose-multiversx/scripts
+module github.com/ElrondNetwork/firehose-multiversx/checker
 
 go 1.17
 
