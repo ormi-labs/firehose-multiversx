@@ -123,8 +123,8 @@ github.com/ElrondNetwork/elrond-vm-common v1.3.27/go.mod h1:3GKLv9hUFYEVxoBgtaCm
 github.com/ElrondNetwork/elrond-vm-common v1.3.28/go.mod h1:3GKLv9hUFYEVxoBgtaCmaZo9HMNfKN9mM/O/xX83Rbw=
 github.com/ElrondNetwork/elrond-vm-common v1.3.30 h1:nLMORp46GcvK9qwx/Iiz+8h/MB5qlPppaX+VJikOz8I=
 github.com/ElrondNetwork/elrond-vm-common v1.3.30/go.mod h1:3GKLv9hUFYEVxoBgtaCmaZo9HMNfKN9mM/O/xX83Rbw=
-github.com/ElrondNetwork/firehose-multiversx/types v0.0.0-20221222111352-c9399c804e87 h1:w+VRaPudQ26x9nbrpT0LzEPDQdKNnE/epM+k0DkyLzU=
-github.com/ElrondNetwork/firehose-multiversx/types v0.0.0-20221222111352-c9399c804e87/go.mod h1:AP3i9OYANMEwF+4MNrP7VG50YcU87d3WwoWVa3Odv/c=
+github.com/multiversx/firehose-multiversx/types v0.0.0-20221222111352-c9399c804e87 h1:w+VRaPudQ26x9nbrpT0LzEPDQdKNnE/epM+k0DkyLzU=
+github.com/multiversx/firehose-multiversx/types v0.0.0-20221222111352-c9399c804e87/go.mod h1:AP3i9OYANMEwF+4MNrP7VG50YcU87d3WwoWVa3Odv/c=
 github.com/ElrondNetwork/wasm-vm-v1_2 v1.2.48/go.mod h1:xcs02SDXqF//9zFUcgzBY3jpGQKJ4AiO2pTa8ZgS6zs=
 github.com/ElrondNetwork/wasm-vm-v1_3 v1.3.48/go.mod h1:ZyuArzcU3qq34mrW06QPTU2w1xcla6tj+BcTQtcanP4=
 github.com/ElrondNetwork/wasm-vm-v1_4 v1.4.68/go.mod h1:LM/5+DfBaI36NL77Xp1XyH+8ozuGOEPJlOAaDtiKW8g=

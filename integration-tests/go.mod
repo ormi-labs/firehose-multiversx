@@ -7,7 +7,7 @@ require (
 	github.com/ElrondNetwork/elrond-go-crypto v1.2.2
 	github.com/ElrondNetwork/elrond-go-logger v1.0.10
 	github.com/ElrondNetwork/elrond-sdk-erdgo v1.2.1
-	github.com/ElrondNetwork/firehose-multiversx/types v0.0.0-20221222111352-c9399c804e87
+	github.com/multiversx/firehose-multiversx/types v0.0.0-20221222111352-c9399c804e87
 	github.com/streamingfast/bstream v0.0.2-0.20220909121429-4647fd1522c9
 	github.com/streamingfast/dstore v0.1.1-0.20220830184623-b0f0cc804743
 	github.com/streamingfast/pbgo v0.0.6-0.20220629184423-cfd0608e0cf4

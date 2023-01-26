@@ -1,9 +1,9 @@
-module github.com/ElrondNetwork/firehose-multiversx/types
+module github.com/multiversx/firehose-multiversx/types
 
 go 1.16
 
 require (
-	github.com/ElrondNetwork/elrond-go-core v1.1.27-0.20230105090400-71054be29f2f
+	github.com/multiversx/mx-chain-core-go 26d928574f15c9a056fb059dafa18f7febf39bbe
 	github.com/gogo/protobuf v1.3.2
 	github.com/golang/protobuf v1.5.2
 	github.com/streamingfast/bstream v0.0.2-0.20220831142019-0a0b0caa04c3

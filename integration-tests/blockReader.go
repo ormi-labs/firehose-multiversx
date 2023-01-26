@@ -7,8 +7,8 @@ import (
 	"io"
 	"time"
 
-	"github.com/ElrondNetwork/firehose-multiversx/types"
-	pbmultiversx "github.com/ElrondNetwork/firehose-multiversx/types/pb/sf/multiversx/type/v1"
+	"github.com/multiversx/firehose-multiversx/types"
+	pbmultiversx "github.com/multiversx/firehose-multiversx/types/pb/sf/multiversx/type/v1"
 	"github.com/streamingfast/bstream"
 	"github.com/streamingfast/dstore"
 	pbbstream "github.com/streamingfast/pbgo/sf/bstream/v1"

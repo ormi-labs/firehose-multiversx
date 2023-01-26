@@ -24,7 +24,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ElrondNetwork/firehose-multiversx/types"
+	"github.com/multiversx/firehose-multiversx/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
