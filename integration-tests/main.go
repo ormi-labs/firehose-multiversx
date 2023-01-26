@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/multiversx/mx-chain-core/hashing/blake2b"
-	"github.com/multiversx/mx-chain-core/marshal"
+	"github.com/multiversx/mx-chain-core-go/hashing/blake2b"
+	"github.com/multiversx/mx-chain-core-go/marshal"
 	logger "github.com/multiversx/mx-chain-logger-go"
 	"github.com/tidwall/gjson"
 	"github.com/urfave/cli"

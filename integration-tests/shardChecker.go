@@ -70,7 +70,7 @@ func checkShardBlockHeader(multiversxBlock *firehose.FirehoseBlock, shardBlocks 
 		})
 }
 
-func checkShardTxs(apiTxs []gjson.Result, transactions map[string]*firehose.TxWithFee, txHash string) error {
+func checkShardTxs(apiTxs []gjson.Result, transactions map[string]*firehose.TxInfo, txHash string) error {
 	log.Info("checking shard txs...")
 
 	err := checkApiTxExists(apiTxs, txHash)

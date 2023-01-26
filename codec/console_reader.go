@@ -9,10 +9,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/multiversx/mx-chain-core/data/firehose"
 	"github.com/gogo/protobuf/proto"
 	"github.com/multiversx/firehose-multiversx/types"
 	pbmultiversx "github.com/multiversx/firehose-multiversx/types/pb/sf/multiversx/type/v1"
+	"github.com/multiversx/mx-chain-core-go/data/firehose"
 	"github.com/streamingfast/bstream"
 	"go.uber.org/zap"
 )

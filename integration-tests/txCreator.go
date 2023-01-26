@@ -19,13 +19,13 @@ var (
 )
 
 func sendIssueESDTTx(address core.AddressHandler, privateKey []byte) (string, error) {
-	args := blockchain.ArgsElrondProxy{
+	args := blockchain.ArgsProxy{
 		ProxyURL:            proxyUrl,
 		CacheExpirationTime: time.Minute,
 		EntityType:          core.Proxy,
 	}
 
-	proxy, err := blockchain.NewElrondProxy(args)
+	proxy, err := blockchain.NewProxy(args)
 	if err != nil {
 		return "", err
 	}
