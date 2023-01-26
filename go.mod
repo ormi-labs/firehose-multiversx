@@ -1,10 +1,10 @@
-module github.com/ElrondNetwork/firehose-multiversx
+module github.com/multiversx/firehose-multiversx
 
 go 1.17
 
 require (
-	github.com/ElrondNetwork/elrond-go-core v1.1.27-0.20230105090400-71054be29f2f
-	github.com/multiversx/firehose-multiversx/types v0.0.0-20230105094233-40ee8c5c2bec
+	github.com/multiversx/mx-chain-core v1.1.27-0.20230105090400-71054be29f2f
+	github.com/multiversx/firehose-multiversx/types c5f6e83809f043ac85a63baed856e1f85eb36b46
 	github.com/ShinyTrinkets/overseer v0.3.0
 	github.com/gogo/protobuf v1.3.2
 	github.com/golang/protobuf v1.5.2

@@ -4,8 +4,8 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	mvxcore "github.com/ElrondNetwork/elrond-go-core/core"
-	"github.com/ElrondNetwork/elrond-go-core/data/firehose"
+	mvxcore "github.com/multiversx/mx-chain-core/core"
+	"github.com/multiversx/mx-chain-core/data/firehose"
 )
 
 func checkHeader(

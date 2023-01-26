@@ -7,9 +7,9 @@
 package pbmultiversx
 
 import (
-	firehose "github.com/ElrondNetwork/elrond-go-core/data/firehose"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/golang/protobuf/proto"
+	firehose "github.com/multiversx/mx-chain-core-go/data/firehose"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"

@@ -1,12 +1,12 @@
-module github.com/ElrondNetwork/firehose-multiversx/checker
+module github.com/multiversx/firehose-multiversx/checker
 
 go 1.17
 
 require (
-	github.com/ElrondNetwork/elrond-go-core v1.1.27-0.20230105090400-71054be29f2f
-	github.com/ElrondNetwork/elrond-go-crypto v1.2.2
-	github.com/ElrondNetwork/elrond-go-logger v1.0.10
-	github.com/ElrondNetwork/elrond-sdk-erdgo v1.2.1
+	github.com/multiversx/mx-chain-core v1.1.27-0.20230105090400-71054be29f2f
+	github.com/multiversx/mx-chain-crypto-go v1.2.2
+	github.com/multiversx/mx-chain-logger-go v1.0.10
+	github.com/multiversx/mx-sdk-go v1.2.1
 	github.com/multiversx/firehose-multiversx/types v0.0.0-20221222111352-c9399c804e87
 	github.com/streamingfast/bstream v0.0.2-0.20220909121429-4647fd1522c9
 	github.com/streamingfast/dstore v0.1.1-0.20220830184623-b0f0cc804743

@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"math/big"
 
-	mvxcore "github.com/ElrondNetwork/elrond-go-core/core"
-	"github.com/ElrondNetwork/elrond-go-core/data/alteredAccount"
-	"github.com/ElrondNetwork/elrond-go-core/data/firehose"
-	"github.com/ElrondNetwork/elrond-go-core/data/transaction"
+	mvxcore "github.com/multiversx/mx-chain-core/core"
+	"github.com/multiversx/mx-chain-core/data/alteredAccount"
+	"github.com/multiversx/mx-chain-core/data/firehose"
+	"github.com/multiversx/mx-chain-core/data/transaction"
 	"github.com/tidwall/gjson"
 )
 

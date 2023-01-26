@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ElrondNetwork/elrond-go-core/data/firehose"
+	"github.com/multiversx/mx-chain-core/data/firehose"
 	"github.com/gogo/protobuf/proto"
 	"github.com/multiversx/firehose-multiversx/types"
 	pbmultiversx "github.com/multiversx/firehose-multiversx/types/pb/sf/multiversx/type/v1"

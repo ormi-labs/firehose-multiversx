@@ -14,7 +14,7 @@
 
 package cli
 
-import "github.com/ElrondNetwork/firehose-multiversx/tools"
+import "github.com/multiversx/firehose-multiversx/tools"
 
 func init() {
 	RootCmd.AddCommand(tools.Cmd)
