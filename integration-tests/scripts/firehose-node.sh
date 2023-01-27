@@ -2,13 +2,13 @@
 
 CURRENT_DIR=$(pwd)
 SANDBOX_PATH=$CURRENT_DIR/testnet/testnet-local/sandbox
-KEY_GENERATOR_PATH=$CURRENT_DIR/testnet/elrond-go/cmd/keygenerator
+KEY_GENERATOR_PATH=$CURRENT_DIR/testnet/mx-chain-go/cmd/keygenerator
 
 setup(){
   echo "starting integration tests for shard $1"
 
   pushd $CURRENT_DIR
-  cd testnet/elrond-go/cmd/keygenerator
+  cd testnet/mx-chain-go/cmd/keygenerator
   go build
   ./keygenerator
 
