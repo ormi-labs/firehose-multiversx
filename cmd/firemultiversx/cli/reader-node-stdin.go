@@ -17,7 +17,7 @@ package cli
 import (
 	"fmt"
 
-	"github.com/ElrondNetwork/firehose-multiversx/codec"
+	"github.com/multiversx/firehose-multiversx/codec"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/streamingfast/dlauncher/launcher"
@@ -29,7 +29,7 @@ import (
 )
 
 func init() {
-	appLogger, appTracer := logging.PackageLogger("reader-node-stdin", "github.com/ElrondNetwork/firehose-multiversx/firemultiversx/cli/reader-node-stdin")
+	appLogger, appTracer := logging.PackageLogger("reader-node-stdin", "github.com/multiversx/firehose-multiversx/firemultiversx/cli/reader-node-stdin")
 
 	launcher.RegisterApp(rootLog, &launcher.AppDef{
 		ID:            "reader-node-stdin",

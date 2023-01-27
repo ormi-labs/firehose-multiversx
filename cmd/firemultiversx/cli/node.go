@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ElrondNetwork/firehose-multiversx/codec"
-	"github.com/ElrondNetwork/firehose-multiversx/nodemanager"
+	"github.com/multiversx/firehose-multiversx/codec"
+	"github.com/multiversx/firehose-multiversx/nodemanager"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/streamingfast/bstream/blockstream"

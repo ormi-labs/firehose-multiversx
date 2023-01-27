@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"math/big"
 
-	mvxcore "github.com/ElrondNetwork/elrond-go-core/core"
-	"github.com/ElrondNetwork/elrond-go-core/data/alteredAccount"
-	"github.com/ElrondNetwork/elrond-go-core/data/firehose"
-	"github.com/ElrondNetwork/elrond-go-core/data/transaction"
+	mvxcore "github.com/multiversx/mx-chain-core-go/core"
+	"github.com/multiversx/mx-chain-core-go/data/alteredAccount"
+	"github.com/multiversx/mx-chain-core-go/data/firehose"
+	"github.com/multiversx/mx-chain-core-go/data/transaction"
 	"github.com/tidwall/gjson"
 )
 
@@ -34,7 +34,7 @@ func checkMetaBlock(apiTxResultBody string, txHash string) error {
 	}
 
 	scrs := gjson.Get(apiTxResultBody, "data.transaction.smartContractResults").Array()
-	err = checkMetaSCRs(scrs, multiversxBlock.MultiversxBlock.SmartContractResult)
+	err = checkMetaSCRs(scrs, multiversxBlock.MultiversxBlock.SmartContractResults)
 	if err != nil {
 		return err
 	}
@@ -48,7 +48,7 @@ func checkMetaBlock(apiTxResultBody string, txHash string) error {
 	return checkMetaAlteredAccounts(multiversxBlock.MultiversxBlock.AlteredAccounts)
 }
 
-func checkMetaSCRs(apiSCRs []gjson.Result, scrs map[string]*firehose.SCRWithFee) error {
+func checkMetaSCRs(apiSCRs []gjson.Result, scrs map[string]*firehose.SCRInfo) error {
 	log.Info("checking meta scrs...")
 
 	numApiSCRS := len(apiSCRs)

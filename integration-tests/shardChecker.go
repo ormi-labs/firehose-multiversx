@@ -7,9 +7,9 @@ import (
 	"math/big"
 	"net/http"
 
-	mvxcore "github.com/ElrondNetwork/elrond-go-core/core"
-	"github.com/ElrondNetwork/elrond-go-core/data/alteredAccount"
-	"github.com/ElrondNetwork/elrond-go-core/data/firehose"
+	mvxcore "github.com/multiversx/mx-chain-core-go/core"
+	"github.com/multiversx/mx-chain-core-go/data/alteredAccount"
+	"github.com/multiversx/mx-chain-core-go/data/firehose"
 	"github.com/tidwall/gjson"
 )
 
@@ -70,7 +70,7 @@ func checkShardBlockHeader(multiversxBlock *firehose.FirehoseBlock, shardBlocks 
 		})
 }
 
-func checkShardTxs(apiTxs []gjson.Result, transactions map[string]*firehose.TxWithFee, txHash string) error {
+func checkShardTxs(apiTxs []gjson.Result, transactions map[string]*firehose.TxInfo, txHash string) error {
 	log.Info("checking shard txs...")
 
 	err := checkApiTxExists(apiTxs, txHash)

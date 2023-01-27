@@ -4,13 +4,13 @@ import (
 	"context"
 	"time"
 
-	"github.com/ElrondNetwork/elrond-go-crypto/signing"
-	"github.com/ElrondNetwork/elrond-go-crypto/signing/ed25519"
-	"github.com/ElrondNetwork/elrond-sdk-erdgo/blockchain"
-	"github.com/ElrondNetwork/elrond-sdk-erdgo/blockchain/cryptoProvider"
-	"github.com/ElrondNetwork/elrond-sdk-erdgo/builders"
-	"github.com/ElrondNetwork/elrond-sdk-erdgo/core"
-	"github.com/ElrondNetwork/elrond-sdk-erdgo/interactors"
+	"github.com/multiversx/mx-chain-crypto-go/signing"
+	"github.com/multiversx/mx-chain-crypto-go/signing/ed25519"
+	"github.com/multiversx/mx-sdk-go/blockchain"
+	"github.com/multiversx/mx-sdk-go/blockchain/cryptoProvider"
+	"github.com/multiversx/mx-sdk-go/builders"
+	"github.com/multiversx/mx-sdk-go/core"
+	"github.com/multiversx/mx-sdk-go/interactors"
 )
 
 var (
@@ -19,13 +19,13 @@ var (
 )
 
 func sendIssueESDTTx(address core.AddressHandler, privateKey []byte) (string, error) {
-	args := blockchain.ArgsElrondProxy{
+	args := blockchain.ArgsProxy{
 		ProxyURL:            proxyUrl,
 		CacheExpirationTime: time.Minute,
 		EntityType:          core.Proxy,
 	}
 
-	proxy, err := blockchain.NewElrondProxy(args)
+	proxy, err := blockchain.NewProxy(args)
 	if err != nil {
 		return "", err
 	}

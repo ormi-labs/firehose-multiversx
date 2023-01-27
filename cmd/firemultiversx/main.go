@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ElrondNetwork/firehose-multiversx/cmd/firemultiversx/cli"
+	"github.com/multiversx/firehose-multiversx/cmd/firemultiversx/cli"
 )
 
 // Commit sha1 value, injected via go build `ldflags` at build time
