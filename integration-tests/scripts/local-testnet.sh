@@ -2,12 +2,12 @@ CURRENT_DIR=$(pwd)
 WORKING_DIR="$CURRENT_DIR"
 TESTNET_DIR=$WORKING_DIR/testnet
 TESTNET_OUTPUT_DIR=$TESTNET_DIR/testnet-local
-SCRIPTS_DIR=elrond-go/scripts/testnet
+SCRIPTS_DIR=mx-chain-go/scripts/testnet
 VARIABLES_PATH=$SCRIPTS_DIR/variables.sh
 OBSERVERS_PATH=$SCRIPTS_DIR/include/observers.sh
 VALIDATORS_PATH=$SCRIPTS_DIR/include/validators.sh
-ENABLE_EPOCH_DIR=$TESTNET_DIR/elrond-go/cmd/node/config/enableEpochs.toml
-SYSTEM_SC_CONFIG_DIR=$TESTNET_DIR/elrond-go/cmd/node/config/systemSmartContractsConfig.toml
+ENABLE_EPOCH_DIR=$TESTNET_DIR/mx-chain-go/cmd/node/config/enableEpochs.toml
+SYSTEM_SC_CONFIG_DIR=$TESTNET_DIR/mx-chain-go/cmd/node/config/systemSmartContractsConfig.toml
 SANDBOX_NAME=sandbox
 
 cloneDependencies(){
@@ -17,12 +17,13 @@ cloneDependencies(){
 
   mkdir "$TESTNET_DIR"
 
-  git clone https://github.com/ElrondNetwork/elrond-go "$TESTNET_DIR/elrond-go"
-  cd $TESTNET_DIR/elrond-go
-  git checkout 4f82f49ede54e14b19f42028d910e41a728b3925
+  git clone https://github.com/multiversx/mx-chain-go "$TESTNET_DIR/mx-chain-go"
+  cd $TESTNET_DIR/mx-chain-go
+  git checkout b2495a18cc18dab157e741bc3b263a318a867037
   cd ../..
 
-  git clone https://github.com/ElrondNetwork/elrond-proxy-go "$TESTNET_DIR/elrond-proxy-go"
+  git clone https://github.com/multiversx/mx-chain-deploy-go "$TESTNET_DIR/mx-chain-deploy-go"
+  git clone https://github.com/multiversx/mx-chain-proxy-go "$TESTNET_DIR/mx-chain-proxy-go"
 }
 
 testnetRemove(){
@@ -41,9 +42,10 @@ testnetSetup(){
   sed -i 's/BaseIssuingCost =.*/BaseIssuingCost = "50000000000000000"/' "$SYSTEM_SC_CONFIG_DIR"
 
   mkdir "$TESTNET_OUTPUT_DIR"
-  cd "$TESTNET_OUTPUT_DIR" && \
-    (ln -s "$TESTNET_DIR"/elrond-go elrond-go && \
-    ln -s "$TESTNET_DIR"/elrond-proxy-go elrond-proxy-go)
+  cd "$TESTNET_OUTPUT_DIR"
+  ln -s "$TESTNET_DIR"/mx-chain-go mx-chain-go
+  ln -s "$TESTNET_DIR"/mx-chain-deploy-go mx-chain-deploy-go
+  ln -s "$TESTNET_DIR"/mx-chain-proxy-go mx-chain-proxy-go
 }
 
 testnetPrereq(){
@@ -77,17 +79,17 @@ testnetNew(){
 
 testnetStart(){
   cd "$TESTNET_DIR" && \
-    ./elrond-go/scripts/testnet/start.sh
+    ./mx-chain-go/scripts/testnet/start.sh
 }
 
 testnetReset(){
   cd "$TESTNET_DIR" && \
-    ./elrond-go/scripts/testnet/reset.sh
+    ./mx-chain-go/scripts/testnet/reset.sh
 }
 
 testnetStop(){
   cd "$TESTNET_DIR" && \
-    ./elrond-go/scripts/testnet/stop.sh
+    ./mx-chain-go/scripts/testnet/stop.sh
 }
 
 echoOptions(){
