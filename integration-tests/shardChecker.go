@@ -56,7 +56,13 @@ func checkShardBlock(hyperBlockNonce uint64, address string, txHash string) erro
 		return err
 	}
 
-	return checkShardAlteredAccounts(multiversxBlock.MultiversxBlock.AlteredAccounts, address)
+	err = checkShardAlteredAccounts(multiversxBlock.MultiversxBlock.AlteredAccounts, address)
+	if err != nil {
+		return err
+	}
+
+	log.Info("finished all shard checks successfully")
+	return nil
 }
 
 func checkShardBlockHeader(multiversxBlock *firehose.FirehoseBlock, shardBlocks []gjson.Result) error {
@@ -83,14 +89,9 @@ func checkShardTxs(apiTxs []gjson.Result, transactions map[string]*firehose.TxIn
 		return fmt.Errorf("checkShardTxs: expected only one sent tx, got %d", numIndexedTxs)
 	}
 
-	txHashBytes, err := hex.DecodeString(txHash)
-	if err != nil {
-		return err
-	}
-
-	protocolTx, found := transactions[string(txHashBytes)]
+	protocolTx, found := transactions[txHash]
 	if !found {
-		return fmt.Errorf("checkShardTxs: could not find expected indexed tx hash: %s", apiTxs)
+		return fmt.Errorf("checkShardTxs: could not find expected indexed tx hash: %s", txHash)
 	}
 
 	txProtocolHash, err := mvxcore.CalculateHash(marshaller, hasher, protocolTx.Transaction)

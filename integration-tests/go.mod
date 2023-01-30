@@ -3,8 +3,8 @@ module github.com/multiversx/firehose-multiversx/checker
 go 1.17
 
 require (
-	github.com/multiversx/firehose-multiversx/types v0.0.0-20230126133943-2919f97bf390
-	github.com/multiversx/mx-chain-core-go v1.1.31-0.20230126130945-26d928574f15
+	github.com/multiversx/firehose-multiversx/types v0.0.0-20230130123310-7523df5e6efd
+	github.com/multiversx/mx-chain-core-go v1.1.31-0.20230130111231-561736993b1c
 	github.com/multiversx/mx-chain-crypto-go v1.2.5
 	github.com/multiversx/mx-chain-logger-go v1.0.11
 	github.com/multiversx/mx-sdk-go v1.2.3
