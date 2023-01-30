@@ -380,8 +380,8 @@ github.com/mr-tron/base58 v1.2.0/go.mod h1:BinMc/sQntlIE1frQmRFPUoPA1Zkr8VRgBdjW
 github.com/mschoch/smat v0.2.0/go.mod h1:kc9mz7DoBKqDyiRL7VZN8KvXQMWeTaVnttLRXOlotKw=
 github.com/multiversx/concurrent-map v0.1.4 h1:hdnbM8VE4b0KYJaGY5yJS2aNIW9TFFsUYwbO0993uPI=
 github.com/multiversx/concurrent-map v0.1.4/go.mod h1:8cWFRJDOrWHOTNSqgYCUvwT7c7eFQ4U2vKMOp4A/9+o=
-github.com/multiversx/firehose-multiversx/types v0.0.0-20230130120255-de51c980d5d5 h1:0ol1Aq47eS+71+ahjGrimmdTKSNKK8UU492IjL0CIRg=
-github.com/multiversx/firehose-multiversx/types v0.0.0-20230130120255-de51c980d5d5/go.mod h1:aIiLJpnjj15z+LybfrPEmpJsQebM7w0Wmtc9PcHdf0A=
+github.com/multiversx/firehose-multiversx/types v0.0.0-20230130123310-7523df5e6efd h1:vMeTXZzsa/JGqIUA8DXqydgRLXJsRJ6JIQq9nn52d6E=
+github.com/multiversx/firehose-multiversx/types v0.0.0-20230130123310-7523df5e6efd/go.mod h1:aIiLJpnjj15z+LybfrPEmpJsQebM7w0Wmtc9PcHdf0A=
 github.com/multiversx/mx-chain-core-go v1.1.31-0.20230130111231-561736993b1c h1:nv1yWgwIINcGCxmZSgeAde/m7Y3ufsNjjoAX/nu24xk=
 github.com/multiversx/mx-chain-core-go v1.1.31-0.20230130111231-561736993b1c/go.mod h1:8gGEQv6BWuuJwhd25qqhCOZbBSv9mk+hLeKvinSaSMk=
 github.com/multiversx/mx-chain-crypto-go v1.2.5 h1:tuq3BUNMhKud5DQbZi9DiVAAHUXypizy8zPH0NpTGZk=

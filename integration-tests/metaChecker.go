@@ -45,7 +45,13 @@ func checkMetaBlock(apiTxResultBody string, txHash string) error {
 		return err
 	}
 
-	return checkMetaAlteredAccounts(multiversxBlock.MultiversxBlock.AlteredAccounts)
+	err = checkMetaAlteredAccounts(multiversxBlock.MultiversxBlock.AlteredAccounts)
+	if err != nil {
+		return err
+	}
+
+	log.Info("finished all metachain checks successfully")
+	return nil
 }
 
 func checkMetaSCRs(apiSCRs []gjson.Result, scrs map[string]*firehose.SCRInfo) error {

@@ -56,7 +56,13 @@ func checkShardBlock(hyperBlockNonce uint64, address string, txHash string) erro
 		return err
 	}
 
-	return checkShardAlteredAccounts(multiversxBlock.MultiversxBlock.AlteredAccounts, address)
+	err = checkShardAlteredAccounts(multiversxBlock.MultiversxBlock.AlteredAccounts, address)
+	if err != nil {
+		return err
+	}
+
+	log.Info("finished all shard checks successfully")
+	return nil
 }
 
 func checkShardBlockHeader(multiversxBlock *firehose.FirehoseBlock, shardBlocks []gjson.Result) error {
