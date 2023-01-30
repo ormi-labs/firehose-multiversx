@@ -21,7 +21,7 @@ func BlockFromProto(b *pbmultiversx.Block) (*bstream.Block, error) {
 		Number:         b.Number(),
 		PreviousId:     b.PreviousID(),
 		Timestamp:      b.Time(),
-		LibNum:         b.Number() - 1,
+		LibNum:         b.MultiversxBlock.HighestFinalBlockNonce,
 		PayloadKind:    pbbstream.Protocol_UNKNOWN,
 		PayloadVersion: 1,
 	}
