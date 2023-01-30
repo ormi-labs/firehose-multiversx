@@ -38,5 +38,13 @@ cd integration-tests/scripts
 3. Stop the local testnet:
 
 ```bash
-./shard-meta-tests.sh stop
+./local-testnet.sh stop
+```
+
+If you want to locally run a firehose node without integration tests, you need to start a local testnet, as previously
+described at step 1 and then run your firehose node in either shard(will use shard 0), or metachain:
+
+```bash
+./firehose-node shard # starts a firehose node in shard 0
+./firehose-node metachain # starts a firehose node in metachain
 ```
