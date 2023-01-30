@@ -67,7 +67,7 @@ func checkMetaSCRs(apiSCRs []gjson.Result, scrs map[string]*firehose.SCRInfo) er
 			return err
 		}
 
-		scrFromProtocol, found := scrs[string(hashBytes)]
+		scrFromProtocol, found := scrs[hash]
 		if !found {
 			return fmt.Errorf("checkMetaSCRs: api hash %s not found in indexed block", hash)
 		}
@@ -93,12 +93,8 @@ func checkMetaLogs(apiLog gjson.Result, logs map[string]*transaction.Log, txHash
 	if numIndexedLogs != 1 {
 		return fmt.Errorf("checkMetaLogs: expected only one generated and indexed log, received %d", numIndexedLogs)
 	}
-	txHashBytes, err := hex.DecodeString(txHash)
-	if err != nil {
-		return err
-	}
 
-	indexedLog, found := logs[string(txHashBytes)]
+	indexedLog, found := logs[txHash]
 	if !found {
 		return fmt.Errorf("checkMetaLogs: api tx hash %s not found in indexed logs", txHash)
 	}

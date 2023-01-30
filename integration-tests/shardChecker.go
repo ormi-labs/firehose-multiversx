@@ -83,12 +83,7 @@ func checkShardTxs(apiTxs []gjson.Result, transactions map[string]*firehose.TxIn
 		return fmt.Errorf("checkShardTxs: expected only one sent tx, got %d", numIndexedTxs)
 	}
 
-	txHashBytes, err := hex.DecodeString(txHash)
-	if err != nil {
-		return err
-	}
-
-	protocolTx, found := transactions[string(txHashBytes)]
+	protocolTx, found := transactions[txHash]
 	if !found {
 		return fmt.Errorf("checkShardTxs: could not find expected indexed tx hash: %s", apiTxs)
 	}
