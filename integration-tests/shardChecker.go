@@ -91,7 +91,7 @@ func checkShardTxs(apiTxs []gjson.Result, transactions map[string]*firehose.TxIn
 
 	protocolTx, found := transactions[txHash]
 	if !found {
-		return fmt.Errorf("checkShardTxs: could not find expected indexed tx hash: %s", apiTxs)
+		return fmt.Errorf("checkShardTxs: could not find expected indexed tx hash: %s", txHash)
 	}
 
 	txProtocolHash, err := mvxcore.CalculateHash(marshaller, hasher, protocolTx.Transaction)

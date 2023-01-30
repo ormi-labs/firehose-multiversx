@@ -68,17 +68,17 @@ func checkMetaSCRs(apiSCRs []gjson.Result, scrs map[string]*firehose.SCRInfo) er
 
 	for _, apiSCR := range apiSCRs {
 		hash := apiSCR.Get("hash").String()
-		hashBytes, err := hex.DecodeString(hash)
-		if err != nil {
-			return err
-		}
-
 		scrFromProtocol, found := scrs[hash]
 		if !found {
 			return fmt.Errorf("checkMetaSCRs: api hash %s not found in indexed block", hash)
 		}
 
 		computedHash, err := mvxcore.CalculateHash(marshaller, hasher, scrFromProtocol.SmartContractResult)
+		if err != nil {
+			return err
+		}
+
+		hashBytes, err := hex.DecodeString(hash)
 		if err != nil {
 			return err
 		}
