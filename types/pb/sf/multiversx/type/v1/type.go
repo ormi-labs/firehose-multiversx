@@ -6,7 +6,7 @@ import (
 )
 
 func (b *Block) ID() string {
-	return hex.EncodeToString(b.MultiversxBlock.HeaderHash)
+	return hex.EncodeToString(b.MultiversxBlock.BlockData.HeaderHash)
 }
 
 func (b *Block) Number() uint64 {

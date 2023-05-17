@@ -5,13 +5,13 @@ package sf.multiversx.type.v1;
 option go_package = "github.com/multiversx/firehose-multiversx/types/pb/sf/firemultiversx/type/v1;pbmultiversx";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
-import "github.com/multiversx/mx-chain-core-go/data/firehose/firehoseBlock.proto";
+import "github.com/multiversx/mx-chain-core-go/data/outport/outportBlock.proto";
 
 option (gogoproto.stable_marshaler_all) = true;
 
 message Block {
-  uint64              height = 1;
-  string              prevHash = 2;
-  uint64              timestamp = 3;
-  proto.FirehoseBlock MultiversxBlock = 4;
+  uint64             height = 1;
+  string             prevHash = 2;
+  uint64             timestamp = 3;
+  proto.OutportBlock MultiversxBlock = 4;
 }

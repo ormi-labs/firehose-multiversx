@@ -1,3 +1,3 @@
-generate.sh - Fri Jan 27 10:14:48 UTC 2023 - MariusC
+generate.sh - Wed May 17 13:21:41 UTC 2023 - MariusC
 streamingfast/proto revision: 
 streamingfast/firehose-acme/proto revision: c5f6e83
