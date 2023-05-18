@@ -308,7 +308,6 @@ github.com/gordonklaus/ineffassign v0.0.0-20180909121442-1003c8bd00dc/go.mod h1:
 github.com/gorilla/context v1.1.1/go.mod h1:kBGZzfjB9CEq2AlWe17Uuf7NDRt0dE0s8S51q0aT7Yg=
 github.com/gorilla/mux v1.6.2/go.mod h1:1lud6UwP+6orDFRuTfBEV8e9/aOM/c4fVVCaMa2zaAs=
 github.com/gorilla/mux v1.8.0/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
-github.com/gorilla/websocket v1.4.2/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
 github.com/grpc-ecosystem/go-grpc-middleware v1.3.0/go.mod h1:z0ButlSOZa5vEBq9m2m2hlwIgKw+rp3sdCBRoJY+30Y=
 github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0/go.mod h1:8NvIoxWQoOIhqOTXgfV/d3M/q6VIi02HzZEHgUlZvzk=
 github.com/grpc-ecosystem/grpc-gateway v1.16.0/go.mod h1:BDjrQk3hbvj6Nolgz8mAMFbcEtjT1g+wF4CSlocrBnw=
@@ -384,10 +383,8 @@ github.com/mr-tron/base58 v1.2.0/go.mod h1:BinMc/sQntlIE1frQmRFPUoPA1Zkr8VRgBdjW
 github.com/mschoch/smat v0.2.0/go.mod h1:kc9mz7DoBKqDyiRL7VZN8KvXQMWeTaVnttLRXOlotKw=
 github.com/multiversx/concurrent-map v0.1.4 h1:hdnbM8VE4b0KYJaGY5yJS2aNIW9TFFsUYwbO0993uPI=
 github.com/multiversx/concurrent-map v0.1.4/go.mod h1:8cWFRJDOrWHOTNSqgYCUvwT7c7eFQ4U2vKMOp4A/9+o=
-github.com/multiversx/firehose-multiversx/types v0.0.0-20230517132338-70c4ed346dd0 h1:x9r5Uf6ZjB9NkRz6xY/VCedrw6MR4Y/UOT5pqPZbpZ0=
-github.com/multiversx/firehose-multiversx/types v0.0.0-20230517132338-70c4ed346dd0/go.mod h1:haOQcBA6Gnoypgkl8s+ziPKptCC/s9KRpDEN4BelW44=
-github.com/multiversx/mx-chain-core-go v1.1.30/go.mod h1:8gGEQv6BWuuJwhd25qqhCOZbBSv9mk+hLeKvinSaSMk=
-github.com/multiversx/mx-chain-core-go v1.2.1-0.20230330105824-932a718276f6/go.mod h1:/lovncjwo+pXQ7IAERwNzwCifeH7SAWk0DGqjorX2bc=
+github.com/multiversx/firehose-multiversx/types v0.0.0-20230518130743-9686cd85912e h1:ZD6ED4FXu+0/LBw0VyAp/UfZL4zDS+5chQpxv0BCzvc=
+github.com/multiversx/firehose-multiversx/types v0.0.0-20230518130743-9686cd85912e/go.mod h1:NIAGFndy/azmwHpsUzJfW+McoG2LpR9gTXKDPpeFbqw=
 github.com/multiversx/mx-chain-core-go v1.2.4-0.20230517135533-2e54a17cd912 h1:7dgFuxG2sUbQEFA4y36NAoRjuN+Z3PlY0znmmgr7ZSo=
 github.com/multiversx/mx-chain-core-go v1.2.4-0.20230517135533-2e54a17cd912/go.mod h1:jzYFSiYBuO0dGpGFXnZWSwcwcKP7Flyn/X41y4zIQrQ=
 github.com/multiversx/mx-chain-crypto-go v1.2.6 h1:yxsjAQGh62los+iYmORMfh3w9qen0xbYlmwU0juNSeg=
