@@ -71,6 +71,6 @@ If you want to locally run a firehose node without integration tests, you need t
 - start the firehose connector node to receive incoming data
 
 ```bash
-./firehose-node shard # starts a firehose node in shard 0. Otherwise, you can call the script with metachain paramter
+./exporter-node.sh shard # starts a firehose node in shard 0. Otherwise, you can call the script with metachain parameter
 ./firehose-connector.sh
 ```
