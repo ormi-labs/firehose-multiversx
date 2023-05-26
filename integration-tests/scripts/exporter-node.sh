@@ -4,23 +4,28 @@ CURRENT_DIR=$(pwd)
 SANDBOX_PATH=$CURRENT_DIR/testnet/testnet-local/sandbox
 KEY_GENERATOR_PATH=$CURRENT_DIR/testnet/mx-chain-go/cmd/keygenerator
 
+OBSERVER_MODE="server"
+
 setup(){
   echo "starting integration tests for shard $1"
 
   pushd $CURRENT_DIR
+
   cd testnet/mx-chain-go/cmd/keygenerator
   go build
   ./keygenerator
 
   popd
 
-  cd ../../devel/standard/
+  rm -rf exporterNode/
+
+  mkdir "exporterNode"
+  cd exporterNode
 
   rm -rf compiledSCStorage/
   rm -rf config/
   rm -rf db/
   rm -rf stats/
-  rm -rf firehose-data/*
   rm -rf logs/
   rm node
 
@@ -34,9 +39,13 @@ setup(){
 
   sed -i "s@DestinationShardAsObserver =.*@DestinationShardAsObserver = \"$1\"@" $DEVEL/config/prefs.toml
   sed -i 's/FullArchive =.*/FullArchive = true/' $DEVEL/config/prefs.toml
-  sed -i "s@reader-node-path:.*@reader-node-path: \"$DEVEL/node\"@" $DEVEL/standard.yaml
 
-  ./start.sh
+  sed -i '/HostDriverConfig\]/!b;n;n;c\    Enabled = true' $DEVEL/config/external.toml
+  sed -i "s@Mode =.*@Mode = \"$OBSERVER_MODE\"@" $DEVEL/config/external.toml
+  sed -i 's/MarshallerType =.*/MarshallerType = "gogo protobuf"/' $DEVEL/config/external.toml
+  sed -i 's/BlockingAckOnError =.*/BlockingAckOnError = false/' $DEVEL/config/external.toml
+
+  ./node --log-level *:INFO
 }
 
 echoOptions(){

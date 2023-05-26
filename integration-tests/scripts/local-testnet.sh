@@ -19,11 +19,16 @@ cloneDependencies(){
 
   git clone https://github.com/multiversx/mx-chain-go "$TESTNET_DIR/mx-chain-go"
   cd $TESTNET_DIR/mx-chain-go
-  git checkout 18afd7ca8b9c4bdde85326c98cceb0383087442e
+  git checkout rc/v1.6.0
   cd ../..
 
   git clone https://github.com/multiversx/mx-chain-deploy-go "$TESTNET_DIR/mx-chain-deploy-go"
   git clone https://github.com/multiversx/mx-chain-proxy-go "$TESTNET_DIR/mx-chain-proxy-go"
+
+  git clone https://github.com/multiversx/mx-chain-ws-connector-firehose-go "$TESTNET_DIR/mx-chain-ws-connector-firehose-go"
+  cd $TESTNET_DIR/mx-chain-ws-connector-firehose-go
+  git checkout bb79d31a1c7499707354d500571744b939d334f0
+  cd ../..
 }
 
 testnetRemove(){
@@ -65,8 +70,13 @@ testnetUpdateVariables(){
   sed -i 's/META_CONSENSUS_SIZE=.*/META_CONSENSUS_SIZE=$META_VALIDATORCOUNT/' $VARIABLES_PATH
   sed -i 's/export NODE_DELAY=.*/export NODE_DELAY=30/' $VARIABLES_PATH
 
-  sed -i 's/EXTRA_OBSERVERS_FLAGS.*/EXTRA_OBSERVERS_FLAGS --firehose-enabled --operation-mode db-lookup-extension"/' $OBSERVERS_PATH
-  sed -i 's/config_validator.toml/config_validator.toml --firehose-enabled --operation-mode db-lookup-extension/' $VALIDATORS_PATH
+  sed -i 's/EXTRA_OBSERVERS_FLAGS.*/EXTRA_OBSERVERS_FLAGS --operation-mode db-lookup-extension"/' $OBSERVERS_PATH
+  sed -i 's/config_validator.toml/config_validator.toml --operation-mode db-lookup-extension/' $VALIDATORS_PATH
+}
+
+setupFirehoseConnector(){
+  cd "$TESTNET_DIR/mx-chain-ws-connector-firehose-go/cmd/connector"
+  go build
 }
 
 testnetNew(){
@@ -75,6 +85,7 @@ testnetNew(){
   testnetSetup
   testnetUpdateVariables
   testnetPrereq
+  setupFirehoseConnector
 }
 
 testnetStart(){
