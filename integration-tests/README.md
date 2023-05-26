@@ -12,12 +12,12 @@ observer (in either shard), and making it act as a WebSocket Exporter(by enablin
 export data. This exported data is then ingested by the Firehose Connector, which processes it through the StreamingFast
 framework, enabling efficient data streaming and analysis.
 
-```bash
+```
 +-------------------------+       +------------------------+       +-----------------------+
 |   Local Testnet         | ----> |   WebSocket Exporter   | ----> |   Firehose Connector  |
 +-------------------------+       +------------------------+       +-----------------------+
 |   +-------+ +---------+ |       |   +----------------+   |       |   +----------------+  |
-|   |Shard1 | |  Shard2 | |       |   | Observer in    |   |       |   | StreamingFast |   |
+|   |Shard1 | |  Shard2 | |       |   | Observer in    |   |       |   | StreamingFast  |  |
 |   +-------+ +---------+ |       |   | Shard x        |   |       |   | Data Processing|  |
 |   |Shard3 | |Metachain| |       |   +----------------+   |       +-----------------------+
 |   +-------+ +---------+ |       |                        |
