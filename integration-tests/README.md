@@ -3,13 +3,36 @@
 This folder contains integration tests scripts to start firehose ingestion nodes for metachain and shard(0) with a local
 testnet and check indexed data validity for custom a scenario(`ESDTIssue`).
 
+### Data flow
+
+This chapter illustrates how MultiversX handles exported data using WebSocket Exporter Outport Driver.
+
+Consider a network consisting of nodes in a sharded architecture, all being orchestrated by a metachain. Adding an
+observer (in either shard), and making it act as a WebSocket Exporter(by enabling a config file), it will extract and
+export data. This exported data is then ingested by the Firehose Connector, which processes it through the StreamingFast
+framework, enabling efficient data streaming and analysis.
+
+```bash
++-------------------------+       +------------------------+       +-----------------------+
+|   Local Testnet         | ----> |   WebSocket Exporter   | ----> |   Firehose Connector  |
++-------------------------+       +------------------------+       +-----------------------+
+|   +-------+ +---------+ |       |   +----------------+   |       |   +----------------+  |
+|   |Shard1 | |  Shard2 | |       |   | Observer in    |   |       |   | StreamingFast |   |
+|   +-------+ +---------+ |       |   | Shard x        |   |       |   | Data Processing|  |
+|   |Shard3 | |Metachain| |       |   +----------------+   |       +-----------------------+
+|   +-------+ +---------+ |       |                        |
++-------------------------+       +------------------------+
+```
+
 ### Scripts:
 
 - `local-testnet.sh` - used to create/start/reset/stop a local MultiversX testnet
-- `firehose-node.sh` - setup for a new firehose node to start indexing process node. This firehose node will internally
-  start a multiversx observer node (shard0/meta)
-- `shard-meta-tests.sh` - starts with screen a new firehose node in metachain+shard0 and tests the custom scenario, by
-  building(`main.go`) and executing (`checker`) binary.
+- `exporter-node.sh` - setup for a new observer node which will be enabled to export data. Each observer node has to
+  be specified in which shard to start (shard0/meta). This node will export real-time data to the firehose connector
+- `firehose-connector.sh` - setup for a new firehose connector, which will connect to the exporter node to receive real
+  time data. This is opened within the streaming-fast indexing processing node.
+- `shard-meta-tests.sh` - starts with screen a new exporter node and a firehose connector in metachain+shard0 and tests
+  the custom scenario, by building(`main.go`) and executing (`checker`) binary.
 
 - `main.go` contains the main scenario. It will:
 
@@ -41,10 +64,13 @@ cd integration-tests/scripts
 ./local-testnet.sh stop
 ```
 
-If you want to locally run a firehose node without integration tests, you need to start a local testnet, as previously
-described at step 1 and then run your firehose node in either shard(will use shard 0), or metachain:
+If you want to locally run a firehose node without integration tests, you need to:
+
+- start a local testnet, as previously described at step 1
+- start your observer node either in shard in metachain to enable exporting data
+- start the firehose connector node to receive incoming data
 
 ```bash
-./firehose-node shard # starts a firehose node in shard 0
-./firehose-node metachain # starts a firehose node in metachain
+./firehose-node shard # starts a firehose node in shard 0. Otherwise, you can call the script with metachain paramter
+./firehose-connector.sh
 ```
