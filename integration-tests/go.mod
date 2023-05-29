@@ -3,11 +3,11 @@ module github.com/multiversx/firehose-multiversx/checker
 go 1.17
 
 require (
-	github.com/multiversx/firehose-multiversx/types v0.0.0-20230130123310-7523df5e6efd
-	github.com/multiversx/mx-chain-core-go v1.1.31-0.20230130111231-561736993b1c
-	github.com/multiversx/mx-chain-crypto-go v1.2.5
+	github.com/multiversx/firehose-multiversx/types v0.0.0-20230518130743-9686cd85912e
+	github.com/multiversx/mx-chain-core-go v1.2.4-0.20230517135533-2e54a17cd912
+	github.com/multiversx/mx-chain-crypto-go v1.2.6
 	github.com/multiversx/mx-chain-logger-go v1.0.11
-	github.com/multiversx/mx-sdk-go v1.2.3
+	github.com/multiversx/mx-sdk-go v1.2.8-0.20230518124555-e26120931303
 	github.com/streamingfast/bstream v0.0.2-0.20220909121429-4647fd1522c9
 	github.com/streamingfast/dstore v0.1.1-0.20220830184623-b0f0cc804743
 	github.com/streamingfast/pbgo v0.0.6-0.20220629184423-cfd0608e0cf4
@@ -39,7 +39,7 @@ require (
 	github.com/googleapis/enterprise-certificate-proxy v0.1.0 // indirect
 	github.com/googleapis/gax-go/v2 v2.4.0 // indirect
 	github.com/googleapis/go-type-adapters v1.0.0 // indirect
-	github.com/hashicorp/golang-lru v0.5.4 // indirect
+	github.com/hashicorp/golang-lru v0.6.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/klauspost/compress v1.15.1 // indirect
 	github.com/logrusorgru/aurora v2.0.3+incompatible // indirect
@@ -48,10 +48,10 @@ require (
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
 	github.com/mr-tron/base58 v1.2.0 // indirect
 	github.com/multiversx/concurrent-map v0.1.4 // indirect
-	github.com/multiversx/mx-chain-go v1.4.4 // indirect
-	github.com/multiversx/mx-chain-p2p-go v1.0.10 // indirect
-	github.com/multiversx/mx-chain-storage-go v1.0.7 // indirect
-	github.com/multiversx/mx-chain-vm-common-go v1.3.36 // indirect
+	github.com/multiversx/mx-chain-go v1.5.3-0.20230518120106-0ba2bf9a9d74 // indirect
+	github.com/multiversx/mx-chain-p2p-go v1.0.16 // indirect
+	github.com/multiversx/mx-chain-storage-go v1.0.8 // indirect
+	github.com/multiversx/mx-chain-vm-common-go v1.4.2 // indirect
 	github.com/pborman/uuid v1.2.1 // indirect
 	github.com/pelletier/go-toml v1.9.3 // indirect
 	github.com/prometheus/client_golang v1.12.1 // indirect
@@ -75,12 +75,12 @@ require (
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
 	go.uber.org/zap v1.22.0 // indirect
-	golang.org/x/crypto v0.3.0 // indirect
-	golang.org/x/net v0.2.0 // indirect
+	golang.org/x/crypto v0.7.0 // indirect
+	golang.org/x/net v0.8.0 // indirect
 	golang.org/x/oauth2 v0.0.0-20220622183110-fd043fe589d2 // indirect
-	golang.org/x/sys v0.2.0 // indirect
-	golang.org/x/term v0.2.0 // indirect
-	golang.org/x/text v0.4.0 // indirect
+	golang.org/x/sys v0.6.0 // indirect
+	golang.org/x/term v0.6.0 // indirect
+	golang.org/x/text v0.8.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220609144429-65e65417b02f // indirect
 	google.golang.org/api v0.91.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect

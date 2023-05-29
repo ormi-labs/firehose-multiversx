@@ -8,7 +8,7 @@ import (
 
 	mvxcore "github.com/multiversx/mx-chain-core-go/core"
 	"github.com/multiversx/mx-chain-core-go/data/alteredAccount"
-	"github.com/multiversx/mx-chain-core-go/data/firehose"
+	"github.com/multiversx/mx-chain-core-go/data/outport"
 	"github.com/multiversx/mx-chain-core-go/data/transaction"
 	"github.com/tidwall/gjson"
 )
@@ -34,13 +34,13 @@ func checkMetaBlock(apiTxResultBody string, txHash string) error {
 	}
 
 	scrs := gjson.Get(apiTxResultBody, "data.transaction.smartContractResults").Array()
-	err = checkMetaSCRs(scrs, multiversxBlock.MultiversxBlock.SmartContractResults)
+	err = checkMetaSCRs(scrs, multiversxBlock.MultiversxBlock.TransactionPool.SmartContractResults)
 	if err != nil {
 		return err
 	}
 
 	logs := gjson.Get(apiTxResultBody, "data.transaction.logs")
-	err = checkMetaLogs(logs, multiversxBlock.MultiversxBlock.Logs, txHash)
+	err = checkMetaLogs(logs, multiversxBlock.MultiversxBlock.TransactionPool.Logs, txHash)
 	if err != nil {
 		return err
 	}
@@ -54,7 +54,7 @@ func checkMetaBlock(apiTxResultBody string, txHash string) error {
 	return nil
 }
 
-func checkMetaSCRs(apiSCRs []gjson.Result, scrs map[string]*firehose.SCRInfo) error {
+func checkMetaSCRs(apiSCRs []gjson.Result, scrs map[string]*outport.SCRInfo) error {
 	log.Info("checking meta scrs...")
 
 	numApiSCRS := len(apiSCRs)
@@ -92,7 +92,7 @@ func checkMetaSCRs(apiSCRs []gjson.Result, scrs map[string]*firehose.SCRInfo) er
 	return nil
 }
 
-func checkMetaLogs(apiLog gjson.Result, logs map[string]*transaction.Log, txHash string) error {
+func checkMetaLogs(apiLog gjson.Result, logs []*outport.LogData, txHash string) error {
 	log.Info("checking meta logs...")
 
 	numIndexedLogs := len(logs)
@@ -100,13 +100,13 @@ func checkMetaLogs(apiLog gjson.Result, logs map[string]*transaction.Log, txHash
 		return fmt.Errorf("checkMetaLogs: expected only one generated and indexed log, received %d", numIndexedLogs)
 	}
 
-	indexedLog, found := logs[txHash]
+	indexedLog, found := getLogByTxHash(logs, txHash)
 	if !found {
 		return fmt.Errorf("checkMetaLogs: api tx hash %s not found in indexed logs", txHash)
 	}
 
 	apiEvents := apiLog.Get("events").Array()
-	indexedEvents := indexedLog.Events
+	indexedEvents := indexedLog.Log.Events
 	numApiEvents := len(apiEvents)
 	numIndexedAEvents := len(indexedEvents)
 	if numApiEvents != numIndexedAEvents {
@@ -126,6 +126,16 @@ func checkMetaLogs(apiLog gjson.Result, logs map[string]*transaction.Log, txHash
 	return nil
 }
 
+func getLogByTxHash(logs []*outport.LogData, txHash string) (*outport.LogData, bool) {
+	for _, logData := range logs {
+		if logData.TxHash == txHash {
+			return logData, true
+		}
+	}
+
+	return nil, false
+}
+
 func contains(events []*transaction.Event, identifier string) bool {
 	for _, event := range events {
 		if string(event.Identifier) == identifier {
@@ -136,7 +146,7 @@ func contains(events []*transaction.Event, identifier string) bool {
 	return false
 }
 
-func checkMetaAlteredAccounts(alteredAccounts []*alteredAccount.AlteredAccount) error {
+func checkMetaAlteredAccounts(alteredAccounts map[string]*alteredAccount.AlteredAccount) error {
 	log.Info("checking meta altered accounts...")
 
 	numAlteredAccounts := len(alteredAccounts)
@@ -144,8 +154,8 @@ func checkMetaAlteredAccounts(alteredAccounts []*alteredAccount.AlteredAccount) 
 		return fmt.Errorf("checkMetaAlteredAccounts: expected only one altered account: %s, got: %d", esdtIssueAddress, numAlteredAccounts)
 	}
 
-	acc := alteredAccounts[0]
-	if acc.Address != esdtIssueAddress {
+	acc, found := alteredAccounts[esdtIssueAddress]
+	if !found {
 		return fmt.Errorf("checkMetaAlteredAccounts: expected altered account: %s, got: %s", esdtIssueAddress, acc.Address)
 	}
 

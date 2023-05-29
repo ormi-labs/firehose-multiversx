@@ -12,7 +12,7 @@ import (
 	"github.com/gogo/protobuf/proto"
 	"github.com/multiversx/firehose-multiversx/types"
 	pbmultiversx "github.com/multiversx/firehose-multiversx/types/pb/sf/multiversx/type/v1"
-	"github.com/multiversx/mx-chain-core-go/data/firehose"
+	"github.com/multiversx/mx-chain-core-go/data/outport"
 	"github.com/streamingfast/bstream"
 	"go.uber.org/zap"
 )
@@ -235,7 +235,7 @@ func (ctx *parseCtx) readBlockEnd(params []string) (*pbmultiversx.Block, error) 
 		return nil, err
 	}
 
-	multiversxBlock := &firehose.FirehoseBlock{}
+	multiversxBlock := &outport.OutportBlock{}
 	err = proto.Unmarshal(multiversxBlockBytes, multiversxBlock)
 	if err != nil {
 		return nil, err
@@ -247,7 +247,7 @@ func (ctx *parseCtx) readBlockEnd(params []string) (*pbmultiversx.Block, error) 
 
 	ctx.logger.Debug("console reader read block",
 		zap.Uint64("height", ctx.currentBlock.Height),
-		zap.String("hash", hex.EncodeToString(ctx.currentBlock.MultiversxBlock.HeaderHash)),
+		zap.String("hash", hex.EncodeToString(ctx.currentBlock.MultiversxBlock.BlockData.HeaderHash)),
 		zap.String("prev_hash", ctx.currentBlock.PrevHash),
 	)
 

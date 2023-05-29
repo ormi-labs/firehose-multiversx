@@ -9,7 +9,7 @@ import (
 
 	mvxcore "github.com/multiversx/mx-chain-core-go/core"
 	"github.com/multiversx/mx-chain-core-go/data/alteredAccount"
-	"github.com/multiversx/mx-chain-core-go/data/firehose"
+	"github.com/multiversx/mx-chain-core-go/data/outport"
 	"github.com/tidwall/gjson"
 )
 
@@ -51,7 +51,7 @@ func checkShardBlock(hyperBlockNonce uint64, address string, txHash string) erro
 	}
 
 	apiTxs := gjson.Get(string(body), "data.hyperblock.transactions").Array()
-	err = checkShardTxs(apiTxs, multiversxBlock.MultiversxBlock.Transactions, txHash)
+	err = checkShardTxs(apiTxs, multiversxBlock.MultiversxBlock.TransactionPool.Transactions, txHash)
 	if err != nil {
 		return err
 	}
@@ -65,7 +65,7 @@ func checkShardBlock(hyperBlockNonce uint64, address string, txHash string) erro
 	return nil
 }
 
-func checkShardBlockHeader(multiversxBlock *firehose.FirehoseBlock, shardBlocks []gjson.Result) error {
+func checkShardBlockHeader(multiversxBlock *outport.OutportBlock, shardBlocks []gjson.Result) error {
 	shardBlockHash := shardBlocks[0].Get("hash").String()
 	return checkHeader(
 		multiversxBlock,
@@ -76,7 +76,7 @@ func checkShardBlockHeader(multiversxBlock *firehose.FirehoseBlock, shardBlocks 
 		})
 }
 
-func checkShardTxs(apiTxs []gjson.Result, transactions map[string]*firehose.TxInfo, txHash string) error {
+func checkShardTxs(apiTxs []gjson.Result, transactions map[string]*outport.TxInfo, txHash string) error {
 	log.Info("checking shard txs...")
 
 	err := checkApiTxExists(apiTxs, txHash)
@@ -127,7 +127,7 @@ func checkApiTxExists(apiTxs []gjson.Result, txHash string) error {
 	return fmt.Errorf("could not find generated tx hash: %s in api hyperBlock", txHash)
 }
 
-func checkShardAlteredAccounts(alteredAccounts []*alteredAccount.AlteredAccount, expectedAddress string) error {
+func checkShardAlteredAccounts(alteredAccounts map[string]*alteredAccount.AlteredAccount, expectedAddress string) error {
 	log.Info("checking shard altered accounts...")
 
 	numAlteredAccounts := len(alteredAccounts)
@@ -135,8 +135,8 @@ func checkShardAlteredAccounts(alteredAccounts []*alteredAccount.AlteredAccount,
 		return fmt.Errorf("checkShardAlteredAccounts: expected only one altered account: %s, got: %d", expectedAddress, numAlteredAccounts)
 	}
 
-	acc := alteredAccounts[0]
-	if acc.Address != expectedAddress {
+	acc, found := alteredAccounts[expectedAddress]
+	if !found {
 		return fmt.Errorf("checkShardAlteredAccounts: expected altered account: %s, got: %s", expectedAddress, acc.Address)
 	}
 

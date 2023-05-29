@@ -3,15 +3,19 @@
   "prevHash": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
   "timestamp": 1647087903319636000,
   "MultiversxBlock": {
-    "HeaderType": "metachain",
-    "HeaderHash": "aGFzaA==",
-    "AlteredAccounts": [
-      {
-        "Address": "erd1qq",
-        "Nonce": 4,
-        "Balance": "100"
+    "blockData": {
+      "headerType": "metachain",
+      "headerHash": "aGFzaA=="
+    },
+    "alteredAccounts": {
+      "erd1qq": {
+        "address": "",
+        "nonce": 4,
+        "balance": "100"
       }
-    ]
+    },
+    "numberOfShards": 0,
+    "highestFinalBlockNonce": 0
   }
 }
 ]

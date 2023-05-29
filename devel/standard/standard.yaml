@@ -6,6 +6,6 @@ start:
   - relayer
   flags:
     # Specifies the path to the binary
-    reader-node-path: "node/node"
+    reader-node-path: "connector"
     # Flags that will be added to the dummy chain process command
-    reader-node-arguments: --firehose-enabled
+    reader-node-arguments:

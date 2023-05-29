@@ -4,15 +4,38 @@ cd ..
 go build
 cd scripts
 
+startExporterNode(){
+    echo "###### starting exporter node with screen ######"
+
+    mkdir -p screenLogs &&\
+    touch screenLogs/exporter-node.log &&\
+    screen -L -A -m -d -S exporternode bash -c\
+     './exporter-node.sh "$1" >> screenLogs/exporter-node.log 2>&1' -- "$1"
+
+    sleep 45
+
+    echo "###### finished starting exporter node ######"
+}
+
+startFirehoseConnector(){
+    echo "###### starting firehose connector with screen ######"
+
+    sudo chmod +x firehose-connector.sh
+
+    touch screenLogs/firehose-connector.log &&\
+    screen -L -A -m -d -S connector bash -c\
+    './firehose-connector.sh >> screenLogs/firehose-connector.log 2>&1'
+
+    sleep 20
+
+    echo "###### finished starting firehose connector ######"
+}
+
 startTest(){
-  echo "starting firehosenode with screen"
+  startExporterNode $1
+  startFirehoseConnector
 
-  screen -L -A -m -d -S firehosenode ./firehose-node.sh $1
-
-  sleep 50
-
-  echo "finish starting firehosenode"
-  echo "starting integration tests for $1"
+  echo "###### starting integration tests for $1 ######"
 
   cd ..
   if [[ "$1" == "shard" ]]
@@ -28,9 +51,11 @@ startTest(){
     fi
   fi
 
-  echo "finished integration tests for $1"
+  echo "###### finished integration tests for $1 ######"
 
-  screen -S firehosenode -X quit
+  screen -S exporternode -X quit
+  screen -S connector -X quit
+
   cd scripts
 }
 

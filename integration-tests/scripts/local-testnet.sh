@@ -10,6 +10,9 @@ ENABLE_EPOCH_DIR=$TESTNET_DIR/mx-chain-go/cmd/node/config/enableEpochs.toml
 SYSTEM_SC_CONFIG_DIR=$TESTNET_DIR/mx-chain-go/cmd/node/config/systemSmartContractsConfig.toml
 SANDBOX_NAME=sandbox
 
+MX_CHAIN_GO_STABLE_VERSION=rc/v1.6.0
+MX_CHAIN_WS_CONNECTOR_VERSION=f193e7b2fcd899837b6e631a288a775acc3df908
+
 cloneDependencies(){
   if [ -d "$TESTNET_DIR" ]; then
     rm -rf $TESTNET_DIR
@@ -18,12 +21,19 @@ cloneDependencies(){
   mkdir "$TESTNET_DIR"
 
   git clone https://github.com/multiversx/mx-chain-go "$TESTNET_DIR/mx-chain-go"
-  cd $TESTNET_DIR/mx-chain-go
-  git checkout 32d0f017fa68add935a4f3a226c674c45d440835
-  cd ../..
+  checkoutStableVersion mx-chain-go $MX_CHAIN_GO_STABLE_VERSION
 
   git clone https://github.com/multiversx/mx-chain-deploy-go "$TESTNET_DIR/mx-chain-deploy-go"
   git clone https://github.com/multiversx/mx-chain-proxy-go "$TESTNET_DIR/mx-chain-proxy-go"
+
+  git clone https://github.com/multiversx/mx-chain-ws-connector-firehose-go "$TESTNET_DIR/mx-chain-ws-connector-firehose-go"
+  checkoutStableVersion mx-chain-ws-connector-firehose-go $MX_CHAIN_WS_CONNECTOR_VERSION
+}
+
+checkoutStableVersion(){
+    cd $TESTNET_DIR/$1
+    git checkout $2
+    cd ../..
 }
 
 testnetRemove(){
@@ -65,8 +75,13 @@ testnetUpdateVariables(){
   sed -i 's/META_CONSENSUS_SIZE=.*/META_CONSENSUS_SIZE=$META_VALIDATORCOUNT/' $VARIABLES_PATH
   sed -i 's/export NODE_DELAY=.*/export NODE_DELAY=30/' $VARIABLES_PATH
 
-  sed -i 's/EXTRA_OBSERVERS_FLAGS.*/EXTRA_OBSERVERS_FLAGS --firehose-enabled --operation-mode db-lookup-extension"/' $OBSERVERS_PATH
-  sed -i 's/config_validator.toml/config_validator.toml --firehose-enabled --operation-mode db-lookup-extension/' $VALIDATORS_PATH
+  sed -i 's/EXTRA_OBSERVERS_FLAGS.*/EXTRA_OBSERVERS_FLAGS --operation-mode db-lookup-extension"/' $OBSERVERS_PATH
+  sed -i 's/config_validator.toml/config_validator.toml --operation-mode db-lookup-extension/' $VALIDATORS_PATH
+}
+
+setupFirehoseConnector(){
+  cd "$TESTNET_DIR/mx-chain-ws-connector-firehose-go/cmd/connector"
+  go build
 }
 
 testnetNew(){
@@ -75,6 +90,7 @@ testnetNew(){
   testnetSetup
   testnetUpdateVariables
   testnetPrereq
+  setupFirehoseConnector
 }
 
 testnetStart(){
