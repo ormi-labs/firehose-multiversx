@@ -100,7 +100,7 @@ func checkMetaLogs(apiLog gjson.Result, logs []*outport.LogData, txHash string) 
 		return fmt.Errorf("checkMetaLogs: expected only one generated and indexed log, received %d", numIndexedLogs)
 	}
 
-	indexedLog, found := getIndexedLog(logs, txHash)
+	indexedLog, found := getLogByTxHash(logs, txHash)
 	if !found {
 		return fmt.Errorf("checkMetaLogs: api tx hash %s not found in indexed logs", txHash)
 	}
@@ -126,7 +126,7 @@ func checkMetaLogs(apiLog gjson.Result, logs []*outport.LogData, txHash string) 
 	return nil
 }
 
-func getIndexedLog(logs []*outport.LogData, txHash string) (*outport.LogData, bool) {
+func getLogByTxHash(logs []*outport.LogData, txHash string) (*outport.LogData, bool) {
 	for _, logData := range logs {
 		if logData.TxHash == txHash {
 			return logData, true

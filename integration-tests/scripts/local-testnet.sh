@@ -10,6 +10,9 @@ ENABLE_EPOCH_DIR=$TESTNET_DIR/mx-chain-go/cmd/node/config/enableEpochs.toml
 SYSTEM_SC_CONFIG_DIR=$TESTNET_DIR/mx-chain-go/cmd/node/config/systemSmartContractsConfig.toml
 SANDBOX_NAME=sandbox
 
+MX_CHAIN_GO_STABLE_VERSION=rc/v1.6.0
+MX_CHAIN_WS_CONNECTOR_VERSION=f193e7b2fcd899837b6e631a288a775acc3df908
+
 cloneDependencies(){
   if [ -d "$TESTNET_DIR" ]; then
     rm -rf $TESTNET_DIR
@@ -18,13 +21,13 @@ cloneDependencies(){
   mkdir "$TESTNET_DIR"
 
   git clone https://github.com/multiversx/mx-chain-go "$TESTNET_DIR/mx-chain-go"
-  checkoutStableVersion mx-chain-go rc/v1.6.0
+  checkoutStableVersion mx-chain-go $MX_CHAIN_GO_STABLE_VERSION
 
   git clone https://github.com/multiversx/mx-chain-deploy-go "$TESTNET_DIR/mx-chain-deploy-go"
   git clone https://github.com/multiversx/mx-chain-proxy-go "$TESTNET_DIR/mx-chain-proxy-go"
 
   git clone https://github.com/multiversx/mx-chain-ws-connector-firehose-go "$TESTNET_DIR/mx-chain-ws-connector-firehose-go"
-  checkoutStableVersion mx-chain-ws-connector-firehose-go bb79d31a1c7499707354d500571744b939d334f0
+  checkoutStableVersion mx-chain-ws-connector-firehose-go $MX_CHAIN_WS_CONNECTOR_VERSION
 }
 
 checkoutStableVersion(){
