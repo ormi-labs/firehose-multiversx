@@ -5,8 +5,8 @@ go 1.17
 require (
 	github.com/ShinyTrinkets/overseer v0.3.0
 	github.com/gogo/protobuf v1.3.2
-	github.com/multiversx/firehose-multiversx/types v0.0.0-20230518130743-9686cd85912e
-	github.com/multiversx/mx-chain-core-go v1.2.4-0.20230517135533-2e54a17cd912
+	github.com/multiversx/firehose-multiversx/types v0.0.0-20240126110138-813c0de84cb1
+	github.com/multiversx/mx-chain-core-go v1.2.18
 	github.com/spf13/cobra v1.4.0
 	github.com/spf13/viper v1.8.1
 	github.com/streamingfast/bstream v0.0.2-0.20220909121429-4647fd1522c9

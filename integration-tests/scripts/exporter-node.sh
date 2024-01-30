@@ -9,18 +9,18 @@ OBSERVER_MODE="server"
 setup(){
   echo "starting integration tests for shard $1"
 
-  pushd $CURRENT_DIR
+  pushd "$CURRENT_DIR" || exit
 
-  cd testnet/mx-chain-go/cmd/keygenerator
+  cd testnet/mx-chain-go/cmd/keygenerator || exit
   go build
   ./keygenerator
 
-  popd
+  popd || exit
 
   rm -rf exporterNode/
 
   mkdir "exporterNode"
-  cd exporterNode
+  cd exporterNode || exit
 
   rm -rf compiledSCStorage/
   rm -rf config/
@@ -32,18 +32,18 @@ setup(){
   mkdir "config/"
 
   DEVEL=$(pwd)
-  cp $SANDBOX_PATH/node/node $DEVEL
-  cp -R $SANDBOX_PATH/node/config $DEVEL
+  cp "$SANDBOX_PATH"/node/node "$DEVEL"
+  cp -R "$SANDBOX_PATH"/node/config "$DEVEL"
   mv config/config_observer.toml config/config.toml
-  mv $KEY_GENERATOR_PATH/validatorKey.pem config/
+  mv "$KEY_GENERATOR_PATH"/validatorKey.pem config/
 
-  sed -i "s@DestinationShardAsObserver =.*@DestinationShardAsObserver = \"$1\"@" $DEVEL/config/prefs.toml
-  sed -i 's/FullArchive =.*/FullArchive = true/' $DEVEL/config/prefs.toml
+  sed -i "s@DestinationShardAsObserver =.*@DestinationShardAsObserver = \"$1\"@" "$DEVEL"/config/prefs.toml
+  sed -i 's/FullArchive =.*/FullArchive = true/' "$DEVEL"/config/prefs.toml
 
-  sed -i '/HostDriverConfig\]/!b;n;n;c\    Enabled = true' $DEVEL/config/external.toml
-  sed -i "s@Mode =.*@Mode = \"$OBSERVER_MODE\"@" $DEVEL/config/external.toml
-  sed -i 's/MarshallerType =.*/MarshallerType = "gogo protobuf"/' $DEVEL/config/external.toml
-  sed -i 's/BlockingAckOnError =.*/BlockingAckOnError = false/' $DEVEL/config/external.toml
+  sed -i '/HostDriverConfig\]/!b;n;n;c\    Enabled = true' "$DEVEL"/config/external.toml
+  sed -i "s@Mode =.*@Mode = \"$OBSERVER_MODE\"@" "$DEVEL"/config/external.toml
+  sed -i 's/MarshallerType =.*/MarshallerType = "gogo protobuf"/' "$DEVEL"/config/external.toml
+  sed -i 's/BlockingAckOnError =.*/BlockingAckOnError = false/' "$DEVEL"/config/external.toml
 
   ./node --log-level *:INFO
 }

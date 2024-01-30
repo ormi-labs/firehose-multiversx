@@ -33,7 +33,7 @@ main() {
     usage_error "The 'dummy-blockchain' executable must be found within your PATH, install it from source of 'https://github.com/streamingfast/dummy-blockchain'"
   fi
 
-  exec dummy-blockchain --firehose-enabled --block-rate 60 start --store-dir "$chain_data" | $firemultiversx -c $(basename $ROOT).yaml start "$@"
+  exec dummy-blockchain --firehose-enabled --block-rate 60 start --store-dir "$chain_data" | $firemultiversx -c "$(basename "$ROOT")".yaml start "$@"
 }
 
 usage_error() {
@@ -43,13 +43,13 @@ usage_error() {
   echo "ERROR: $message"
   echo ""
   usage
-  exit ${exit_code:-1}
+  exit "${exit_code:-1}"
 }
 
 usage() {
   echo "usage: start.sh [-c]"
   echo ""
-  echo "Start $(basename $ROOT) environment."
+  echo "Start $(basename "$ROOT") environment."
   echo ""
   echo "Options"
   echo "    -c             Clean actual data directory first"

@@ -2,7 +2,7 @@
 
 cd ..
 go build
-cd scripts
+cd scripts || exit
 
 startExporterNode(){
     echo "###### starting exporter node with screen ######"
@@ -56,6 +56,7 @@ startTest(){
   screen -S exporternode -X quit
   screen -S connector -X quit
 
+  # shellcheck disable=SC2164
   cd scripts
 }
 

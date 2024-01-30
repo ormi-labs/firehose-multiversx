@@ -31,7 +31,7 @@ cloneDependencies(){
 }
 
 checkoutStableVersion(){
-    cd $TESTNET_DIR/$1
+    cd "$TESTNET_DIR"/$1 || exit
     git checkout $2
     cd ../..
 }
@@ -52,7 +52,7 @@ testnetSetup(){
   sed -i 's/BaseIssuingCost =.*/BaseIssuingCost = "50000000000000000"/' "$SYSTEM_SC_CONFIG_DIR"
 
   mkdir "$TESTNET_OUTPUT_DIR"
-  cd "$TESTNET_OUTPUT_DIR"
+  cd "$TESTNET_OUTPUT_DIR" || exit
   ln -s "$TESTNET_DIR"/mx-chain-go mx-chain-go
   ln -s "$TESTNET_DIR"/mx-chain-deploy-go mx-chain-deploy-go
   ln -s "$TESTNET_DIR"/mx-chain-proxy-go mx-chain-proxy-go
@@ -80,7 +80,7 @@ testnetUpdateVariables(){
 }
 
 setupFirehoseConnector(){
-  cd "$TESTNET_DIR/mx-chain-ws-connector-firehose-go/cmd/connector"
+  cd "$TESTNET_DIR/mx-chain-ws-connector-firehose-go/cmd/connector" || exit
   go build
 }
 
