@@ -56,8 +56,7 @@ startTest(){
   screen -S exporternode -X quit
   screen -S connector -X quit
 
-  # shellcheck disable=SC2164
-  cd scripts
+  cd scripts || exit
 }
 
 startTest shard || exit 1
