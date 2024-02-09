@@ -10,3 +10,5 @@ require (
 	github.com/streamingfast/pbgo v0.0.6-0.20220629184423-cfd0608e0cf4
 	google.golang.org/protobuf v1.27.1
 )
+
+replace github.com/gogo/protobuf => github.com/multiversx/protobuf v1.3.2
