@@ -15,7 +15,9 @@ package codec
 
 import (
 	"bytes"
+	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -24,7 +26,11 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gogo/protobuf/proto"
 	"github.com/multiversx/firehose-multiversx/types"
+	pbmultiversx "github.com/multiversx/firehose-multiversx/types/pb/sf/multiversx/type/v1"
+	"github.com/multiversx/mx-chain-core-go/data/alteredAccount"
+	"github.com/multiversx/mx-chain-core-go/data/outport"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -36,6 +42,29 @@ func TestParseFromFile(t *testing.T) {
 	}{
 		{"testdata/full.firelog", nil},
 	}
+
+	block := &pbmultiversx.Block{
+		Height:    6,
+		PrevHash:  "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+		Timestamp: 1647087903319636000,
+		MultiversxBlock: &outport.OutportBlock{
+			BlockData: &outport.BlockData{
+				HeaderType: "metachain",
+				HeaderHash: []byte("hash"),
+			},
+			AlteredAccounts: map[string]*alteredAccount.AlteredAccount{
+				"erd1qq": {
+					Nonce:   4,
+					Balance: "100",
+				},
+			},
+			NumberOfShards:         0,
+			HighestFinalBlockNonce: 0,
+		},
+	}
+
+	bResult, _ := proto.Marshal(block)
+	fmt.Println(hex.EncodeToString(bResult))
 
 	for _, test := range tests {
 		t.Run(strings.Replace(test.firehoseLogsFile, "testdata/", "", 1), func(t *testing.T) {

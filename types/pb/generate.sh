@@ -16,7 +16,7 @@
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd ../.. && pwd )"
 
 # Protobuf definitions
-PROTO=${1:-"$ROOT/../proto"}
+PROTO=${1:-"$ROOT/../../streamingfast/proto"}
 PROTO_MULTIVERSX=${2:-"$ROOT/proto"}
 
 function main() {
