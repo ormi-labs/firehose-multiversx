@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/ShinyTrinkets/overseer v0.3.0
 	github.com/gogo/protobuf v1.3.2
-	github.com/multiversx/firehose-multiversx/types v0.0.0-20240126110138-813c0de84cb1
+	github.com/multiversx/firehose-multiversx/types v0.0.0-20240209135824-1372c8c9da18
 	github.com/multiversx/mx-chain-core-go v1.2.18
 	github.com/spf13/cobra v1.4.0
 	github.com/spf13/viper v1.8.1
@@ -156,3 +156,5 @@ require (
 )
 
 replace github.com/ShinyTrinkets/overseer => github.com/streamingfast/overseer v0.2.1-0.20210326144022-ee491780e3ef
+
+replace github.com/gogo/protobuf => github.com/multiversx/protobuf v1.3.2
