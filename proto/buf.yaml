@@ -1,0 +1,10 @@
+version: v1
+name: buf.build/multiversx/firehose-multiversx
+
+lint:
+  use:
+    - DEFAULT
+
+breaking:
+  use:
+    - FILE
