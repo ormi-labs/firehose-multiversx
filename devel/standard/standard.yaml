@@ -5,7 +5,10 @@ start:
   - reader-node
   - relayer
   flags:
-    # Specifies the path to the binary
+    common-first-streamable-block: 0
+    # Specifies the path to the connector binary, that outputs multiversx node data in stdout
     reader-node-path: "connector"
+    reader-node-data-dir: "{data-dir}/reader-node"
+
     # Flags that will be added to the dummy chain process command
     reader-node-arguments:

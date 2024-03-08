@@ -13,23 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd ../.. && pwd )"
+ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
 
 # Protobuf definitions
-PROTO=${1:-"$ROOT/../../streamingfast/proto"}
 PROTO_MULTIVERSX=${2:-"$ROOT/proto"}
 
 function main() {
   checks
 
   set -e
-  cd "$ROOT/types/pb" &> /dev/null
+  cd "$ROOT/pb" &> /dev/null
 
   generate "sf/multiversx/type/v1/type.proto"
 
   echo "generate.sh - `LANG=en_US date --utc` - `whoami`" > ./last_generate.txt
-  echo "streamingfast/proto revision: `GIT_DIR=$PROTO/.git git rev-parse HEAD`" >> ./last_generate.txt
-  echo "streamingfast/firehose-acme/proto revision: `GIT_DIR=$ROOT/.git git log -n 1 --pretty=format:%h -- proto`" >> ./last_generate.txt
+  echo "multiversx/firehose-multiversx/proto revision: `GIT_DIR=$ROOT/.git git log -n 1 --pretty=format:%h -- proto`" >> ./last_generate.txt
 }
 
 # usage:
@@ -42,9 +40,8 @@ function generate() {
     fi
 
     for file in "$@"; do
-      protoc -I$GOPATH/src -I$PROTO -I$PROTO_MULTIVERSX \
+      protoc -I$GOPATH/src -I$PROTO_MULTIVERSX \
         --go_out=. --go_opt=paths=source_relative \
-        --go-grpc_out=. --go-grpc_opt=paths=source_relative,require_unimplemented_servers=false \
          $base$file
     done
 }

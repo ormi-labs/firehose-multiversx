@@ -7,10 +7,9 @@ Welcome to this node manager pod, common commands:
  - Show version                       firemultiversx --version
 
 Node manager commands (multiversx-... <tab> to show all):
- - Check if running                   multiversx-is-running
+ - Check if running                   reader-is-running
 
- - Debug Firehose logs for 30s       multiversx-debug-firehose-logs-30s
- - Stop instance                      multiversx-maintenance
- - Start or restart instance          multiversx-resume
-
- - RPC Head Block                     multiversx-rpc-head-block
+ - Start or restart instance          reader-resume
+ - Stop instance                      reader-maintenance
+ - Show final start command used      reader-start-command
+ - Debug Firehose logs for 30s        reader-debug-firehose-logs-30s

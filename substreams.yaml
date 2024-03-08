@@ -4,7 +4,7 @@ package:
   version: v0.0.1
   url: https://github.com/streamingfast/firehose-multiversx
   doc: |
-    Protobuf definitions for Substreams modules on Multiversx.
+    Protobuf definitions for developing Substreams Multiversx modules.
 
     This package does not include any modules.
 
@@ -12,4 +12,4 @@ protobuf:
   files:
     - sf/multiversx/type/v1/type.proto
   importPaths:
-    - ../proto
+    - ./proto

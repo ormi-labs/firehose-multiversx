@@ -19,6 +19,7 @@
 *.spkg
 
 /firemultiversx
+/build
 /dist
 
 firehose-data
