@@ -24,7 +24,7 @@ main() {
     rm -rf firehose-data &> /dev/null || true
   fi
 
-  exec $firemultiversx -c $(basename $ROOT).yaml start "$@"
+  exec "$firemultiversx" -c "$(basename "$ROOT")".yaml start "$@"
 }
 
 usage_error() {
@@ -34,13 +34,13 @@ usage_error() {
   echo "ERROR: $message"
   echo ""
   usage
-  exit ${exit_code:-1}
+  exit "${exit_code:-1}"
 }
 
 usage() {
   echo "usage: start.sh [-c]"
   echo ""
-  echo "Start $(basename $ROOT) environment."
+  echo "Start $(basename "$ROOT") environment."
   echo ""
   echo "Options"
   echo "    -c             Clean actual data directory first"

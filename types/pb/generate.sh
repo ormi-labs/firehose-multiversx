@@ -16,7 +16,7 @@
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd ../.. && pwd )"
 
 # Protobuf definitions
-PROTO=${1:-"$ROOT/../proto"}
+PROTO=${1:-"$ROOT/../../streamingfast/proto"}
 PROTO_MULTIVERSX=${2:-"$ROOT/proto"}
 
 function main() {
@@ -54,7 +54,7 @@ function checks() {
   # version waits forever. So we pipe some wrong input to make it exit fast. This in the new version
   # which supports `--version` correctly print the version anyway and discard the standard input
   # so it's good with both version.
-  result=`printf "" | protoc-gen-go --version 2>&1 | grep -Eo v[0-9\.]+`
+  result=$(printf "" | protoc-gen-go --version 2>&1 | grep -Eo "v[0-9\.]+")
   if [[ "$result" == "" ]]; then
     echo "Your version of 'protoc-gen-go' (at `which protoc-gen-go`) is not recent enough."
     echo ""
@@ -63,7 +63,7 @@ function checks() {
     echo "  go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.25.0"
     echo "  go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1.0"
     echo ""
-    echo "If everything is working as expetcted, the command:"
+    echo "If everything is working as expected, the command:"
     echo ""
     echo "  protoc-gen-go --version"
     echo ""
