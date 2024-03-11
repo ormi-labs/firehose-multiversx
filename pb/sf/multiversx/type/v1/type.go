@@ -9,7 +9,6 @@ import (
 var _ firecore.Block = (*Block)(nil)
 
 func (b *Block) GetFirehoseBlockID() string {
-	// return hex.EncodeToString(b.MultiversxBlock.BlockData.HeaderHash)
 	return b.Header.Hash
 }
 

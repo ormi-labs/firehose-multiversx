@@ -1,2 +1,2 @@
-generate.sh - Fri Mar  8 13:10:11 UTC 2024 - ado
-multiversx/firehose-multiversx/proto revision: 70c4ed3
+generate.sh - Mon Mar 11 15:12:11 UTC 2024 - ado
+multiversx/firehose-multiversx/proto revision: 912d0e5
