@@ -1,0 +1,17 @@
+[package]
+name = "firehose-multiversx"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+prost = "0.12"
+# Only necessary if using Protobuf well-known types:
+prost-types = "0.12"
+substreams = "0.5"
+protobuf = { git = "https://github.com/stepancheg/rust-protobuf.git", branch = "master" }
+
+[build-dependencies]
+prost-build = "0.12"
+protoc-rust = "2"
