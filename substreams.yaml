@@ -13,3 +13,16 @@ protobuf:
     - sf/multiversx/type/v1/type.proto
   importPaths:
     - ./proto
+
+binaries:
+  default:
+    type: wasm/rust-v1
+    file: target/wasm32-unknown-unknown/release/firehose-multiversx.wasm
+
+modules:
+  - name: map_block
+    kind: map
+    inputs:
+      - source: sf.multiversx.type.v1.OutportBlock
+    output:
+      type: proto:sf.multiversx.type.v1.OutportBlock
