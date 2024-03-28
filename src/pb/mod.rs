@@ -11,7 +11,7 @@ pub mod sf {
     }
 }
 
-pub mod guardians;
-pub mod outportBlock;
-pub mod proto;
-pub mod type_pb;
+#[allow(unused_imports)]
+#[allow(dead_code)]
+#[path = "./sf.multiversx.type.v1.rs"]
+pub mod multiversx;

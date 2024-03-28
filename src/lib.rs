@@ -1,13 +1,16 @@
 mod pb;
 
-// use crate::pb::type_pb;
-
+use substreams;
 use substreams::errors::Error;
-use type_pb::BlockHeader;
+
+use pb::multiversx;
 
 #[substreams::handlers::map]
-fn block_index(blk: BlockHeader) -> Result<BlockHeader, Error> {
-    let mut block_header = BlockHeader::default();
+pub fn guardians_fn(blk: multiversx::OutportBlock) -> Result<multiversx::OutportBlock, Error> {
+    let mut block_header = blk;
+    block_header.shard_id = 2;
+
+    println!("{:?}", block_header);
 
     Ok(block_header)
 }
