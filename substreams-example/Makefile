@@ -1,6 +1,3 @@
-GRAPH_CONFIG ?= ../graph-node-dev/config/graphman.toml
-STOP_BLOCK ?= +1000
-
 .PHONY: build protogen package test
 
 build:

@@ -10,8 +10,3 @@ pub mod sf {
         }
     }
 }
-
-#[allow(unused_imports)]
-#[allow(dead_code)]
-#[path = "./sf.multiversx.type.v1.rs"]
-pub mod multiversx;
