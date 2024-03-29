@@ -16,7 +16,7 @@ pub struct OutportBlock {
     pub notarized_headers_hashes: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(uint32, tag="7")]
     pub number_of_shards: u32,
-    #[prost(uint64, repeated, packed="false", tag="8")]
+    #[prost(uint64, repeated, tag="8")]
     pub signers_indexes: ::prost::alloc::vec::Vec<u64>,
     #[prost(uint64, tag="9")]
     pub highest_final_block_nonce: u64,
@@ -140,7 +140,7 @@ pub struct ValidatorsRating {
 pub struct RoundInfo {
     #[prost(uint64, tag="1")]
     pub round: u64,
-    #[prost(uint64, repeated, packed="false", tag="2")]
+    #[prost(uint64, repeated, tag="2")]
     pub signers_indexes: ::prost::alloc::vec::Vec<u64>,
     #[prost(bool, tag="3")]
     pub block_was_proposed: bool,
