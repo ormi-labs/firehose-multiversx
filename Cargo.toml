@@ -1,5 +1,5 @@
 [package]
-name = "firehose-multiversx"
+name = "substreams-multiversx"
 version = "0.1.0"
 edition = "2021"
 
