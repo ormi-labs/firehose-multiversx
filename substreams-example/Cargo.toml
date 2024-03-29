@@ -7,11 +7,8 @@ edition = "2021"
 
 [dependencies]
 prost = "0.11.9"
-# Only necessary if using Protobuf well-known types:
 prost-types = "0.11.9"
-protobuf = "2.0.0"
 substreams = "0.5"
 
 [build-dependencies]
 prost-build = "0.11.9"
-protoc-rust = "2"
