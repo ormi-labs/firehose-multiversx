@@ -12,4 +12,17 @@ protobuf:
   files:
     - sf/multiversx/type/v1/type.proto
   importPaths:
-    - ./proto
+    - ../proto
+
+binaries:
+  default:
+    type: wasm/rust-v1
+    file: target/wasm32-unknown-unknown/release/substreams-multiversx.wasm
+
+modules:
+  - name: map_print_block
+    kind: map
+    inputs:
+      - source: sf.multiversx.type.v1.OutportBlock
+    output:
+      type: proto:sf.multiversx.type.v1.OutportBlock
