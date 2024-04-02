@@ -23,6 +23,6 @@ modules:
   - name: map_print_block
     kind: map
     inputs:
-      - source: sf.multiversx.type.v1.OutportBlock
+      - source: pbmultiversx.Block
     output:
-      type: proto:sf.multiversx.type.v1.OutportBlock
+      type: proto:pbmultiversx.Block
