@@ -1,6 +1,21 @@
 syntax = "proto3";
 
-package sf.multiversx.type.v1;
+package pbmultiversx;
+
+message BlockHeader {
+  uint64             height = 1;
+  string             hash = 2;
+  optional uint64    previous_num = 3;
+  optional string    previous_hash = 4;
+  uint64             final_num = 5;
+  string             final_hash = 6;
+  uint64             timestamp = 7;
+}
+
+message Block {
+  BlockHeader header = 1;
+  OutportBlock MultiversxBlock = 2;
+}
 
 message OutportBlock {
   uint32                       ShardID                = 1;
