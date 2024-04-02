@@ -3,10 +3,10 @@ mod pb;
 use substreams;
 use substreams::errors::Error;
 
-use pb::sf::multiversx::r#type::v1::OutportBlock;
+use pb::pbmultiversx::Block;
 
 #[substreams::handlers::map]
-pub fn map_print_block(blk: OutportBlock) -> Result<OutportBlock, Error> {
+pub fn map_print_block(blk: Block) -> Result<Block, Error> {
     println!("{:?}", blk);
 
     Ok(blk)
