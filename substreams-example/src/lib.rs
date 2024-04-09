@@ -1,6 +1,5 @@
 pub mod pb;
 
-// use crate::pb::pbmultiversx::Block;
 use crate::pb::pbmultiversx::Block;
 
 #[substreams::handlers::map]
