@@ -1,12 +1,10 @@
-mod pb;
+pub mod pb;
 
-use substreams;
-use substreams::errors::Error;
-
-use pb::pbmultiversx::Block;
+// use crate::pb::pbmultiversx::Block;
+use crate::pb::pbmultiversx::Block;
 
 #[substreams::handlers::map]
-pub fn map_print_block(blk: Block) -> Result<Block, Error> {
+pub fn map_print_block(blk: Block) -> Result<Block, substreams::errors::Error> {
     println!("{:?}", blk);
 
     Ok(blk)
