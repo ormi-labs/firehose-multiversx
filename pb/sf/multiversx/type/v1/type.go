@@ -17,19 +17,19 @@ func (b *Block) GetFirehoseBlockNumber() uint64 {
 }
 
 func (b *Block) GetFirehoseBlockParentID() string {
-	if b.Header.PreviousHash == nil {
+	if b.Header.PreviousHash == "" {
 		return ""
 	}
 
-	return *b.Header.PreviousHash
+	return b.Header.PreviousHash
 }
 
 func (b *Block) GetFirehoseBlockParentNumber() uint64 {
-	if b.Header.PreviousNum == nil {
+	if b.Header.PreviousNum == 0 {
 		return 0
 	}
 
-	return *b.Header.PreviousNum
+	return b.Header.PreviousNum
 }
 
 func (b *Block) GetFirehoseBlockTime() time.Time {
