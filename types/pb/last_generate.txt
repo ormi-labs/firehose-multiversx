@@ -1,3 +1,0 @@
-generate.sh - Fri Feb  9 14:13:08 UTC 2024 - ado
-streamingfast/proto revision: 67073d7d67736a3d36e8b4181ccdd7dcf406a4f6
-streamingfast/firehose-acme/proto revision: 70c4ed3

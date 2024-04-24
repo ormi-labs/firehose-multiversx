@@ -33,6 +33,7 @@ main() {
     usage_error "The 'dummy-blockchain' executable must be found within your PATH, install it from source of 'https://github.com/streamingfast/dummy-blockchain'"
   fi
 
+## TODO: add the command to start multiversx required nodes instead of dummy-blockchain
   exec dummy-blockchain --firehose-enabled --block-rate 60 start --store-dir "$chain_data" | $firemultiversx -c "$(basename "$ROOT")".yaml start "$@"
 }
 

@@ -1,43 +1,28 @@
 package main
 
 import (
-	"fmt"
-	"strings"
-	"time"
+	firecore "github.com/streamingfast/firehose-core"
+	fhCmd "github.com/streamingfast/firehose-core/cmd"
 
-	"github.com/multiversx/firehose-multiversx/cmd/firemultiversx/cli"
+	pbmultiversx "github.com/multiversx/firehose-multiversx/pb/sf/multiversx/type/v1"
 )
 
-// Commit sha1 value, injected via go build `ldflags` at build time
-var commit = ""
-
-// Version value, injected via go build `ldflags` at build time
-var version = "dev"
-
-// Date value, injected via go build `ldflags` at build time
-var date = time.Now().Format(time.RFC3339)
-
-func init() {
-	cli.RootCmd.Version = versionString()
-}
-
 func main() {
-	cli.Main()
+	fhCmd.Main(&firecore.Chain[*pbmultiversx.Block]{
+		ShortName:            "multiversx",
+		LongName:             "Multiversx",
+		ExecutableName:       "multiversx",
+		FullyQualifiedModule: "github.com/multiversx/firehose-multiversx",
+		Version:              version,
+
+		FirstStreamableBlock: 0,
+
+		BlockFactory:         func() firecore.Block { return new(pbmultiversx.Block) },
+		ConsoleReaderFactory: firecore.NewConsoleReader,
+
+		Tools: &firecore.ToolsConfig[*pbmultiversx.Block]{},
+	})
 }
 
-func versionString() string {
-	var labels []string
-	if len(commit) >= 7 {
-		labels = append(labels, fmt.Sprintf("Commit %s", commit[0:7]))
-	}
-
-	if date != "" {
-		labels = append(labels, fmt.Sprintf("Built %s", date))
-	}
-
-	if len(labels) == 0 {
-		return version
-	}
-
-	return fmt.Sprintf("%s (%s)", version, strings.Join(labels, ", "))
-}
+// Version value, injected via go build `ldflags` at build time, **must** not be removed or inlined
+var version = "dev"

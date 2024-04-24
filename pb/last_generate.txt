@@ -1,0 +1,2 @@
+generate.sh - Mon Apr  8 10:53:20 UTC 2024 - darius
+multiversx/firehose-multiversx/proto revision: ec815f6

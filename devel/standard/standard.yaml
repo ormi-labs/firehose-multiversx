@@ -4,8 +4,13 @@ start:
   - merger
   - reader-node
   - relayer
+  - substreams-tier1
+  - substreams-tier2
   flags:
-    # Specifies the path to the binary
-    reader-node-path: "connector"
+    common-first-streamable-block: 0
+    # Specifies the path to the connector binary, that outputs multiversx node data in stdout
+    reader-node-path: "./connector"
+    reader-node-data-dir: "{data-dir}/reader-node"
+
     # Flags that will be added to the dummy chain process command
     reader-node-arguments:

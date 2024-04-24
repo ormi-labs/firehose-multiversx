@@ -1,0 +1,15 @@
+specVersion: v0.1.0
+package:
+  name: multiversx
+  version: v0.0.1
+  url: https://github.com/streamingfast/firehose-multiversx
+  doc: |
+    Protobuf definitions for developing Substreams Multiversx modules.
+
+    This package does not include any modules.
+
+protobuf:
+  files:
+    - sf/multiversx/type/v1/type.proto
+  importPaths:
+    - ./proto
