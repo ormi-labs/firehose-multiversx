@@ -17,12 +17,12 @@ protobuf:
 binaries:
   default:
     type: wasm/rust-v1
-    file: target/wasm32-unknown-unknown/release/substreams-multiversx.wasm
+    file: ./target/wasm32-unknown-unknown/release/substreams.wasm
 
 modules:
   - name: map_print_block
     kind: map
     inputs:
-      - source: sf.multiversx.type.v1.OutportBlock
+        - source: sf.multiversx.type.v1.Block
     output:
-      type: proto:sf.multiversx.type.v1.OutportBlock
+      type: proto:sf.multiversx.type.v1.Block

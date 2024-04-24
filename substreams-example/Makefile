@@ -11,3 +11,6 @@ package: build
 
 test:
 	cargo test
+
+run: package
+	substreams run substreams.spkg map_print_block --plaintext -e localhost:10016
