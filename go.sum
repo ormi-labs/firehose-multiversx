@@ -497,8 +497,6 @@ github.com/multiformats/go-varint v0.0.7 h1:sWSGR+f/eu5ABZA2ZpYKBILXTTs9JWpdEM/n
 github.com/multiformats/go-varint v0.0.7/go.mod h1:r8PUYw/fD/SjBCiKOoDlGF6QawOELpZAu9eioSos/OU=
 github.com/multiversx/mx-chain-core-go v1.2.19 h1:2BaVHkB0tro3cjs5ay2pmLup1loCV0e1p9jV5QW0xqc=
 github.com/multiversx/mx-chain-core-go v1.2.19/go.mod h1:B5zU4MFyJezmEzCsAHE9YNULmGCm2zbPHvl9hazNxmE=
-github.com/multiversx/mx-chain-ws-connector-firehose-go v0.0.0-20240425063344-f3dfb8376682 h1:xDpAgtqcdggVKG4nBQg+c4gXBQNGQPv+AAGg4p3nOqM=
-github.com/multiversx/mx-chain-ws-connector-firehose-go v0.0.0-20240425063344-f3dfb8376682/go.mod h1:9AX/rRp45OXEqCbD8QH9dSbRj+ruREPA/hPoW6B4cxc=
 github.com/multiversx/protobuf v1.3.2 h1:RaNkxvGTGbA0lMcnHAN24qE1G1i+Xs5yHA6MDvQ4mSM=
 github.com/multiversx/protobuf v1.3.2/go.mod h1:SlYgWuQ5SjCEi6WLHjHCa1yvBfUnHcTbrrZtXPKa29o=
 github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 h1:C3w9PqII01/Oq1c1nUAm88MOHcQC9l5mIlSMApZMrHA=

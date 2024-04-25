@@ -24,10 +24,26 @@ function main() {
   set -e
   cd "$ROOT/pb" &> /dev/null
 
+  set -x
+  sync_data_proto_file "rename-module-name"
+  set +x
+
   generate "sf/multiversx/type/v1/type.proto"
 
   echo "generate.sh - `LANG=en_US date --utc` - `whoami`" > ./last_generate.txt
   echo "multiversx/firehose-multiversx/proto revision: `GIT_DIR=$ROOT/.git git log -n 1 --pretty=format:%h -- proto`" >> ./last_generate.txt
+}
+
+function sync_data_proto_file() {
+    # TODO: update module name
+    branch="rename-module-name"
+    if [[ "$#" -gt 1 ]]; then
+      branch="$1"; shift
+    fi
+
+    curl -s \
+        -o $ROOT/proto/sf/multiversx/type/v1/hyperOutportBlock.proto \
+        https://raw.githubusercontent.com/multiversx/mx-chain-ws-connector-firehose-go/$branch/data/hyperOutportBlocks/hyperOutportBlock.proto
 }
 
 # usage:

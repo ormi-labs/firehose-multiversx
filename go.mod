@@ -7,7 +7,6 @@ toolchain go1.22.0
 require (
 	github.com/gogo/protobuf v1.3.2
 	github.com/multiversx/mx-chain-core-go v1.2.19
-	github.com/multiversx/mx-chain-ws-connector-firehose-go v0.0.0-20240425063344-f3dfb8376682
 	github.com/streamingfast/firehose-core v1.3.3
 	google.golang.org/protobuf v1.33.0
 )
