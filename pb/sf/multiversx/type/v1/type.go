@@ -1,41 +1,45 @@
 package pbmultiversx
 
 import (
+	"encoding/hex"
 	"time"
 
 	firecore "github.com/streamingfast/firehose-core"
 )
 
-var _ firecore.Block = (*Block)(nil)
+var _ firecore.Block = (*HyperOutportBlock)(nil)
 
-func (b *Block) GetFirehoseBlockID() string {
-	return b.Header.Hash
+func (b *HyperOutportBlock) GetFirehoseBlockID() string {
+	return hex.EncodeToString(b.MetaOutportBlock.BlockData.HeaderHash)
 }
 
-func (b *Block) GetFirehoseBlockNumber() uint64 {
-	return b.Header.Height
+func (b *HyperOutportBlock) GetFirehoseBlockNumber() uint64 {
+	return b.MetaOutportBlock.BlockData.Header.GetNonce()
 }
 
-func (b *Block) GetFirehoseBlockParentID() string {
-	if b.Header.PreviousHash == "" {
+func (b *HyperOutportBlock) GetFirehoseBlockParentID() string {
+	if hex.EncodeToString(b.MetaOutportBlock.BlockData.Header.PrevHash) == "" {
 		return ""
 	}
 
-	return b.Header.PreviousHash
+	return hex.EncodeToString(b.MetaOutportBlock.BlockData.Header.PrevHash)
 }
 
-func (b *Block) GetFirehoseBlockParentNumber() uint64 {
-	if b.Header.PreviousNum == 0 {
-		return 0
+func (b *HyperOutportBlock) GetFirehoseBlockParentNumber() uint64 {
+	var previousNum uint64
+	if b.MetaOutportBlock.BlockData.Header.GetNonce() == 0 {
+		previousNum = 0
 	}
 
-	return b.Header.PreviousNum
+	previousNum = b.MetaOutportBlock.BlockData.Header.GetNonce() - 1
+
+	return previousNum
 }
 
-func (b *Block) GetFirehoseBlockTime() time.Time {
-	return time.Unix(0, int64(b.Header.Timestamp)).UTC()
+func (b *HyperOutportBlock) GetFirehoseBlockTime() time.Time {
+	return time.Unix(0, int64(b.MetaOutportBlock.BlockData.Header.GetTimeStamp())).UTC()
 }
 
-func (b *Block) GetFirehoseBlockLIBNum() uint64 {
-	return b.Header.FinalNum
+func (b *HyperOutportBlock) GetFirehoseBlockLIBNum() uint64 {
+	return b.MetaOutportBlock.HighestFinalBlockNonce
 }

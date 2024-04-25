@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	fhCmd.Main(&firecore.Chain[*pbmultiversx.Block]{
+	fhCmd.Main(&firecore.Chain[*pbmultiversx.HyperOutportBlock]{
 		ShortName:            "multiversx",
 		LongName:             "Multiversx",
 		ExecutableName:       "multiversx",
@@ -17,10 +17,10 @@ func main() {
 
 		FirstStreamableBlock: 0,
 
-		BlockFactory:         func() firecore.Block { return new(pbmultiversx.Block) },
+		BlockFactory:         func() firecore.Block { return new(pbmultiversx.HyperOutportBlock) },
 		ConsoleReaderFactory: firecore.NewConsoleReader,
 
-		Tools: &firecore.ToolsConfig[*pbmultiversx.Block]{},
+		Tools: &firecore.ToolsConfig[*pbmultiversx.HyperOutportBlock]{},
 	})
 }
 
