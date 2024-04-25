@@ -1,33 +1,59 @@
 // @generated
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct BlockHeader {
-    #[prost(uint64, tag="1")]
-    pub height: u64,
-    #[prost(string, tag="2")]
-    pub hash: ::prost::alloc::string::String,
-    #[prost(uint64, optional, tag="3")]
-    pub previous_num: ::core::option::Option<u64>,
-    #[prost(string, optional, tag="4")]
-    pub previous_hash: ::core::option::Option<::prost::alloc::string::String>,
-    #[prost(uint64, tag="5")]
-    pub final_num: u64,
-    #[prost(string, tag="6")]
-    pub final_hash: ::prost::alloc::string::String,
-    #[prost(uint64, tag="7")]
-    pub timestamp: u64,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Block {
+pub struct HyperOutportBlock {
     #[prost(message, optional, tag="1")]
-    pub header: ::core::option::Option<BlockHeader>,
-    #[prost(message, optional, tag="2")]
-    pub multiversx_block: ::core::option::Option<OutportBlock>,
+    pub meta_outport_block: ::core::option::Option<MetaOutportBlock>,
+    #[prost(message, repeated, tag="2")]
+    pub notarized_headers_outport_data: ::prost::alloc::vec::Vec<NotarizedHeaderOutportData>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct OutportBlock {
+pub struct NotarizedHeaderOutportData {
+    #[prost(string, tag="1")]
+    pub notarized_header_hash: ::prost::alloc::string::String,
+    #[prost(message, optional, tag="2")]
+    pub outport_block: ::core::option::Option<ShardOutportBlock>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct BlockHashRequest {
+    #[prost(string, tag="1")]
+    pub hash: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct BlockNonceRequest {
+    #[prost(uint64, tag="1")]
+    pub nonce: u64,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MetaOutportBlock {
+    #[prost(uint32, tag="1")]
+    pub shard_id: u32,
+    #[prost(message, optional, tag="2")]
+    pub block_data: ::core::option::Option<MetaBlockData>,
+    #[prost(message, optional, tag="3")]
+    pub transaction_pool: ::core::option::Option<TransactionPool>,
+    #[prost(message, optional, tag="4")]
+    pub header_gas_consumption: ::core::option::Option<HeaderGasConsumption>,
+    #[prost(map="string, message", tag="5")]
+    pub altered_accounts: ::std::collections::HashMap<::prost::alloc::string::String, AlteredAccount>,
+    #[prost(string, repeated, tag="6")]
+    pub notarized_headers_hashes: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(uint32, tag="7")]
+    pub number_of_shards: u32,
+    #[prost(uint64, repeated, tag="8")]
+    pub signers_indexes: ::prost::alloc::vec::Vec<u64>,
+    #[prost(uint64, tag="9")]
+    pub highest_final_block_nonce: u64,
+    #[prost(bytes="vec", tag="10")]
+    pub highest_final_block_hash: ::prost::alloc::vec::Vec<u8>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ShardOutportBlock {
     #[prost(uint32, tag="1")]
     pub shard_id: u32,
     #[prost(message, optional, tag="2")]
@@ -49,13 +75,146 @@ pub struct OutportBlock {
     #[prost(bytes="vec", tag="10")]
     pub highest_final_block_hash: ::prost::alloc::vec::Vec<u8>,
 }
+/// Header holds the metadata of a block. This is the part that is being hashed and run through consensus.
+/// The header holds the hash of the body and also the link to the previous block header hash
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Header {
+    #[prost(uint64, tag="1")]
+    pub nonce: u64,
+    #[prost(bytes="vec", tag="2")]
+    pub prev_hash: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="3")]
+    pub prev_rand_seed: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="4")]
+    pub rand_seed: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="5")]
+    pub pub_keys_bitmap: ::prost::alloc::vec::Vec<u8>,
+    #[prost(uint32, tag="6")]
+    pub shard_id: u32,
+    #[prost(uint64, tag="7")]
+    pub time_stamp: u64,
+    #[prost(uint64, tag="8")]
+    pub round: u64,
+    #[prost(uint32, tag="9")]
+    pub epoch: u32,
+    #[prost(enumeration="Type", tag="10")]
+    pub block_body_type: i32,
+    #[prost(bytes="vec", tag="11")]
+    pub signature: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="12")]
+    pub leader_signature: ::prost::alloc::vec::Vec<u8>,
+    #[prost(message, repeated, tag="13")]
+    pub mini_block_headers: ::prost::alloc::vec::Vec<MiniBlockHeader>,
+    #[prost(message, repeated, tag="14")]
+    pub peer_changes: ::prost::alloc::vec::Vec<PeerChange>,
+    #[prost(bytes="vec", tag="15")]
+    pub root_hash: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", repeated, tag="16")]
+    pub meta_block_hashes: ::prost::alloc::vec::Vec<::prost::alloc::vec::Vec<u8>>,
+    #[prost(uint32, tag="17")]
+    pub tx_count: u32,
+    #[prost(bytes="vec", tag="18")]
+    pub epoch_start_meta_hash: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="19")]
+    pub receipts_hash: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="20")]
+    pub chain_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="21")]
+    pub software_version: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="22")]
+    pub accumulated_fees: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="23")]
+    pub developer_fees: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="24")]
+    pub reserved: ::prost::alloc::vec::Vec<u8>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MetaHeader {
+    #[prost(uint64, tag="1")]
+    pub nonce: u64,
+    #[prost(uint32, tag="2")]
+    pub epoch: u32,
+    #[prost(uint64, tag="3")]
+    pub round: u64,
+    #[prost(uint64, tag="4")]
+    pub time_stamp: u64,
+    #[prost(message, repeated, tag="5")]
+    pub shard_info: ::prost::alloc::vec::Vec<ShardData>,
+    #[prost(message, repeated, tag="6")]
+    pub peer_info: ::prost::alloc::vec::Vec<PeerData>,
+    #[prost(bytes="vec", tag="7")]
+    pub signature: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="8")]
+    pub leader_signature: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="9")]
+    pub pub_keys_bitmap: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="10")]
+    pub prev_hash: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="11")]
+    pub prev_rand_seed: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="12")]
+    pub rand_seed: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="13")]
+    pub root_hash: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="14")]
+    pub validator_stats_root_hash: ::prost::alloc::vec::Vec<u8>,
+    #[prost(message, repeated, tag="16")]
+    pub mini_block_headers: ::prost::alloc::vec::Vec<MiniBlockHeader>,
+    #[prost(bytes="vec", tag="17")]
+    pub receipts_hash: ::prost::alloc::vec::Vec<u8>,
+    #[prost(message, optional, tag="18")]
+    pub epoch_start: ::core::option::Option<EpochStart>,
+    #[prost(bytes="vec", tag="19")]
+    pub chain_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="20")]
+    pub software_version: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="21")]
+    pub accumulated_fees: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="22")]
+    pub accumulated_fees_in_epoch: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="23")]
+    pub developer_fees: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="24")]
+    pub dev_fees_in_epoch: ::prost::alloc::vec::Vec<u8>,
+    #[prost(uint32, tag="25")]
+    pub tx_count: u32,
+    #[prost(bytes="vec", tag="26")]
+    pub reserved: ::prost::alloc::vec::Vec<u8>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MiniBlockHeader {
+    #[prost(bytes="vec", tag="1")]
+    pub hash: ::prost::alloc::vec::Vec<u8>,
+    #[prost(uint32, tag="2")]
+    pub sender_shard_id: u32,
+    #[prost(uint32, tag="3")]
+    pub receiver_shard_id: u32,
+    #[prost(uint32, tag="4")]
+    pub tx_count: u32,
+    #[prost(enumeration="Type", tag="5")]
+    pub r#type: i32,
+    #[prost(bytes="vec", tag="6")]
+    pub reserved: ::prost::alloc::vec::Vec<u8>,
+}
+/// PeerChange holds a change in one peer to shard assignation
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PeerChange {
+    #[prost(bytes="vec", tag="1")]
+    pub pub_key: ::prost::alloc::vec::Vec<u8>,
+    #[prost(uint32, tag="2")]
+    pub shard_id_dest: u32,
+}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct BlockData {
     #[prost(uint32, tag="1")]
     pub shard_id: u32,
-    #[prost(bytes="vec", tag="2")]
-    pub header_bytes: ::prost::alloc::vec::Vec<u8>,
+    #[prost(message, optional, tag="2")]
+    pub header: ::core::option::Option<Header>,
     #[prost(string, tag="3")]
     pub header_type: ::prost::alloc::string::String,
     #[prost(bytes="vec", tag="4")]
@@ -64,6 +223,148 @@ pub struct BlockData {
     pub body: ::core::option::Option<Body>,
     #[prost(message, repeated, tag="6")]
     pub intra_shard_mini_blocks: ::prost::alloc::vec::Vec<MiniBlock>,
+    #[prost(bytes="vec", tag="7")]
+    pub scheduled_root_hash: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="8")]
+    pub scheduled_accumulated_fees: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="9")]
+    pub scheduled_developer_fees: ::prost::alloc::vec::Vec<u8>,
+    #[prost(uint64, tag="10")]
+    pub scheduled_gas_provided: u64,
+    #[prost(uint64, tag="11")]
+    pub scheduled_gas_penalized: u64,
+    #[prost(uint64, tag="12")]
+    pub scheduled_gas_refunded: u64,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MetaBlockData {
+    #[prost(uint32, tag="1")]
+    pub shard_id: u32,
+    #[prost(message, optional, tag="2")]
+    pub header: ::core::option::Option<MetaHeader>,
+    #[prost(string, tag="3")]
+    pub header_type: ::prost::alloc::string::String,
+    #[prost(bytes="vec", tag="4")]
+    pub header_hash: ::prost::alloc::vec::Vec<u8>,
+    #[prost(message, optional, tag="5")]
+    pub body: ::core::option::Option<Body>,
+    #[prost(message, repeated, tag="6")]
+    pub intra_shard_mini_blocks: ::prost::alloc::vec::Vec<MiniBlock>,
+    #[prost(bytes="vec", tag="7")]
+    pub scheduled_root_hash: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="8")]
+    pub scheduled_accumulated_fees: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="9")]
+    pub scheduled_developer_fees: ::prost::alloc::vec::Vec<u8>,
+    #[prost(uint64, tag="10")]
+    pub scheduled_gas_provided: u64,
+    #[prost(uint64, tag="11")]
+    pub scheduled_gas_penalized: u64,
+    #[prost(uint64, tag="12")]
+    pub scheduled_gas_refunded: u64,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ShardData {
+    #[prost(uint32, tag="1")]
+    pub shard_id: u32,
+    #[prost(bytes="vec", tag="2")]
+    pub header_hash: ::prost::alloc::vec::Vec<u8>,
+    #[prost(message, repeated, tag="3")]
+    pub shard_mini_block_headers: ::prost::alloc::vec::Vec<MiniBlockHeader>,
+    #[prost(bytes="vec", tag="4")]
+    pub prev_rand_seed: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="5")]
+    pub pub_keys_bitmap: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="6")]
+    pub signature: ::prost::alloc::vec::Vec<u8>,
+    #[prost(uint32, tag="7")]
+    pub tx_count: u32,
+    #[prost(uint64, tag="8")]
+    pub round: u64,
+    #[prost(bytes="vec", tag="9")]
+    pub prev_hash: ::prost::alloc::vec::Vec<u8>,
+    #[prost(uint64, tag="10")]
+    pub nonce: u64,
+    #[prost(uint32, tag="11")]
+    pub num_pending_mini_blocks: u32,
+    #[prost(bytes="vec", tag="12")]
+    pub accumulated_fees: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="14")]
+    pub developer_fees: ::prost::alloc::vec::Vec<u8>,
+    #[prost(uint64, tag="13")]
+    pub last_included_meta_nonce: u64,
+}
+/// EpochStart holds the block information for end-of-epoch
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct EpochStart {
+    #[prost(message, repeated, tag="1")]
+    pub last_finalized_headers: ::prost::alloc::vec::Vec<EpochStartShardData>,
+    #[prost(message, optional, tag="2")]
+    pub economics: ::core::option::Option<Economics>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct EpochStartShardData {
+    #[prost(uint32, tag="1")]
+    pub shard_id: u32,
+    #[prost(bytes="vec", tag="2")]
+    pub header_hash: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="3")]
+    pub root_hash: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="4")]
+    pub first_pending_meta_block: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="5")]
+    pub last_finished_meta_block: ::prost::alloc::vec::Vec<u8>,
+    #[prost(message, repeated, tag="6")]
+    pub pending_mini_block_headers: ::prost::alloc::vec::Vec<MiniBlockHeader>,
+    #[prost(uint64, tag="7")]
+    pub round: u64,
+    #[prost(uint64, tag="8")]
+    pub nonce: u64,
+    #[prost(uint32, tag="9")]
+    pub epoch: u32,
+    #[prost(bytes="vec", tag="10")]
+    pub scheduled_root_hash: ::prost::alloc::vec::Vec<u8>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Economics {
+    #[prost(bytes="vec", tag="1")]
+    pub total_supply: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="2")]
+    pub total_to_distribute: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="3")]
+    pub total_newly_minted: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="4")]
+    pub rewards_per_block: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="5")]
+    pub rewards_for_protocol_sustainability: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="6")]
+    pub node_price: ::prost::alloc::vec::Vec<u8>,
+    #[prost(uint64, tag="7")]
+    pub prev_epoch_start_round: u64,
+    #[prost(bytes="vec", tag="8")]
+    pub prev_epoch_start_hash: ::prost::alloc::vec::Vec<u8>,
+}
+/// PeerData holds information about actions taken by a peer:
+///   - a peer can register with an amount to become a validator
+///   - a peer can choose to deregister and get back the deposited value
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PeerData {
+    #[prost(bytes="vec", tag="1")]
+    pub address: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="2")]
+    pub public_key: ::prost::alloc::vec::Vec<u8>,
+    #[prost(enumeration="PeerAction", tag="3")]
+    pub action: i32,
+    #[prost(uint64, tag="4")]
+    pub time_stamp: u64,
+    #[prost(bytes="vec", tag="5")]
+    pub value_change: ::prost::alloc::vec::Vec<u8>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -435,6 +736,57 @@ pub struct Receipt {
     pub data: ::prost::alloc::vec::Vec<u8>,
     #[prost(bytes="vec", tag="4")]
     pub tx_hash: ::prost::alloc::vec::Vec<u8>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct BigInt {
+    #[prost(bytes="vec", tag="1")]
+    pub bytes: ::prost::alloc::vec::Vec<u8>,
+}
+/// PeerAction type represents the possible events that a node can trigger for the metachain to notarize
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum PeerAction {
+    InvalidAction = 0,
+    PeerRegistration = 1,
+    PeerUnstaking = 2,
+    PeerDeregistration = 3,
+    PeerJailed = 4,
+    PeerUnJailed = 5,
+    PeerSlashed = 6,
+    PeerReStake = 7,
+}
+impl PeerAction {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            PeerAction::InvalidAction => "InvalidAction",
+            PeerAction::PeerRegistration => "PeerRegistration",
+            PeerAction::PeerUnstaking => "PeerUnstaking",
+            PeerAction::PeerDeregistration => "PeerDeregistration",
+            PeerAction::PeerJailed => "PeerJailed",
+            PeerAction::PeerUnJailed => "PeerUnJailed",
+            PeerAction::PeerSlashed => "PeerSlashed",
+            PeerAction::PeerReStake => "PeerReStake",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "InvalidAction" => Some(Self::InvalidAction),
+            "PeerRegistration" => Some(Self::PeerRegistration),
+            "PeerUnstaking" => Some(Self::PeerUnstaking),
+            "PeerDeregistration" => Some(Self::PeerDeregistration),
+            "PeerJailed" => Some(Self::PeerJailed),
+            "PeerUnJailed" => Some(Self::PeerUnJailed),
+            "PeerSlashed" => Some(Self::PeerSlashed),
+            "PeerReStake" => Some(Self::PeerReStake),
+            _ => None,
+        }
+    }
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
