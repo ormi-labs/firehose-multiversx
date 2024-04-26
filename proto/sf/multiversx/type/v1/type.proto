@@ -22,6 +22,7 @@ message BlockNonceRequest {
   uint64 nonce = 1;
 }
 
+// TODO: move rpc components to separate file
 service HyperOutportBlockService {
   rpc GetHyperOutportBlockByHash(BlockHashRequest) returns (HyperOutportBlock) {}
   rpc GetHyperOutportBlockByNonce(BlockNonceRequest) returns (HyperOutportBlock) {}
