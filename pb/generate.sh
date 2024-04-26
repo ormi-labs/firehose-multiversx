@@ -25,7 +25,7 @@ function main() {
   cd "$ROOT/pb" &> /dev/null
 
   set -x
-  sync_data_proto_file "rename-module-name"
+  sync_data_proto_file "0.0.1"
   set +x
 
   generate "sf/multiversx/type/v1/type.proto"
@@ -35,15 +35,42 @@ function main() {
 }
 
 function sync_data_proto_file() {
-    # TODO: update module name
-    branch="rename-module-name"
-    if [[ "$#" -gt 1 ]]; then
+    branch="main"
+    if [[ "$#" -gt 0 ]]; then
       branch="$1"; shift
     fi
 
-    curl -s \
-        -o $ROOT/proto/sf/multiversx/type/v1/hyperOutportBlock.proto \
-        https://raw.githubusercontent.com/multiversx/mx-chain-ws-connector-firehose-go/$branch/data/hyperOutportBlocks/hyperOutportBlock.proto
+    proto_file_path=$ROOT/proto/sf/multiversx/type/v1/type.proto
+
+    if [ -f ${proto_file_path} ]; then
+        mv ${proto_file_path} ${proto_file_path}.tmp
+    fi
+
+    curl -sL \
+        -o ${proto_file_path} \
+        https://raw.githubusercontent.com/multiversx/mx-chain-ws-connector-firehose-go/${branch}/data/hyperOutportBlocks/hyperOutportBlock.proto
+
+    # restore old proto file on error
+    if [[ "$?" -ne 0 ]]; then
+        mv ${proto_file_path}.tmp ${proto_file_path}
+        return
+    fi
+
+    # update proto file
+    new_package_name="sf.multiversx.type.v1"
+    sed -i -r "s/^package\s(.*);/package ${new_package_name};/" ${proto_file_path}
+    if [[ "$?" -ne 0 ]]; then
+        mv ${proto_file_path}.tmp ${proto_file_path}
+        return
+    fi
+
+    new_go_package_name="github.com/multiversx/firehose-multiversx/pb/sf/multiversx/type/v1;pbmultiversx"
+    escaped_go_package_name=$(printf '%s\n' "${new_go_package_name}" | sed -e 's/[\/&]/\\&/g')
+    sed -i -r "s/^option go_package\s=\s\"(.*)\";$/option go_package = \"${escaped_go_package_name}\";/" ${proto_file_path}
+    if [[ "$?" -ne 0 ]]; then
+        mv ${proto_file_path}.tmp ${proto_file_path}
+        return
+    fi
 }
 
 # usage:
