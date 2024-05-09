@@ -24,7 +24,7 @@ function main() {
   set -e
   cd "$ROOT/pb" &> /dev/null
 
-  sync_data_proto_file "0.0.1"
+  sync_data_proto_file "0.0.2"
 
   generate "sf/multiversx/type/v1/type.proto"
 
