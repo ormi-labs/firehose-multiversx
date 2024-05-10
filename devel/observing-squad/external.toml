@@ -57,7 +57,7 @@
     WithAcknowledge = true
 
     # The duration in seconds to wait for an acknowledgment message, after this time passes an error will be returned
-    AcknowledgeTimeoutInSec = 60
+    AcknowledgeTimeoutInSec = 5
 
     # This flag defines the marshaller type. Currently supported: "json", "gogo protobuf"
     MarshallerType = "gogo protobuf"

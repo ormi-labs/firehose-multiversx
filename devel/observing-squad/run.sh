@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -x
+# set -x
 
 SCRIPTPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -11,7 +11,6 @@ KEYS_FOLDER=${STACK_FOLDER}/keys
 EXTERNAL_CONFIG=${SCRIPTPATH}/external.toml
 
 setup() {
-    docker pull multiversx/chain-observer:v1.6.15.0
     docker pull multiversx/chain-keygenerator:latest
 
     gen_dirs
@@ -75,6 +74,7 @@ run_observers() {
     do
         observer_dir=${STACK_FOLDER}/node-${shard_id}
         p2p_port=$(( 10000 + $i + 3 ))
+        http_port=$(( 8080 + $i + 1 ))
 
         docker run \
             -d \
@@ -83,16 +83,19 @@ run_observers() {
             --mount type=bind,source=${observer_dir}/config,destination=/config \
             --network="host" \
             --name squad-${shard_id} \
-            multiversx/chain-observer:v1.6.15.0 \
+            multiversx/chain-testnet:T1.7.10.1 \
             --destination-shard-as-observer=${shard_id} \
             --validator-key-pem-file=/config/observerKey_${shard_id}.pem \
             --display-name="${display_name}" \
             --config-external=/config/external.toml \
-            --full-archive
+            --rest-api-interface=localhost:${http_port} \
+            # --full-archive
         if [ "$?" -ne 0 ]; then
             echo -e "failed to start container"
             exit 1
         fi
+
+        echo -e "created container: dir path = ${observer_dir}"
 
         i=$(( i+1 ))
     done
@@ -106,6 +109,7 @@ start_stack() {
     for shard_id in "${NODES[@]}"
     do
         docker start squad-${shard_id}
+        echo -e "started container: shard_id = ${shard_id}"
     done
 }
 
@@ -113,6 +117,7 @@ stop_stack() {
     for shard_id in "${NODES[@]}"
     do
         docker stop squad-${shard_id}
+        echo -e "stopping container: shard_id = ${shard_id}"
     done
 }
 
@@ -120,6 +125,7 @@ rm_stack() {
     for shard_id in "${NODES[@]}"
     do
         docker rm squad-${shard_id}
+        echo -e "removing container: shard_id = ${shard_id}"
     done
 }
 
