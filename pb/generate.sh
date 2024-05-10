@@ -24,7 +24,8 @@ function main() {
   set -e
   cd "$ROOT/pb" &> /dev/null
 
-  sync_data_proto_file "0.0.2"
+  # TODO: change to use latest tag
+  sync_data_proto_file "0.0.3"
 
   generate "sf/multiversx/type/v1/type.proto"
 

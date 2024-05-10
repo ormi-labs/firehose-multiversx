@@ -31,6 +31,7 @@ main() {
 }
 
 sync_connector() {
+  # TODO: change to use latest tag
   local branch=0.0.3
 
   local dir_name=connector-repo
