@@ -8,12 +8,13 @@ firemultiversx="$ROOT/../firemultiversx"
 main() {
   pushd "$ROOT" &> /dev/null
 
-  while getopts "hcfo" opt; do
+  while getopts "hcfos" opt; do
     case $opt in
       h) usage && exit 0;;
       c) clean=true;;
       f) sync_connector && exit 0;;
       o) start_observing_squad && exit 0;;
+      s) stop_observing_squad && exit 0;;
       \?) usage_error "Invalid option: -$OPTARG";;
     esac
   done
@@ -30,7 +31,7 @@ main() {
 }
 
 sync_connector() {
-  local branch=blocks-pool-improvements
+  local branch=0.0.3
 
   local dir_name=connector-repo
 
@@ -47,13 +48,24 @@ sync_connector() {
   cp ${dir_name}/cmd/connector/connector ${ROOT} 
   cp -r ${dir_name}/cmd/connector/config ${ROOT}
 
-  rm -rf ${dir_name} &> /dev/null || true
+  rm -rf ${dir_name}
 }
 
 start_observing_squad() {
     pushd "$ROOT/../observing-squad"
-        exec bash ./run.sh run
+        bash ./run.sh setup && bash ./run.sh run
     popd
+}
+
+stop_observing_squad() {
+    pushd "$ROOT/../observing-squad"
+        bash ./run.sh cleanup
+    popd
+
+    if [[ $clean == "true" ]]; then
+        rm -rf "$ROOT/OutportBlocks"
+        sudo rm -rf "$ROOT/../observing-squad/MyObservingSquad"
+    fi
 }
 
 usage_error() {
@@ -75,6 +87,7 @@ usage() {
   echo "    -c             Clean actual data directory first"
   echo "    -f             Download and setup connector aggregator tool"
   echo "    -o             Setup and start observing squad"
+  echo "    -s             Stop observing squad and removing containers"
 }
 
 main "$@"
