@@ -83,12 +83,13 @@ run_observers() {
             --mount type=bind,source=${observer_dir}/config,destination=/config \
             --network="host" \
             --name squad-${shard_id} \
-            multiversx/chain-testnet:T1.7.11.0 \
+            multiversx/chain-testnet:T1.7.13.0 \
             --destination-shard-as-observer=${shard_id} \
             --validator-key-pem-file=/config/observerKey_${shard_id}.pem \
             --display-name="${display_name}" \
             --config-external=/config/external.toml \
             --rest-api-interface=localhost:${http_port} \
+            --log-level *:DEBUG \
             # --full-archive
         if [ "$?" -ne 0 ]; then
             echo -e "failed to start container"
