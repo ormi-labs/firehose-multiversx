@@ -1,0 +1,17 @@
+{
+  "name": "multiversx-blocks",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "codegen": "graph codegen",
+    "pack": "cargo build --target wasm32-unknown-unknown --release && substreams pack -o substreams.spkg substreams.yaml",
+    "build": "pnpm run pack && graph build",
+    "remove": "graph remove multiversx-blocks --node http://127.0.0.1:8020",
+    "create": "graph create multiversx-blocks --node http://127.0.0.1:8020",
+    "deploy": "graph deploy multiversx-blocks --ipfs http://127.0.0.1:5001 --node http://127.0.0.1:8020"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.80.0"
+  },
+  "packageManager": "pnpm@9.1.1+sha1.09ada6cd05003e0ced25fb716f9fda4063ec2e3b"
+}
