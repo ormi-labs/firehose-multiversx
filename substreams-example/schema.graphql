@@ -1,24 +1,21 @@
-type Block @entity {
+type IssuanceTransaction @entity {
   id: ID!
 
-  nonce: BigInt!
-  round: BigInt!
-  epoch: BigInt!
-  timestamp: BigInt!
-  signature: String!
-  leader_signature: String!
-  pub_keys_bitmap: String!
-  prev_hash: String!
-  prev_rand_seed: String!
-  rand_seed: String!
-  root_hash: String!
-  validator_stats_root_hash: String!
-  receipts_hash: String!
-  chain_id: String!
-  software_version: String!
-  accumulated_fees: String!
-  accumulated_fees_in_epoch: String!
-  developer_fees: String!
-  dev_fees_in_epoch: String!
-  tx_count: BigInt!
+  tx: Transaction!
+
+  token_manager_addr: String!
+  token_name: String!
+  token_ticker: String!
+  initial_supply: String!
+  decimals: String!
+  extra_fields: String!
+}
+
+type Transaction @entity {
+    id: ID!
+
+    timestamp: BigInt!
+    sender: String!
+    receiver: String!
+    data: String!
 }

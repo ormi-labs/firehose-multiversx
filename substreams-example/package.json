@@ -1,14 +1,14 @@
 {
-  "name": "multiversx-blocks",
+  "name": "multiversx-tx-testnet",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "codegen": "graph codegen",
     "pack": "cargo build --target wasm32-unknown-unknown --release && substreams pack -o substreams.spkg substreams.yaml",
     "build": "pnpm run pack && graph build",
-    "remove": "graph remove multiversx-blocks --node http://127.0.0.1:8020",
-    "create": "graph create multiversx-blocks --node http://127.0.0.1:8020",
-    "deploy": "graph deploy multiversx-blocks --ipfs http://127.0.0.1:5001 --node http://127.0.0.1:8020"
+    "remove": "graph remove multiversx-tx-testnet --node https://multiversxapi.0xgraph.xyz/deploy",
+    "create": "graph create multiversx-tx-testnet --node https://multiversxapi.0xgraph.xyz/deploy",
+    "deploy": "graph deploy multiversx-tx-testnet --ipfs https://multiversxapi.0xgraph.xyz/ipfs --node https://multiversxapi.0xgraph.xyz/deploy"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.80.0"

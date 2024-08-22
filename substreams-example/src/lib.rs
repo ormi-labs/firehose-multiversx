@@ -1,6 +1,7 @@
 pub mod pb;
 
 use crate::pb::sf::multiversx::r#type::v1::HyperOutportBlock;
+use substreams::hex;
 use substreams_entity_change::pb::entity::EntityChanges;
 use substreams_entity_change::tables::Tables;
 
@@ -13,43 +14,82 @@ pub fn map_print_block(
     Ok(blk)
 }
 
+/// Address of the system smart contract that manages ESDT.
+const SYSTEM_SC_ADDRESS_BYTES: [u8; 32] =
+    hex!("000000000000000000010000000000000000000000000000000000000002ffff");
+
 #[substreams::handlers::map]
 fn graph_out(blk: HyperOutportBlock) -> Result<EntityChanges, substreams::errors::Error> {
     // hash map of name to a table
     let mut tables = Tables::new();
 
-    let blk = blk.meta_outport_block.unwrap().block_data.unwrap();
-    let hex = hex::encode(&blk.header_hash);
+    let outport = blk.meta_outport_block.unwrap();
+    let blk = outport.block_data.unwrap();
+    // let hex = hex::encode(&blk.header_hash);
     let header = blk.header.unwrap();
 
-    tables
-        .create_row("Block", hex)
-        .set("nonce", header.nonce)
-        .set("round", header.round)
-        .set("epoch", header.epoch)
-        .set("tx_count", header.tx_count)
-        .set("timestamp", header.time_stamp)
-        .set("signature", hex::encode(&header.signature))
-        .set("leader_signature", hex::encode(&header.leader_signature))
-        .set("pub_keys_bitmap", hex::encode(&header.pub_keys_bitmap))
-        .set("prev_hash", hex::encode(&header.prev_hash))
-        .set("prev_rand_seed", hex::encode(&header.prev_rand_seed))
-        .set("rand_seed", hex::encode(&header.rand_seed))
-        .set("root_hash", hex::encode(&header.root_hash))
-        .set(
-            "validator_stats_root_hash",
-            hex::encode(&header.validator_stats_root_hash),
-        )
-        .set("receipts_hash", hex::encode(&header.receipts_hash))
-        .set("chain_id", hex::encode(&header.chain_id))
-        .set("software_version", hex::encode(&header.software_version))
-        .set("accumulated_fees", hex::encode(&header.accumulated_fees))
-        .set(
-            "accumulated_fees_in_epoch",
-            hex::encode(&header.accumulated_fees_in_epoch),
-        )
-        .set("developer_fees", hex::encode(&header.developer_fees))
-        .set("dev_fees_in_epoch", hex::encode(&header.dev_fees_in_epoch));
+    let tx_pool = outport.transaction_pool.unwrap();
+    for (id, tx) in tx_pool.transactions {
+        /// https://github.com/multiversx/mx-specs/blob/main/ESDT-specs.md#issuance-of-fungible-esdt-tokens
+        const ISSUANCE_TRANSACTION_PREFIX: &[u8] = b"issue";
+
+        let tx = tx.transaction.expect("Should have tx");
+
+        tables
+            .create_row("Transaction", id.clone())
+            .set("timestamp", header.time_stamp)
+            .set("sender", hex::encode(&tx.snd_addr))
+            .set("receiver", hex::encode(&tx.rcv_addr))
+            .set("data", hex::encode(&tx.data));
+
+        if tx.rcv_addr != SYSTEM_SC_ADDRESS_BYTES {
+            continue;
+        }
+
+        if tx.data.starts_with(ISSUANCE_TRANSACTION_PREFIX) {
+            let utf_data = String::from_utf8(tx.data.clone())
+                .expect("Failed to parse `IssuanceTransaction` data as a string");
+
+            let mut split = utf_data.split("@");
+            let _issue = split.next().expect("Should have issue segment");
+            let token_name = split
+                .next()
+                .map(|s| {
+                    String::from_utf8(hex::decode(s).expect("token_name should be decodable"))
+                        .expect("token_name should be a string")
+                })
+                .expect("Should stringify token_name segment");
+            let token_ticker = split
+                .next()
+                .map(|s| {
+                    String::from_utf8(hex::decode(s).expect("token_ticker should be decodable"))
+                        .expect("token_name should be a string")
+                })
+                .expect("Should stringify token_ticker segment");
+            let initial_supply = split.next().expect("Should have initial_supply segment");
+            let decimals = split.next().expect("Should have decimals segment");
+            let extra_fields = split
+                .map(|s| {
+                    String::from_utf8(hex::decode(s).expect("should decode other fields")).unwrap()
+                })
+                .collect::<Vec<_>>()
+                .chunks_exact(2)
+                .map(|c| format!("{}: {}", c[0], c[1]))
+                .collect::<Vec<_>>()
+                .join(", ");
+
+            let token_manager_addr = &tx.snd_addr;
+            tables
+                .create_row("IssuanceTransaction", id.clone())
+                .set("tx", id.clone())
+                .set("token_manager_addr", hex::encode(token_manager_addr))
+                .set("token_name", token_name)
+                .set("token_ticker", token_ticker)
+                .set("initial_supply", initial_supply)
+                .set("decimals", decimals)
+                .set("extra_fields", extra_fields);
+        }
+    }
 
     Ok(tables.to_entity_changes())
 }

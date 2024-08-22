@@ -6,7 +6,7 @@ schema:
 dataSources:
   - kind: substreams
     name: multiversx_blocks
-    network: multiversx
+    network: multiversx-testnet
     source:
       package:
         moduleName: graph_out
