@@ -1,16 +1,3 @@
-type IssuanceTransaction @entity {
-  id: ID!
-
-  tx: Transaction!
-
-  token_manager_addr: String!
-  token_name: String!
-  token_ticker: String!
-  initial_supply: String!
-  decimals: String!
-  extra_fields: String!
-}
-
 type Transaction @entity {
     id: ID!
 
@@ -18,4 +5,27 @@ type Transaction @entity {
     sender: String!
     receiver: String!
     data: String!
+}
+
+type IssuanceTransaction @entity {
+    id: ID!
+
+    tx: Transaction!
+
+    token_name: String!
+    token_ticker: String!
+    initial_supply: BigInt!
+    decimals: BigInt!
+    extra_fields: String!
+}
+
+type TransferTransaction @entity {
+    id: ID!
+
+    token_identifier: String!
+    value: BigInt!
+    method: String
+    arg1: String
+    arg2: String
+    extra_fields: String
 }

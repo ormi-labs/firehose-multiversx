@@ -1,6 +1,11 @@
 pub mod pb;
 
+pub mod decode;
+pub mod utils;
+
+use crate::decode::parse_data;
 use crate::pb::sf::multiversx::r#type::v1::HyperOutportBlock;
+use crate::utils::{Field, RowExt};
 use substreams::hex;
 use substreams_entity_change::pb::entity::EntityChanges;
 use substreams_entity_change::tables::Tables;
@@ -18,6 +23,12 @@ pub fn map_print_block(
 const SYSTEM_SC_ADDRESS_BYTES: [u8; 32] =
     hex!("000000000000000000010000000000000000000000000000000000000002ffff");
 
+mod methods {
+    /// https://github.com/multiversx/mx-specs/blob/main/ESDT-specs.md#issuance-of-fungible-esdt-tokens
+    pub const ISSUANCE: &str = "issue";
+    pub const TRANSFER: &str = "ESDTTransfer";
+}
+
 #[substreams::handlers::map]
 fn graph_out(blk: HyperOutportBlock) -> Result<EntityChanges, substreams::errors::Error> {
     // hash map of name to a table
@@ -30,9 +41,6 @@ fn graph_out(blk: HyperOutportBlock) -> Result<EntityChanges, substreams::errors
 
     let tx_pool = outport.transaction_pool.unwrap();
     for (id, tx) in tx_pool.transactions {
-        /// https://github.com/multiversx/mx-specs/blob/main/ESDT-specs.md#issuance-of-fungible-esdt-tokens
-        const ISSUANCE_TRANSACTION_PREFIX: &[u8] = b"issue";
-
         let tx = tx.transaction.expect("Should have tx");
 
         tables
@@ -46,48 +54,44 @@ fn graph_out(blk: HyperOutportBlock) -> Result<EntityChanges, substreams::errors
             continue;
         }
 
-        if tx.data.starts_with(ISSUANCE_TRANSACTION_PREFIX) {
-            let utf_data = String::from_utf8(tx.data.clone())
-                .expect("Failed to parse `IssuanceTransaction` data as a string");
+        let utf_data = String::from_utf8(tx.data.to_vec())
+            .expect("Failed to parse `IssuanceTransaction` data as a string");
+        let mut segments = utf_data.split('@');
 
-            let mut split = utf_data.split("@");
-            let _issue = split.next().expect("Should have issue segment");
-            let token_name = split
-                .next()
-                .map(|s| {
-                    String::from_utf8(hex::decode(s).expect("token_name should be decodable"))
-                        .expect("token_name should be a string")
-                })
-                .expect("Should stringify token_name segment");
-            let token_ticker = split
-                .next()
-                .map(|s| {
-                    String::from_utf8(hex::decode(s).expect("token_ticker should be decodable"))
-                        .expect("token_name should be a string")
-                })
-                .expect("Should stringify token_ticker segment");
-            let initial_supply = split.next().expect("Should have initial_supply segment");
-            let decimals = split.next().expect("Should have decimals segment");
-            let extra_fields = split
-                .map(|s| {
-                    String::from_utf8(hex::decode(s).expect("should decode other fields")).unwrap()
-                })
-                .collect::<Vec<_>>()
-                .chunks_exact(2)
-                .map(|c| format!("{}: {}", c[0], c[1]))
-                .collect::<Vec<_>>()
-                .join(", ");
+        let method = segments.next().expect("Should have method");
 
-            let token_manager_addr = &tx.snd_addr;
-            tables
-                .create_row("IssuanceTransaction", id.clone())
-                .set("tx", id.clone())
-                .set("token_manager_addr", hex::encode(token_manager_addr))
-                .set("token_name", token_name)
-                .set("token_ticker", token_ticker)
-                .set("initial_supply", initial_supply)
-                .set("decimals", decimals)
-                .set("extra_fields", extra_fields);
+        let tx_field = Field::from_tovalue("tx", id.clone());
+
+        match method {
+            methods::ISSUANCE => {
+                parse_data(segments, methods::ISSUANCE, |mut p| {
+                    tables
+                        .create_row("IssuanceTransaction", id.clone())
+                        .set_field(tx_field)
+                        .set_field(p.field_string("token_name"))
+                        .set_field(p.field_string("token_ticker"))
+                        .set_field(p.field_bigint("initial_supply"))
+                        .set_field(p.field_bigint("decimals"))
+                        .set_field(p.extra_fields());
+                });
+            }
+            methods::TRANSFER => {
+                parse_data(segments, methods::TRANSFER, |mut p| {
+                    let row = tables
+                        .create_row("TransferTransaction", id.clone())
+                        .set_field(tx_field)
+                        .set_field(p.field_string("token_identifier"))
+                        .set_field(p.field_bigint("value"));
+                    // https://github.com/multiversx/mx-specs/blob/main/ESDT-specs.md#transfers-to-a-smart-contract
+                    if p.has_next() {
+                        row.set_field(p.field_string("method"))
+                            .set_field(p.field_raw("arg1"))
+                            .set_field(p.field_raw("arg2"))
+                            .set_field(p.extra_fields());
+                    }
+                });
+            }
+            _ => {}
         }
     }
 

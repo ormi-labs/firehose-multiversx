@@ -10,8 +10,15 @@ name = "substreams"
 crate-type = ["cdylib"]
 
 [dependencies]
+hex = { version = "0.4", default-features = false }
+itertools = "0.13.0"
+nanoserde = { version = "0.2.0-beta.0", features = ["std", "json"] }
 prost = "0.11"
 substreams = "0.5"
 substreams-entity-change = "1.3"
-anyhow = "1.0"
-hex = { version = "0.4", default-features = false }
+
+[profile.release]
+# Optimize across all crates
+lto = "fat"
+# Only one unit for more compile time optimization opportunities
+codegen-units = 1
