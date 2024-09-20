@@ -27,6 +27,12 @@ mod methods {
     /// https://github.com/multiversx/mx-specs/blob/main/ESDT-specs.md#issuance-of-fungible-esdt-tokens
     pub const ISSUANCE: &str = "issue";
     pub const TRANSFER: &str = "ESDTTransfer";
+    pub const ISSUANCE_NFT: &str = "issueNonFungible";
+    pub const ISSUANCE_SFT: &str = "issueSemiFungible";
+    pub const SET_ROLE: &str = "setSpecialRole";
+    pub const CREATE_ROLE: &str = "ESDTNFTCreateRoleTransfer";
+    pub const CREATE_NFT: &str = "ESDTNFTCreate";
+    pub const TRANSFER_NFT: &str = "ESDTNFTTransfer";
 }
 
 #[substreams::handlers::map]
@@ -91,6 +97,65 @@ fn graph_out(blk: HyperOutportBlock) -> Result<EntityChanges, substreams::errors
                     }
                 });
             }
+            methods::ISSUANCE_NFT => parse_data(segments, methods::ISSUANCE_NFT, |mut p| {
+                tables
+                    .create_row("NFTIssuanceTransaction", id.clone())
+                    .set_field(p.field_string("token_name"))
+                    .set_field(p.field_string("token_ticker"))
+                    .set_field(p.extra_fields());
+            }),
+            methods::ISSUANCE_SFT => parse_data(segments, methods::ISSUANCE_SFT, |mut p| {
+                tables
+                    .create_row("SFTIssuanceTransaction", id.clone())
+                    .set_field(p.field_string("token_name"))
+                    .set_field(p.field_string("token_ticker"))
+                    .set_field(p.extra_fields());
+            }),
+            methods::SET_ROLE => parse_data(segments, methods::SET_ROLE, |mut p| {
+                let row = tables
+                    .create_row("RolesAssigningTransaction", id.clone())
+                    .set_field(p.field_string("token_identifier"))
+                    .set_field(p.field_string("address"));
+
+                let mut roles = vec![];
+                while p.has_next() {
+                    roles.push(p.next_utf8("role"));
+                }
+
+                row.set("roles", roles);
+            }),
+            methods::CREATE_NFT => parse_data(segments, methods::CREATE_NFT, |mut p| {
+                let row = tables
+                    .create_row("NFTCreationTransaction", id.clone())
+                    .set_field(p.field_string("token_identifier"))
+                    .set_field(p.field_bigint("initial_quantity"))
+                    .set_field(p.field_string("nft_name"))
+                    .set_field(p.field_bigint("royalties"))
+                    .set_field(p.field_string("hash"))
+                    .set_field(p.field_raw("attributes"));
+
+                let mut uris = vec![];
+                while p.has_next() {
+                    uris.push(p.next_utf8("uri"));
+                }
+
+                row.set("uris", uris);
+            }),
+            methods::CREATE_ROLE => parse_data(segments, methods::CREATE_ROLE, |mut p| {
+                tables
+                    .create_row("TransferCreationRoleTransaction", id.clone())
+                    .set_field(p.field_string("token_identifier"))
+                    .set_field(p.field_string("address_from"))
+                    .set_field(p.field_string("address_to"));
+            }),
+            methods::TRANSFER_NFT => parse_data(segments, methods::TRANSFER_NFT, |mut p| {
+                tables
+                    .create_row("NFTTransferTransaction", id.clone())
+                    .set_field(p.field_string("token_identifier"))
+                    .set_field(p.field_bigint("nonce"))
+                    .set_field(p.field_bigint("quantity"))
+                    .set_field(p.field_string("destination"));
+            }),
             _ => {}
         }
     }

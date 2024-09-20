@@ -7,7 +7,17 @@ type Transaction @entity {
     data: String!
 }
 
-type IssuanceTransaction @entity {
+interface Issuance {
+    id: ID!
+
+    tx: Transaction!
+
+    token_name: String!
+    token_ticker: String!
+    extra_fields: String!
+}
+
+type IssuanceTransaction implements Issuance @entity {
     id: ID!
 
     tx: Transaction!
@@ -28,4 +38,69 @@ type TransferTransaction @entity {
     arg1: String
     arg2: String
     extra_fields: String
+}
+
+type NFTIssuanceTransaction implements Issuance @entity {
+    id: ID!
+
+    tx: Transaction!
+
+    token_name: String!
+    token_ticker: String!
+    extra_fields: String!
+}
+
+type SFTIssuanceTransaction implements Issuance @entity {
+    id: ID!
+
+    tx: Transaction!
+
+    token_name: String!
+    token_ticker: String!
+    extra_fields: String!
+}
+
+type RolesAssigningTransaction @entity {
+    id: ID!
+
+    tx: Transaction!
+
+    token_identifier: String!
+    address: String!
+    roles: [String!]!
+}
+
+type NFTCreationTransaction @entity {
+    id: ID!
+
+    tx: Transaction!
+
+    token_identifier: String!
+    initial_quantity: BigInt!
+    nft_name: String!
+    royalties: BigInt!
+    hash: String!
+    attributes: String!
+    uris: [String!]!
+}
+
+type TransferCreationRoleTransaction @entity {
+    id: ID!
+
+    tx: Transaction!
+
+    token_identifier: String!
+    address_from: String!
+    address_to: String!
+}
+
+type NFTTransferTransaction @entity {
+    id: ID!
+
+    tx: Transaction!
+
+    token_identifier: String!
+    nonce: BigInt!
+    quantity: BigInt!
+    destination: String!
 }
