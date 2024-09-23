@@ -1,9 +1,8 @@
-use crate::utils::Field;
 use itertools::Itertools;
 use std::collections::HashMap;
 use std::iter::Peekable;
 use std::str::Split;
-use substreams::scalar::BigInt;
+use substreams::prelude::BigInt;
 
 pub struct TxData<'a> {
     method: &'a str,
@@ -18,26 +17,8 @@ pub fn parse_data<'a>(segments: Split<'a, char>, method: &'a str, cb: impl FnOnc
 }
 
 impl TxData<'_> {
-    /// Decodes the next field as a string
-    pub fn field_string(&mut self, field_name: &'static str) -> Field {
-        Field::from_tovalue(field_name, self.next_utf8(field_name))
-    }
-
-    /// Returns the next field as a raw hex string
-    pub fn field_raw(&mut self, field_name: &'static str) -> Field {
-        Field::from_tovalue(field_name, self.next_raw(field_name))
-    }
-
-    /// Returns the next field as an unsigned bigint
-    pub fn field_bigint(&mut self, field_name: &'static str) -> Field {
-        Field::from_tovalue(
-            field_name,
-            BigInt::from_unsigned_bytes_be(&self.next_decoded(field_name)),
-        )
-    }
-
     /// Decodes the rest of the data as extra fields
-    pub fn extra_fields(self) -> Field {
+    pub fn extra_fields(self) -> String {
         let extra_fields = self
             .segments
             .map(|s| {
@@ -54,10 +35,7 @@ impl TxData<'_> {
             })
             .collect::<HashMap<_, _>>();
 
-        Field::from_tovalue(
-            "extra_fields",
-            nanoserde::SerJson::serialize_json(&extra_fields),
-        )
+        nanoserde::SerJson::serialize_json(&extra_fields)
     }
 
     /// Returns the raw next segment
@@ -85,6 +63,11 @@ impl TxData<'_> {
                 field_name, self.method
             )
         })
+    }
+
+    /// Returns base16-decoded bigint segment
+    pub fn next_bigint(&mut self, field_name: &'static str) -> BigInt {
+        BigInt::from_unsigned_bytes_be(&self.next_decoded(field_name))
     }
 
     pub fn has_next(&mut self) -> bool {
